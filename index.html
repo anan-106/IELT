@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>538考点词 — 雅思阅读同义替换</title>
+<style>
+:root {
+  --bg: #f5f0eb;
+  --card: #ffffff;
+  --text: #2c2416;
+  --sub: #8b7355;
+  --accent: #c75b39;
+  --accent-hover: #a0482e;
+  --green: #4a8c5c;
+  --red: #c0392b;
+  --green-bg: #e8f5e9;
+  --red-bg: #fdecea;
+  --border: #e0d5c7;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --radius: 12px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+.container { width: 100%; max-width: 640px; }
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+.header .subtitle {
+  font-size: 0.85rem;
+  color: var(--sub);
+  margin-top: 4px;
+}
+
+/* Mode tabs */
+.tabs {
+  display: flex;
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 4px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.2s;
+  color: var(--sub);
+  user-select: none;
+}
+.tab.active {
+  background: var(--accent);
+  color: #fff;
+}
+.tab:hover:not(.active) { color: var(--text); }
+
+/* Group selector */
+.group-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.group-btn {
+  flex: 1;
+  min-width: 70px;
+  padding: 8px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.82rem;
+  transition: all 0.2s;
+  color: var(--text);
+}
+.group-btn.active {
+  border-color: var(--accent);
+  background: #fdf3ef;
+  color: var(--accent);
+  font-weight: 600;
+}
+.group-btn:hover { border-color: var(--accent); }
+
+/* Progress bar */
+.progress-wrap {
+  margin-bottom: 20px;
+}
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--sub);
+  margin-bottom: 6px;
+}
+.progress-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+/* Card */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+.word-display {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 4px;
+}
+.word-pos {
+  font-size: 0.9rem;
+  color: var(--sub);
+  font-style: italic;
+  margin-bottom: 28px;
+}
+
+/* Options */
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+  max-width: 460px;
+}
+.option {
+  padding: 14px 16px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: #fafaf8;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.15s;
+  text-align: center;
+  color: var(--text);
+}
+.option:hover { border-color: var(--accent); background: #fdf3ef; }
+.option.correct { border-color: var(--green); background: var(--green-bg); color: var(--green); font-weight: 600; }
+.option.wrong { border-color: var(--red); background: var(--red-bg); color: var(--red); }
+.option:disabled { pointer-events: none; opacity: 0.85; }
+
+/* Answer panel */
+.answer-panel {
+  margin-top: 24px;
+  padding: 20px;
+  background: #fafaf8;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  width: 100%;
+  max-width: 460px;
+  text-align: left;
+  display: none;
+}
+.answer-panel.show { display: block; }
+.answer-panel .syn-line {
+  font-size: 0.9rem;
+  color: var(--text);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.answer-panel .syn-line strong { color: var(--accent); }
+.answer-panel .chinese-line {
+  font-size: 0.9rem;
+  color: var(--sub);
+  margin-bottom: 8px;
+}
+.answer-panel .ielts-line {
+  font-size: 0.82rem;
+  color: #6b9080;
+  background: #f0f7f4;
+  padding: 10px 12px;
+  border-radius: 8px;
+  line-height: 1.5;
+}
+.next-btn {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.next-btn:hover { background: var(--accent-hover); }
+
+/* Test result */
+.result-card {
+  text-align: center;
+}
+.result-score {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.result-detail {
+  font-size: 0.9rem;
+  color: var(--sub);
+  margin-bottom: 20px;
+}
+.mistake-list {
+  width: 100%;
+  text-align: left;
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+.mistake-item {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-size: 0.88rem;
+  cursor: pointer;
+  background: #fafaf8;
+}
+.mistake-item .q-word { font-weight: 700; color: var(--accent); }
+.mistake-item .detail { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); color: var(--sub); font-size: 0.82rem; }
+.mistake-item.open .detail { display: block; }
+
+.btn-secondary {
+  padding: 10px 24px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  color: var(--text);
+}
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Complete banner */
+.complete-banner {
+  text-align: center;
+  padding: 40px 20px;
+}
+.complete-banner h2 { font-size: 1.4rem; margin-bottom: 12px; }
+.complete-banner p { color: var(--sub); font-size: 0.9rem; margin-bottom: 20px; }
+
+/* Responsive */
+@media (max-width: 480px) {
+  .card { padding: 24px 18px; }
+  .word-display { font-size: 1.7rem; }
+  .options { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>538 考点词</h1>
+    <div class="subtitle">雅思阅读同义替换 · 刘洪波</div>
+  </div>
+
+  <!-- Mode tabs -->
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-mode="study" id="tab-study">背诵模式</div>
+    <div class="tab" data-mode="test" id="tab-test">测试模式</div>
+  </div>
+
+  <!-- Group selector -->
+  <div class="group-row" id="groupRow"></div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-text"><span id="progressLabel">进度</span><span id="progressCount">0 / 0</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+
+  <!-- Main card -->
+  <div class="card" id="card"></div>
+</div>
+
+<script src="data.js"></script>
+<script>
+(function() {
+  const DATA = window.__538_DATA__;
+  if (!DATA) { document.getElementById('card').innerHTML = '<p style="color:var(--red)">数据加载失败，请确保 data.js 文件存在。</p>'; return; }
+
+  // ===== State =====
+  let mode = 'study';         // 'study' | 'test'
+  let groupIdx = 0;           // 0, 1, 2
+  let studyIdx = 0;           // current word index in study mode
+  let answered = false;       // whether current question has been answered
+  let testQuestions = [];     // shuffled questions for test mode
+  let testIdx = 0;
+  let testAnswers = [];       // { wordId, correct, userPicked }
+  let optionBtns = [];
+
+  // ===== localStorage =====
+  function storageKey(key) { return '538-' + key; }
+  function loadProgress() {
+    try {
+      const raw = localStorage.getItem(storageKey('progress'));
+      return raw ? JSON.parse(raw) : { study: [0,0,0], mistakes: {} };
+    } catch(e) { return { study: [0,0,0], mistakes: {} }; }
+  }
+  function saveProgress(p) {
+    try { localStorage.setItem(storageKey('progress'), JSON.stringify(p)); } catch(e) {}
+  }
+  let progress = loadProgress();
+
+  // ===== Helpers =====
+  function currentGroup() { return DATA.groups[groupIdx]; }
+  function currentWords() { return currentGroup().words; }
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length-1; i>0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+    return a;
+  }
+
+  // Generate 4 options for a word: 1 correct + 3 distractors
+  function generateOptions(word, allWords) {
+    const correctSyn = word.synonyms[Math.floor(Math.random() * word.synonyms.length)];
+    const others = allWords.filter(w => w.id !== word.id);
+    const distractors = [];
+    const candidatePool = [];
+    others.forEach(w => w.synonyms.forEach(s => candidatePool.push(s)));
+    const uniqueCandidates = [...new Set(candidatePool)].filter(s => s !== correctSyn && !word.synonyms.includes(s));
+    const shuffled = shuffle(uniqueCandidates);
+    for (let i = 0; i < Math.min(3, shuffled.length); i++) distractors.push(shuffled[i]);
+    // If not enough distractors, grab from other groups
+    if (distractors.length < 3) {
+      const allPool = [];
+      DATA.groups.forEach(g => g.words.forEach(w => {
+        if (w.id !== word.id) w.synonyms.forEach(s => { if (!distractors.includes(s) && s !== correctSyn && !word.synonyms.includes(s)) allPool.push(s); });
+      }));
+      const extra = shuffle([...new Set(allPool)]).slice(0, 3 - distractors.length);
+      distractors.push(...extra);
+    }
+    const options = shuffle([correctSyn, ...distractors]);
+    return { options, correct: correctSyn };
+  }
+
+  // ===== Render =====
+  function renderGroupSelector() {
+    const row = document.getElementById('groupRow');
+    row.innerHTML = DATA.groups.map((g, i) =>
+      `<button class="group-btn${i === groupIdx ? ' active' : ''}" data-idx="${i}">${g.name}<br><small>${g.words.length}词</small></button>`
+    ).join('');
+    row.querySelectorAll('.group-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        groupIdx = parseInt(this.dataset.idx);
+        studyIdx = progress.study[groupIdx] || 0;
+        if (mode === 'test') startTest();
+        else renderStudy();
+        renderGroupSelector();
+      });
+    });
+  }
+
+  function updateProgress() {
+    const total = currentWords().length;
+    if (mode === 'study') {
+      document.getElementById('progressLabel').textContent = '背诵进度';
+      document.getElementById('progressCount').textContent = studyIdx + ' / ' + total;
+      document.getElementById('progressFill').style.width = (studyIdx / total * 100) + '%';
+    } else {
+      document.getElementById('progressLabel').textContent = '测试进度';
+      document.getElementById('progressCount').textContent = testIdx + ' / ' + testQuestions.length;
+      document.getElementById('progressFill').style.width = (testIdx / testQuestions.length * 100) + '%';
+    }
+  }
+
+  // ===== STUDY MODE =====
+  function renderStudy() {
+    const words = currentWords();
+    const card = document.getElementById('card');
+    answered = false;
+
+    if (studyIdx >= words.length) {
+      // Group complete
+      card.innerHTML = `
+        <div class="complete-banner">
+          <h2>${currentGroup().name} 背诵完成！</h2>
+          <p>已学完本组全部 ${words.length} 个考点词</p>
+          <button class="btn-secondary" id="btnRestart">重新背诵本组</button>
+          ${groupIdx < 2 ? `<button class="btn-secondary" id="btnNextGroup" style="margin-left:8px">进入${DATA.groups[groupIdx+1].name}</button>` : ''}
+        </div>`;
+      document.getElementById('btnRestart').addEventListener('click', () => { studyIdx = 0; renderStudy(); updateProgress(); });
+      const btnNext = document.getElementById('btnNextGroup');
+      if (btnNext) btnNext.addEventListener('click', () => { groupIdx++; studyIdx = 0; renderGroupSelector(); renderStudy(); updateProgress(); });
+      updateProgress();
+      return;
+    }
+
+    const word = words[studyIdx];
+    const { options, correct } = generateOptions(word, words);
+
+    card.innerHTML = `
+      <div class="word-display">${word.word}</div>
+      <div class="word-pos">${word.pos}</div>
+      <div class="options" id="options"></div>
+      <div class="answer-panel" id="answerPanel">
+        <div class="syn-line">同义替换：<strong>${word.synonyms.join(' · ')}</strong></div>
+        <div class="chinese-line">中文：${word.chinese}</div>
+        ${word.ieltsMeaning ? `<div class="ielts-line">雅思阅读：${word.ieltsMeaning}</div>` : ''}
+        <button class="next-btn" id="btnNext">下一个 →</button>
+      </div>`;
+
+    const optsDiv = document.getElementById('options');
+    optionBtns = options.map((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'option';
+      btn.textContent = opt;
+      btn.addEventListener('click', () => handleStudyAnswer(opt, correct, word));
+      optsDiv.appendChild(btn);
+      return btn;
+    });
+
+    document.getElementById('btnNext').addEventListener('click', () => {
+      studyIdx++;
+      if (studyIdx > progress.study[groupIdx]) progress.study[groupIdx] = studyIdx;
+      saveProgress(progress);
+      renderStudy();
+      updateProgress();
+    });
+
+    updateProgress();
+  }
+
+  function handleStudyAnswer(picked, correct, word) {
+    if (answered) return;
+    answered = true;
+
+    optionBtns.forEach(btn => {
+      btn.disabled = true;
+      if (btn.textContent === correct) btn.classList.add('correct');
+      if (btn.textContent === picked && picked !== correct) btn.classList.add('wrong');
+    });
+
+    if (picked !== correct) {
+      if (!progress.mistakes[word.id]) progress.mistakes[word.id] = 0;
+      progress.mistakes[word.id]++;
+      saveProgress(progress);
+    }
+
+    document.getElementById('answerPanel').classList.add('show');
+  }
+
+  // ===== TEST MODE =====
+  function startTest() {
+    const words = currentWords();
+    // For each word, generate a question
+    testQuestions = shuffle(words.map(w => {
+      const { options, correct } = generateOptions(w, words);
+      return { word: w, options, correct };
+    }));
+    testIdx = 0;
+    testAnswers = [];
+    renderTestQuestion();
+    updateProgress();
+  }
+
+  function renderTestQuestion() {
+    const card = document.getElementById('card');
+    answered = false;
+
+    if (testIdx >= testQuestions.length) {
+      showTestResult();
+      return;
+    }
+
+    const q = testQuestions[testIdx];
+    card.innerHTML = `
+      <div class="word-display">${q.word.word}</div>
+      <div class="word-pos">${q.word.pos}</div>
+      <div class="options" id="options"></div>`;
+
+    const optsDiv = document.getElementById('options');
+    optionBtns = q.options.map(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'option';
+      btn.textContent = opt;
+      btn.addEventListener('click', () => handleTestAnswer(opt, q));
+      optsDiv.appendChild(btn);
+      return btn;
+    });
+
+    updateProgress();
+  }
+
+  function handleTestAnswer(picked, q) {
+    if (answered) return;
+    answered = true;
+
+    const correct = q.correct;
+    const isCorrect = picked === correct;
+    testAnswers.push({ word: q.word, correct, userPicked: picked, isCorrect });
+
+    optionBtns.forEach(btn => {
+      btn.disabled = true;
+      if (btn.textContent === correct) btn.classList.add('correct');
+      if (btn.textContent === picked && !isCorrect) btn.classList.add('wrong');
+    });
+
+    if (!isCorrect) {
+      if (!progress.mistakes[q.word.id]) progress.mistakes[q.word.id] = 0;
+      progress.mistakes[q.word.id]++;
+      saveProgress(progress);
+    }
+
+    // Auto advance after short delay
+    setTimeout(() => {
+      testIdx++;
+      renderTestQuestion();
+    }, 800);
+  }
+
+  function showTestResult() {
+    const card = document.getElementById('card');
+    const total = testAnswers.length;
+    const correct = testAnswers.filter(a => a.isCorrect).length;
+    const mistakes = testAnswers.filter(a => !a.isCorrect);
+    const pct = Math.round(correct / total * 100);
+
+    card.innerHTML = `
+      <div class="result-card">
+        <div class="result-score">${correct} / ${total}</div>
+        <div class="result-detail">正确率 ${pct}%${pct >= 80 ? ' — 优秀！' : pct >= 60 ? ' — 继续加油' : ' — 多背背再来'}</div>
+        ${mistakes.length > 0 ? `
+          <div class="mistake-list">
+            ${mistakes.map(m => `
+              <div class="mistake-item" data-wid="${m.word.id}">
+                <span class="q-word">${m.word.word}</span> (${m.word.pos})
+                — 你选了 <span style="color:var(--red)">${m.userPicked}</span>
+                <div class="detail">
+                  正确答案：<strong>${m.correct}</strong><br>
+                  全部同义词：${m.word.synonyms.join(' · ')}<br>
+                  中文：${m.word.chinese}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        ` : `<p style="color:var(--green);margin-bottom:20px">全部正确！</p>`}
+        <button class="btn-secondary" id="btnRetest">重新测试</button>
+        <button class="btn-secondary" id="btnRetestMistakes" style="margin-left:8px"${mistakes.length===0?' disabled':''}>只测错题 (${mistakes.length})</button>
+      </div>`;
+
+    document.getElementById('btnRetest').addEventListener('click', () => startTest());
+    if (mistakes.length > 0) {
+      document.getElementById('btnRetestMistakes').addEventListener('click', () => {
+        testQuestions = shuffle(mistakes.map(m => {
+          const { options, correct } = generateOptions(m.word, currentWords());
+          return { word: m.word, options, correct };
+        }));
+        testIdx = 0;
+        testAnswers = [];
+        renderTestQuestion();
+        updateProgress();
+      });
+    }
+
+    // Click to expand mistake details
+    card.querySelectorAll('.mistake-item').forEach(item => {
+      item.addEventListener('click', () => item.classList.toggle('open'));
+    });
+
+    updateProgress();
+  }
+
+  // ===== Mode switching =====
+  function switchMode(newMode) {
+    mode = newMode;
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+    if (mode === 'study') {
+      studyIdx = progress.study[groupIdx] || 0;
+      renderStudy();
+    } else {
+      startTest();
+    }
+  }
+
+  document.getElementById('tabs').addEventListener('click', e => {
+    const tab = e.target.closest('.tab');
+    if (!tab) return;
+    switchMode(tab.dataset.mode);
+  });
+
+  // ===== Init =====
+  function init() {
+    renderGroupSelector();
+    studyIdx = progress.study[groupIdx] || 0;
+    renderStudy();
+  }
+  init();
+})();
+</script>
+</body>
+</html>
