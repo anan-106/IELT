@@ -212,6 +212,17 @@ body {
   border-radius: 8px;
   line-height: 1.5;
 }
+.answer-panel .example-line {
+  font-size: 0.85rem;
+  color: #5b6d82;
+  font-style: italic;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #f4f6f9;
+  border-radius: 6px;
+  border-left: 3px solid #8fa4b8;
+  line-height: 1.5;
+}
 .next-btn {
   display: block;
   width: 100%;
@@ -227,6 +238,23 @@ body {
   transition: background 0.2s;
 }
 .next-btn:hover { background: var(--accent-hover); }
+
+/* End test button */
+.end-test-btn {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+  margin-top: 16px;
+  padding: 10px;
+  background: transparent;
+  color: var(--sub);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.end-test-btn:hover { border-color: var(--accent); color: var(--accent); }
 
 /* Test result */
 .result-card {
@@ -283,6 +311,93 @@ body {
 .complete-banner h2 { font-size: 1.4rem; margin-bottom: 12px; }
 .complete-banner p { color: var(--sub); font-size: 0.9rem; margin-bottom: 20px; }
 
+/* Search */
+.search-wrap {
+  position: relative;
+  margin-bottom: 16px;
+}
+.search-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  background: var(--card);
+  color: var(--text);
+  transition: border-color 0.2s;
+  outline: none;
+}
+.search-input:focus { border-color: var(--accent); }
+.search-input::placeholder { color: #c0b8a8; }
+.search-results {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 10;
+  margin-top: 4px;
+}
+.search-results.show { display: block; }
+.search-result-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+  text-align: left;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: #faf8f5; }
+.search-result-item .sr-word {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text);
+}
+.search-result-item .sr-pos {
+  font-size: 0.8rem;
+  color: var(--sub);
+  font-style: italic;
+  margin-left: 6px;
+}
+.search-result-item .sr-group {
+  font-size: 0.72rem;
+  color: var(--accent);
+  background: #fdf3ef;
+  padding: 2px 8px;
+  border-radius: 4px;
+  float: right;
+}
+.search-result-item .sr-synonyms {
+  font-size: 0.82rem;
+  color: var(--sub);
+  margin-top: 4px;
+}
+.search-result-item .sr-chinese {
+  font-size: 0.82rem;
+  color: var(--text);
+  margin-top: 2px;
+}
+.search-result-item .sr-example {
+  font-size: 0.78rem;
+  color: #5b6d82;
+  font-style: italic;
+  margin-top: 4px;
+  padding-left: 8px;
+  border-left: 2px solid var(--border);
+}
+.search-no-results {
+  padding: 20px;
+  text-align: center;
+  color: var(--sub);
+  font-size: 0.9rem;
+}
+
 /* Responsive */
 @media (max-width: 480px) {
   .card { padding: 24px 18px; }
@@ -306,6 +421,12 @@ body {
 
   <!-- Group selector -->
   <div class="group-row" id="groupRow"></div>
+
+  <!-- Search -->
+  <div class="search-wrap" id="searchWrap">
+    <input type="text" class="search-input" id="searchInput" placeholder="搜索单词或中文含义...">
+    <div class="search-results" id="searchResults"></div>
+  </div>
 
   <!-- Progress -->
   <div class="progress-wrap">
@@ -332,6 +453,7 @@ body {
   let testIdx = 0;
   let testAnswers = [];       // { wordId, correct, userPicked }
   let optionBtns = [];
+  let autoAdvanceTimer = null;
 
   // ===== localStorage =====
   function storageKey(key) { return '538-' + key; }
@@ -441,6 +563,7 @@ body {
         <div class="syn-line">同义替换：<strong>${word.synonyms.join(' · ')}</strong></div>
         <div class="chinese-line">中文：${word.chinese}</div>
         ${word.ieltsMeaning ? `<div class="ielts-line">雅思阅读：${word.ieltsMeaning}</div>` : ''}
+        ${word.example ? `<div class="example-line">例句：${word.example}</div>` : ''}
         <button class="next-btn" id="btnNext">下一个 →</button>
       </div>`;
 
@@ -486,6 +609,7 @@ body {
 
   // ===== TEST MODE =====
   function startTest() {
+    clearTimeout(autoAdvanceTimer);
     const words = currentWords();
     // For each word, generate a question
     testQuestions = shuffle(words.map(w => {
@@ -511,7 +635,8 @@ body {
     card.innerHTML = `
       <div class="word-display">${q.word.word}</div>
       <div class="word-pos">${q.word.pos}</div>
-      <div class="options" id="options"></div>`;
+      <div class="options" id="options"></div>
+      <button class="end-test-btn" id="btnEndTest">结束测试</button>`;
 
     const optsDiv = document.getElementById('options');
     optionBtns = q.options.map(opt => {
@@ -522,6 +647,8 @@ body {
       optsDiv.appendChild(btn);
       return btn;
     });
+
+    document.getElementById('btnEndTest').addEventListener('click', () => endTest());
 
     updateProgress();
   }
@@ -547,15 +674,31 @@ body {
     }
 
     // Auto advance after short delay
-    setTimeout(() => {
+    autoAdvanceTimer = setTimeout(() => {
       testIdx++;
       renderTestQuestion();
     }, 800);
   }
 
+  function endTest() {
+    clearTimeout(autoAdvanceTimer);
+    testIdx = testQuestions.length;
+    showTestResult();
+  }
+
   function showTestResult() {
     const card = document.getElementById('card');
     const total = testAnswers.length;
+    if (total === 0) {
+      card.innerHTML = `
+        <div class="result-card">
+          <p style="color:var(--sub);font-size:1.1rem;margin-bottom:20px">还没有回答任何题目</p>
+          <button class="btn-secondary" id="btnRetest">继续测试</button>
+        </div>`;
+      updateProgress();
+      document.getElementById('btnRetest').addEventListener('click', () => startTest());
+      return;
+    }
     const correct = testAnswers.filter(a => a.isCorrect).length;
     const mistakes = testAnswers.filter(a => !a.isCorrect);
     const pct = Math.round(correct / total * 100);
@@ -573,7 +716,7 @@ body {
                 <div class="detail">
                   正确答案：<strong>${m.correct}</strong><br>
                   全部同义词：${m.word.synonyms.join(' · ')}<br>
-                  中文：${m.word.chinese}
+                  中文：${m.word.chinese}${m.word.example ? `<br>例句：${m.word.example}` : ''}
                 </div>
               </div>
             `).join('')}
@@ -623,11 +766,68 @@ body {
     switchMode(tab.dataset.mode);
   });
 
+  // ===== SEARCH =====
+  function performSearch(query) {
+    const q = query.trim().toLowerCase();
+    const resultsDiv = document.getElementById('searchResults');
+    if (q.length < 1) {
+      resultsDiv.innerHTML = '';
+      resultsDiv.classList.remove('show');
+      return;
+    }
+    const allWords = [];
+    DATA.groups.forEach(g => g.words.forEach(w => allWords.push({ ...w, groupName: g.name })));
+    const results = allWords.filter(w => {
+      return w.word.toLowerCase().includes(q) ||
+        w.chinese.includes(q) ||
+        w.synonyms.some(s => s.toLowerCase().includes(q));
+    });
+    renderSearchResults(results.slice(0, 20));
+  }
+
+  function renderSearchResults(results) {
+    const div = document.getElementById('searchResults');
+    if (results.length === 0) {
+      div.innerHTML = '<div class="search-no-results">未找到匹配的单词</div>';
+      div.classList.add('show');
+      return;
+    }
+    div.innerHTML = results.map(w => `
+      <div class="search-result-item">
+        <span class="sr-group">${w.groupName}</span>
+        <span class="sr-word">${w.word}</span>
+        <span class="sr-pos">${w.pos}</span>
+        <div class="sr-synonyms">同义：${w.synonyms.join(' · ')}</div>
+        <div class="sr-chinese">中文：${w.chinese}</div>
+        ${w.example ? `<div class="sr-example">例句：${w.example}</div>` : ''}
+      </div>
+    `).join('');
+    div.classList.add('show');
+  }
+
   // ===== Init =====
   function init() {
     renderGroupSelector();
     studyIdx = progress.study[groupIdx] || 0;
     renderStudy();
+
+    // Search events
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', () => performSearch(searchInput.value));
+    searchInput.addEventListener('focus', () => {
+      if (searchInput.value.trim()) performSearch(searchInput.value);
+    });
+    searchInput.addEventListener('blur', () => {
+      setTimeout(() => {
+        document.getElementById('searchResults').classList.remove('show');
+      }, 150);
+    });
+    searchInput.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        searchInput.value = '';
+        document.getElementById('searchResults').classList.remove('show');
+      }
+    });
   }
   init();
 })();
