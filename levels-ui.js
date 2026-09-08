@@ -129,6 +129,20 @@
     if (el && el.textContent !== text) el.textContent = text;
   }
 
+  function decorateTodaySummary() {
+    const el = document.getElementById("todaySummary");
+    if (!el) return;
+    const state = readState();
+    const next = (DATA.allPrimaryWords || []).find((w) => !state.cards?.[w.cardId]?.reps);
+    const base = el.textContent.split(" · 当前新词优先：")[0];
+    if (!next) {
+      setTextIfChanged(el, `${base} · 538主词已全部进入记忆系统`);
+      return;
+    }
+    const meta = LEVEL_META[next.groupId];
+    setTextIfChanged(el, `${base} · 当前新词优先：${meta.shortLabel}（${meta.order}）`);
+  }
+
   function decorateStudyCard() {
     const root = document.getElementById("studyCard");
     const title = root?.querySelector(".word-title");
@@ -145,7 +159,7 @@
 
     const head = root.querySelector(".word-card-head");
     if (!head) return;
-    let info = head.querySelector(".pdf-level-info");
+    let info = root.querySelector(".pdf-level-info");
     if (!info) {
       info = document.createElement("div");
       info.className = "pdf-level-info";
@@ -192,6 +206,7 @@
   function refresh() {
     scheduled = false;
     renderLevelProgress();
+    decorateTodaySummary();
     decorateStudyCard();
     decorateLibrary();
   }
