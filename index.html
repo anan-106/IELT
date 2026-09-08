@@ -14,7 +14,7 @@
       <div>
         <div class="eyebrow">IELT MEMORY</div>
         <h1>雅思阅读 538 + Academic</h1>
-        <p class="subtitle">新版 376 主词逐条校验 · NAWL 学术扩展 · 错词强化 · 自适应间隔复习</p>
+        <p class="subtitle">新版 376 主词逐条校验 · 同义组双向互考 · 错词当天强化 · 艾宾浩斯按天复习</p>
       </div>
       <div class="streak-chip">🔥 连续 <strong id="streakCount">0</strong> 天</div>
     </header>
@@ -23,7 +23,7 @@
       <article class="metric-card metric-primary">
         <span class="metric-label">今日到期</span>
         <strong id="dueCount">0</strong>
-        <small>优先复习</small>
+        <small>跨天复习优先</small>
       </article>
       <article class="metric-card">
         <span class="metric-label">今日新词</span>
@@ -54,7 +54,7 @@
         <div>
           <div class="section-kicker">DAILY SESSION</div>
           <h2>今日学习</h2>
-          <p id="todaySummary">到期 0 · 新词 0 · 错词会自动重现</p>
+          <p id="todaySummary">到期 0 · 新词 0 · 答错后当天需再答对2次</p>
         </div>
         <div>
           <button class="button button-ghost" id="rebuildSessionBtn">重新生成</button>
@@ -63,7 +63,7 @@
       </div>
 
       <div class="session-progress">
-        <div class="progress-meta"><span>本轮进度</span><span id="sessionProgressText">0 / 0</span></div>
+        <div class="progress-meta"><span>本轮通过进度</span><span id="sessionProgressText">0 / 0</span></div>
         <div class="progress-track"><div class="progress-value" id="sessionProgressBar"></div></div>
       </div>
 
@@ -89,26 +89,26 @@
       <div class="section-heading">
         <div class="section-kicker">MEMORY ANALYTICS</div>
         <h2>学习统计</h2>
-        <p>538 与 Academic 共用同一套记忆状态，不重新计算、不丢旧进度。</p>
+        <p>当天学习强化与跨天复习分开记录；答错的词必须当天重新答对两次才算通过。</p>
       </div>
 
       <div class="stats-grid">
-        <article class="stat-panel"><span>今日复习</span><strong id="statTodayReviews">0</strong></article>
+        <article class="stat-panel"><span>今日作答</span><strong id="statTodayReviews">0</strong></article>
         <article class="stat-panel"><span>今日正确率</span><strong id="statTodayAccuracy">—</strong></article>
         <article class="stat-panel"><span>稳定掌握</span><strong id="statMastered">0</strong></article>
-        <article class="stat-panel"><span>平均稳定度</span><strong id="statAvgStability">—</strong></article>
+        <article class="stat-panel"><span>平均复习间隔</span><strong id="statAvgStability">—</strong></article>
       </div>
 
       <article class="activity-panel">
         <div class="panel-heading">
-          <div><h3>近 7 天学习量</h3><p>每根柱代表当天完成的卡片次数。</p></div>
+          <div><h3>近 7 天学习量</h3><p>每根柱代表当天完成的作答次数。</p></div>
         </div>
         <div class="activity-chart" id="activityChart"></div>
       </article>
 
       <article class="activity-panel">
         <div class="panel-heading">
-          <div><h3>当前最薄弱的词</h3><p>结合错误、遗忘次数、难度和当前回忆率排序。</p></div>
+          <div><h3>当前最薄弱的词</h3><p>结合答错次数、遗忘次数和当前复习阶段排序。</p></div>
         </div>
         <div class="weak-list" id="weakList"></div>
       </article>
@@ -116,27 +116,18 @@
 
     <section class="view" id="view-settings">
       <div class="section-heading">
-        <div class="section-kicker">PERSONAL SCHEDULER</div>
-        <h2>复习设置</h2>
+        <div class="section-kicker">DAILY LEARNING + REVIEW</div>
+        <h2>学习设置</h2>
         <p>所有学习记录只保存在你当前浏览器本地。</p>
       </div>
 
       <div class="settings-grid">
         <label class="setting-card">
-          <span><strong>每日新词</strong><small>默认先完成新版 538，再进入 Academic</small></span>
+          <span><strong>每日新词</strong><small>默认先完成第1类 → 第2类 → 第3类，再进入 Academic</small></span>
           <input id="dailyNewInput" type="number" min="0" max="100" step="1" />
         </label>
         <label class="setting-card">
-          <span><strong>目标记忆率</strong><small>越高，复习越频繁</small></span>
-          <select id="retentionInput">
-            <option value="0.85">85%</option>
-            <option value="0.90">90%</option>
-            <option value="0.93">93%</option>
-            <option value="0.95">95%</option>
-          </select>
-        </label>
-        <label class="setting-card">
-          <span><strong>错词重现间隔</strong><small>答错后隔几张卡重新出现</small></span>
+          <span><strong>当天错词重现间隔</strong><small>答错后隔几张其它卡重新出现；之后必须答对2次</small></span>
           <input id="repeatGapInput" type="number" min="1" max="10" step="1" />
         </label>
       </div>
@@ -144,8 +135,9 @@
       <button class="button button-primary" id="saveSettingsBtn">保存设置</button>
 
       <article class="algorithm-note">
-        <h3>记忆算法</h3>
-        <p>每个词独立保存 Difficulty（难度）、Stability（稳定度）和 Retrievability（当前可回忆率）。答错会立即降低稳定度并进入本轮错词强化；跨天则根据遗忘曲线和目标记忆率自动计算下一次出现时间。加入 Academic 后算法不变，只增加新卡片。</p>
+        <h3>学习与复习规则</h3>
+        <p><strong>当天学习：</strong>首次答对即可通过；只要答错过一次，之后必须在当天后续题目中再答对2次才通过，中途再次答错则重新从2次开始。538 同义组会随机改变题干与正确答案方向。</p>
+        <p style="margin-top:8px"><strong>跨天复习：</strong>只有当天通过后才开始计时，按本地日历日执行 <strong>1 → 2 → 6 → 31 天</strong>；之后进入 <strong>60 → 120 天</strong>长期维护。答错并完成当天两次补答后，跨天阶段重置为明天。</p>
       </article>
 
       <article class="data-panel">
