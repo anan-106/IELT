@@ -9,6 +9,8 @@
 
   const STORAGE_KEY = "ielt-memory-v3";
   const LEGACY_KEY = "538-progress";
+  const SCHEDULE_MODEL = "ebbinghaus-calendar-v2";
+  const REVIEW_INTERVALS = [1, 2, 6, 31, 60, 120];
   const DAY = 86400000;
   const $ = (id) => document.getElementById(id);
   const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
@@ -24,6 +26,13 @@
     const m = String(d.getMonth() + 1).padStart(2, "0");
     const day = String(d.getDate()).padStart(2, "0");
     return `${y}-${m}-${day}`;
+  }
+
+  function startOfDayPlus(days, base = new Date()) {
+    const d = new Date(base);
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() + days);
+    return d.getTime();
   }
 
   function shuffle(input) {
@@ -50,8 +59,10 @@
 
   function freshState() {
     return {
-      version: 3,
-      settings: { dailyNew: 20, targetRetention: 0.90, repeatGap: 3 },
+      version: 4,
+      scheduleModel: SCHEDULE_MODEL,
+      scheduleIntervalsDays: REVIEW_INTERVALS,
+      settings: { dailyNew: 20, repeatGap: 3 },
       cards: {},
       daily: {},
       migratedLegacy: false
@@ -92,7 +103,9 @@
       lastReview: 0,
       correct: 0,
       wrong: 0,
-      lastRating: 0
+      lastRating: 0,
+      reviewStage: -1,
+      scheduleModel: SCHEDULE_MODEL
     };
   }
 
@@ -114,9 +127,10 @@
             const c = card(w.cardId);
             if (!c.reps) {
               c.reps = 1;
-              c.stability = 1.5;
-              c.lastReview = now() - DAY;
-              c.due = now();
+              c.reviewStage = 0;
+              c.stability = 1;
+              c.lastReview = now();
+              c.due = startOfDayPlus(1);
               c.lastRating = 3;
             }
           });
@@ -130,7 +144,9 @@
           c.wrong = Math.max(c.wrong, n);
           c.lapses = Math.max(c.lapses, n);
           c.difficulty = clamp(c.difficulty + Math.min(3, n) * 0.5, 1, 10);
-          c.due = now();
+          c.reviewStage = 0;
+          c.stability = 1;
+          c.due = startOfDayPlus(1);
         });
       }
     } catch (e) {
@@ -140,53 +156,37 @@
     save();
   }
 
-  // D/S/R 模型不再让用户主观选择难易程度。
-  // 正确 => grade 3 (Good)，错误 => grade 1 (Again)。
-  function retrievability(c, ts = now()) {
-    if (!c.reps || !c.stability || !c.lastReview) return 0;
-    const elapsed = Math.max(0, (ts - c.lastReview) / DAY);
-    return Math.pow(0.9, elapsed / Math.max(0.05, c.stability));
+  function migrateScheduleModel() {
+    if (state.scheduleModel === SCHEDULE_MODEL) return;
+    Object.values(state.cards || {}).forEach((c) => {
+      if (!c?.reps) return;
+      c.reviewStage = 0;
+      c.scheduleModel = SCHEDULE_MODEL;
+      c.stability = 1;
+      c.due = startOfDayPlus(1);
+    });
+    state.scheduleModel = SCHEDULE_MODEL;
+    state.scheduleIntervalsDays = REVIEW_INTERVALS;
+    save();
   }
 
-  function intervalDays(stability) {
-    const target = clamp(Number(state.settings.targetRetention) || 0.9, 0.80, 0.97);
-    return Math.max(5 / 1440, stability * Math.log(target) / Math.log(0.9));
-  }
-
-  function schedule(c, grade) {
-    grade = grade === 1 ? 1 : 3;
-    const ts = now();
-    const oldR = retrievability(c, ts);
-    const first = !c.reps || !c.stability;
-
-    if (first) {
-      c.stability = grade === 1 ? 0.15 : 2.2;
-      c.difficulty = grade === 1 ? 6.2 : 4.6;
-      if (grade === 1) c.lapses++;
-    } else if (grade === 1) {
-      c.lapses++;
-      c.difficulty = clamp(c.difficulty + 0.9, 1, 10);
-      c.stability = Math.max(0.12, c.stability * (0.30 + 0.03 * (10 - c.difficulty)));
+  function scheduleAfterDailyPass(c, hadError, wasNew) {
+    let stage;
+    if (wasNew || hadError || !Number.isInteger(c.reviewStage) || c.reviewStage < 0) {
+      stage = 0;
     } else {
-      const forgettingBoost = 1 + (1 - oldR) * 2.2;
-      const difficultyPenalty = 1 - (c.difficulty - 5) * 0.045;
-      c.stability = Math.max(0.15, c.stability * (1 + 1.0 * forgettingBoost * difficultyPenalty));
-      c.difficulty = clamp(c.difficulty - 0.08, 1, 10);
+      stage = Math.min(c.reviewStage + 1, REVIEW_INTERVALS.length - 1);
     }
 
-    c.reps++;
-    c.lastRating = grade;
-    c.lastReview = ts;
-    c.due = ts + intervalDays(c.stability) * DAY;
-    return c;
-  }
-
-  function humanInterval(days) {
-    if (days < 1 / 24) return `${Math.max(1, Math.round(days * 1440))} 分钟`;
-    if (days < 1) return `${Math.max(1, Math.round(days * 24))} 小时`;
-    if (days < 30) return `${Math.max(1, Math.round(days))} 天`;
-    if (days < 365) return `${Math.max(1, Math.round(days / 30))} 月`;
-    return `${(days / 365).toFixed(1)} 年`;
+    const days = REVIEW_INTERVALS[stage];
+    c.reps = (c.reps || 0) + 1;
+    c.reviewStage = stage;
+    c.scheduleModel = SCHEDULE_MODEL;
+    c.stability = days;
+    c.lastReview = now();
+    c.lastRating = hadError ? 2 : 3;
+    c.due = startOfDayPlus(days);
+    return { days, due: c.due, stage };
   }
 
   function dueWords() {
@@ -202,25 +202,31 @@
 
   function memoryLabel(c) {
     if (!c?.reps) return "新词";
-    const r = retrievability(c);
-    if (c.lapses >= 2 || r < 0.75) return "薄弱";
-    if (c.stability >= 21 && r >= 0.9) return "已掌握";
+    if (c.lapses >= 2 || c.wrong > c.correct) return "薄弱";
+    if ((c.stability || 0) >= 31) return "已掌握";
     return "学习中";
   }
 
   function weakScore(w) {
     const c = state.cards[w.cardId];
     if (!c?.reps) return 0;
-    return c.lapses * 2.4 + c.wrong * 1.2 + c.difficulty * 0.3 + (1 - retrievability(c)) * 5;
+    return c.lapses * 2.4 + c.wrong * 1.2 + c.difficulty * 0.3 + (c.reviewStage <= 0 ? 1 : 0);
   }
 
-  function logDaily(correct, wasNew) {
+  function logAttempt(correct) {
     const k = dateKey();
     const d = state.daily[k] || { reviews: 0, correct: 0, wrong: 0, newCards: 0 };
     d.reviews++;
     if (correct) d.correct++;
     else d.wrong++;
-    if (wasNew) d.newCards++;
+    state.daily[k] = d;
+  }
+
+  function logCompletion(wasNew) {
+    if (!wasNew) return;
+    const k = dateKey();
+    const d = state.daily[k] || { reviews: 0, correct: 0, wrong: 0, newCards: 0 };
+    d.newCards++;
     state.daily[k] = d;
   }
 
@@ -237,36 +243,47 @@
     return n;
   }
 
-  let session = { queue: [], total: 0, done: 0, active: false, answered: false, question: null };
+  function makeItem(w, reason) {
+    const c = state.cards[w.cardId];
+    return {
+      cardId: w.cardId,
+      reason,
+      wasNew: !c?.reps,
+      hadError: false,
+      correctsNeeded: 0,
+      seenPrompts: []
+    };
+  }
+
+  let session = { queue: [], total: 0, done: 0, active: false, answered: false, question: null, outcome: null };
 
   function buildSession(extraNew = null) {
-    const due = dueWords().map((w) => ({ cardId: w.cardId, reason: "到期复习" }));
+    const due = dueWords().map((w) => makeItem(w, "到期复习"));
     const fresh = unseenWords(extraNew == null ? state.settings.dailyNew : extraNew)
-      .map((w) => ({ cardId: w.cardId, reason: "今日新词" }));
+      .map((w) => makeItem(w, "今日新词"));
     session = {
       queue: [...due, ...fresh],
       total: due.length + fresh.length,
       done: 0,
       active: true,
       answered: false,
-      question: null
+      question: null,
+      outcome: null
     };
     renderAll();
   }
 
-  function requeue(item) {
+  function requeueAfterGap(item) {
     const gap = clamp(Number(state.settings.repeatGap) || 3, 1, 10);
     const position = Math.min(gap, session.queue.length);
-    session.queue.splice(position, 0, { ...item, reason: "错词强化" });
-    session.total++;
+    session.queue.splice(position, 0, item);
   }
 
-  // 538 使用“同义簇”互考：主词和替换词都可能成为题干或正确选项。
   function synonymCluster(word) {
     return uniqueNonEmpty([word.word, ...(word.sourceSynonyms || word.quizSynonyms || word.synonyms || [])]);
   }
 
-  function buildQuestion(word) {
+  function buildQuestion(word, item) {
     if (word.quizMode === "meaning") {
       const correct = word.chinese;
       const pool = uniqueNonEmpty(
@@ -286,7 +303,10 @@
       return { prompt: word.word, correct: word.chinese, options: [word.chinese], cluster, mode: "fallback" };
     }
 
-    const prompt = cluster[Math.floor(Math.random() * cluster.length)];
+    const seen = new Set((item.seenPrompts || []).map(normText));
+    let promptCandidates = cluster.filter((x) => !seen.has(normText(x)));
+    if (!promptCandidates.length) promptCandidates = cluster;
+    const prompt = promptCandidates[Math.floor(Math.random() * promptCandidates.length)];
     const answerCandidates = cluster.filter((x) => normText(x) !== normText(prompt));
     const correct = answerCandidates[Math.floor(Math.random() * answerCandidates.length)];
     const currentSet = new Set(cluster.map(normText));
@@ -322,7 +342,7 @@
     const pct = session.total ? Math.min(100, session.done / session.total * 100) : 0;
     $("sessionProgressText").textContent = `${session.done} / ${session.total}`;
     $("sessionProgressBar").style.width = `${pct}%`;
-    $("todaySummary").textContent = `到期 ${dueWords().length} · 新词 ${unseenWords().length} · ${currentLevelSummary()} · 错词隔 ${state.settings.repeatGap} 张重现`;
+    $("todaySummary").textContent = `到期 ${dueWords().length} · 新词 ${unseenWords().length} · ${currentLevelSummary()} · 答错后当天需再答对2次`;
   }
 
   function deckBadge(word) {
@@ -357,7 +377,7 @@
         <div class="empty-state">
           <div class="empty-icon">◌</div>
           <h3>今日学习还没开始</h3>
-          <p>系统根据你的答题正确/错误自动判断记忆状态；不再要求你主观选择难易程度。</p>
+          <p>系统只根据答题正确/错误判断；答错后会在当天后续题目中重新考，之后必须答对2次才算当天通过。</p>
           <button class="button button-primary" id="inlineStart">开始今日学习</button>
         </div>`;
       $("inlineStart").onclick = () => buildSession();
@@ -369,11 +389,11 @@
         <div class="empty-state">
           <div class="empty-icon">✓</div>
           <h3>今日任务完成</h3>
-          <p>下一次出现时间已根据你的实际正确率和每个词的记忆稳定度自动计算。</p>
+          <p>今天通过的词才会进入按天复习：1 → 2 → 6 → 31 天，之后进入 60 → 120 天长期维护。</p>
           <button class="button button-ghost" id="extraTen">再学 10 个新词</button>
         </div>`;
       $("extraTen").onclick = () => {
-        const extra = unseenWords(10).map((w) => ({ cardId: w.cardId, reason: "加练新词" }));
+        const extra = unseenWords(10).map((w) => makeItem(w, "加练新词"));
         session.queue.push(...extra);
         session.total += extra.length;
         renderAll();
@@ -392,16 +412,19 @@
 
     const c = card(item.cardId);
     if (!session.question || session.question.cardId !== item.cardId) {
-      session.question = { cardId: item.cardId, ...buildQuestion(word) };
+      session.question = { cardId: item.cardId, ...buildQuestion(word, item) };
     }
     const q = session.question;
     session.answered = false;
+    session.outcome = null;
+
+    const strengthenText = item.correctsNeeded > 0 ? ` · 当天还需答对 ${item.correctsNeeded} 次` : "";
 
     root.innerHTML = `
       <div class="word-card" data-card="${attr(word.cardId)}">
         <div class="word-card-head">
           <span class="deck-badge">${esc(deckBadge(word))}</span>
-          <span class="memory-badge">${esc(item.reason)} · ${esc(memoryLabel(c))}</span>
+          <span class="memory-badge">${esc(item.reason)} · ${esc(memoryLabel(c))}${esc(strengthenText)}</span>
         </div>
         <div class="word-main">
           <h3 class="word-title">${esc(q.prompt)}</h3>
@@ -427,7 +450,6 @@
     const picked = btn.dataset.option;
     const ok = normText(picked) === normText(q.correct);
     const c = card(item.cardId);
-    const wasNew = !c.reps;
 
     document.querySelectorAll(".option").forEach((b) => {
       b.disabled = true;
@@ -435,33 +457,82 @@
       if (b === btn && !ok) b.classList.add("wrong");
     });
 
-    if (ok) c.correct++;
-    else c.wrong++;
+    item.seenPrompts = uniqueNonEmpty([...(item.seenPrompts || []), q.prompt]);
+    logAttempt(ok);
 
-    const grade = ok ? 3 : 1;
-    schedule(c, grade);
-    logDaily(ok, wasNew);
-    if (!ok) requeue(item);
+    if (ok) {
+      c.correct = (c.correct || 0) + 1;
+      if (item.correctsNeeded > 0) item.correctsNeeded--;
+    } else {
+      c.wrong = (c.wrong || 0) + 1;
+      c.lapses = (c.lapses || 0) + 1;
+      c.difficulty = clamp((c.difficulty || 5) + 0.6, 1, 10);
+      item.hadError = true;
+      item.correctsNeeded = 2;
+    }
+
+    let passed = false;
+    let retry = false;
+    let scheduleInfo = null;
+
+    if (!ok) {
+      retry = true;
+      item.reason = "错词强化";
+    } else if (item.correctsNeeded > 0) {
+      retry = true;
+      item.reason = "错词强化";
+    } else {
+      passed = true;
+      scheduleInfo = scheduleAfterDailyPass(c, item.hadError, item.wasNew);
+      logCompletion(item.wasNew);
+    }
+
+    state.scheduleModel = SCHEDULE_MODEL;
+    state.scheduleIntervalsDays = REVIEW_INTERVALS;
     save();
+
+    session.outcome = { ok, passed, retry, scheduleInfo };
 
     $("answerZone").hidden = false;
     const result = $("autoResult");
     result.hidden = false;
+
+    let headline;
+    let detail;
+    if (!ok) {
+      headline = "回答错误：本词今天还不能通过";
+      detail = "之后必须在今天的后续题目里再答对 2 次；如果中途再次答错，会重新从 2 次开始。";
+    } else if (retry) {
+      headline = `回答正确：还需再答对 ${item.correctsNeeded} 次`;
+      detail = "这是当天强化，不算跨天复习；下一次会换方向继续考同一同义组。";
+    } else {
+      headline = "当天通过";
+      detail = `下一次跨天复习：${scheduleInfo.days} 天后（${dateKey(scheduleInfo.due)}）`;
+    }
+
     result.innerHTML = `
       <div class="complete-banner" style="padding:16px 0 0">
-        <p style="margin-bottom:10px;color:${ok ? 'var(--green)' : 'var(--red)'}">${ok ? '回答正确：系统已自动记为“记住”' : '回答错误：系统已自动记为“忘记”，本轮会再次出现'}</p>
-        <p style="margin-bottom:12px;color:var(--sub);font-size:.82rem">下次预计：${humanInterval(Math.max(0, (c.due - now()) / DAY))}</p>
+        <p style="margin-bottom:10px;color:${passed ? 'var(--green)' : ok ? 'var(--text)' : 'var(--red)'}">${esc(headline)}</p>
+        <p style="margin-bottom:12px;color:var(--sub);font-size:.82rem">${esc(detail)}</p>
         <button class="button button-primary" id="continueBtn">下一题</button>
       </div>`;
-    $("continueBtn").onclick = () => {
-      session.queue.shift();
-      session.done++;
-      session.question = null;
-      renderAll();
-    };
+
+    $("continueBtn").onclick = () => advanceAfterAttempt(item);
   }
 
-  // Speech Synthesis: 提前加载 voices，优先使用本地英语 voice，避免每次点击都冷启动选声线。
+  function advanceAfterAttempt(item) {
+    const outcome = session.outcome;
+    session.queue.shift();
+    if (outcome?.retry) {
+      requeueAfterGap(item);
+    } else if (outcome?.passed) {
+      session.done++;
+    }
+    session.question = null;
+    session.outcome = null;
+    renderAll();
+  }
+
   const synth = "speechSynthesis" in window ? window.speechSynthesis : null;
   let preferredVoice = null;
 
@@ -561,7 +632,8 @@
 
     document.querySelectorAll(".library-item").forEach((el) => {
       el.onclick = () => {
-        session = { queue: [{ cardId: el.dataset.card, reason: "单词查看" }], total: 1, done: 0, active: true, answered: false, question: null };
+        const w = wordById.get(el.dataset.card);
+        session = { queue: [makeItem(w, "单词查看")], total: 1, done: 0, active: true, answered: false, question: null, outcome: null };
         switchView("today");
         renderStudy();
       };
@@ -574,8 +646,8 @@
     $("statTodayAccuracy").textContent = today.reviews ? `${Math.round(today.correct / today.reviews * 100)}%` : "—";
 
     const learned = allWords.filter((w) => state.cards[w.cardId]?.reps).map((w) => state.cards[w.cardId]);
-    $("statMastered").textContent = learned.filter((c) => c.stability >= 21 && retrievability(c) >= 0.9).length;
-    const avgS = learned.length ? learned.reduce((a, c) => a + c.stability, 0) / learned.length : 0;
+    $("statMastered").textContent = learned.filter((c) => (c.stability || 0) >= 31).length;
+    const avgS = learned.length ? learned.reduce((a, c) => a + (c.stability || 0), 0) / learned.length : 0;
     $("statAvgStability").textContent = learned.length ? `${avgS.toFixed(1)} 天` : "—";
 
     const weak = allWords
@@ -586,7 +658,7 @@
 
     $("weakList").innerHTML = weak.length ? weak.map(({ w, c, score }) => `
       <div class="weak-row">
-        <div><strong>${esc(w.word)} <small>${esc(w.chinese)}</small></strong><small>${esc(w.deckName || "")} · 错误 ${c.wrong} · 遗忘 ${c.lapses} · 回忆率 ${Math.round(retrievability(c) * 100)}%</small></div>
+        <div><strong>${esc(w.word)} <small>${esc(w.chinese)}</small></strong><small>${esc(w.deckName || "")} · 错误 ${c.wrong || 0} · 遗忘 ${c.lapses || 0} · 当前间隔 ${c.stability || 0} 天</small></div>
         <span class="weak-score">${score.toFixed(1)}</span>
       </div>`).join("") : '<p style="color:var(--muted)">还没有学习记录。</p>';
 
@@ -618,7 +690,7 @@
   }
 
   function exportData() {
-    const blob = new Blob([JSON.stringify({ app: "IELT Memory", version: 3, exportedAt: new Date().toISOString(), state }, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify({ app: "IELT Memory", version: 4, exportedAt: new Date().toISOString(), state }, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -634,6 +706,7 @@
       const incoming = parsed.state || parsed;
       if (!incoming.cards) throw new Error("bad data");
       state = { ...freshState(), ...incoming, settings: { ...freshState().settings, ...(incoming.settings || {}) } };
+      migrateScheduleModel();
       save();
       syncSettings();
       renderAll();
@@ -647,7 +720,7 @@
     if (!confirm("确定清空所有学习记录吗？此操作无法撤销。")) return;
     state = freshState();
     save();
-    session = { queue: [], total: 0, done: 0, active: false, answered: false, question: null };
+    session = { queue: [], total: 0, done: 0, active: false, answered: false, question: null, outcome: null };
     syncSettings();
     renderAll();
     toast("学习记录已清空");
@@ -655,13 +728,11 @@
 
   function syncSettings() {
     $("dailyNewInput").value = state.settings.dailyNew;
-    $("retentionInput").value = String(state.settings.targetRetention);
     $("repeatGapInput").value = state.settings.repeatGap;
   }
 
   function saveSettings() {
     state.settings.dailyNew = clamp(Number($("dailyNewInput").value) || 0, 0, 100);
-    state.settings.targetRetention = clamp(Number($("retentionInput").value) || 0.9, 0.80, 0.97);
     state.settings.repeatGap = clamp(Number($("repeatGapInput").value) || 3, 1, 10);
     save();
     renderAll();
@@ -704,6 +775,7 @@
   }
 
   migrateLegacy();
+  migrateScheduleModel();
   initSpeech();
   syncSettings();
   bind();
