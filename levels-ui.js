@@ -66,15 +66,21 @@
     const host = ensureProgressHost();
     if (!host) return;
     const state = readState();
-    const rows = DATA.groups.map((group) => {
+    const progress = DATA.groups.map((group) => ({ group, p: groupProgress(group, state) }));
+    const signature = progress.map(({ group, p }) => `${group.id}:${p.learned}:${p.mastered}:${p.total}`).join("|");
+    if (host.dataset.signature === signature) return;
+    host.dataset.signature = signature;
+
+    const rows = progress.map(({ group, p }) => {
       const meta = LEVEL_META[group.id];
-      const p = groupProgress(group, state);
+      const start = group.rangeStart || group.words?.[0]?.id || "";
+      const end = group.rangeEnd || group.words?.[group.words.length - 1]?.id || "";
       return `
         <article class="level-progress-card ${meta.className}">
           <div class="level-progress-head">
             <div>
               <span class="level-chip ${meta.className}">${meta.label}</span>
-              <small>${meta.mastery} · ${group.rangeStart || group.words?.[0]?.id || ""}–${group.rangeEnd || group.words?.at?.(-1)?.id || ""}</small>
+              <small>${meta.mastery} · ${start}–${end}</small>
             </div>
             <strong>${p.learned}<span> / ${p.total}</span></strong>
           </div>
@@ -88,13 +94,12 @@
         </article>`;
     }).join("");
 
-    const html = `
+    host.innerHTML = `
       <div class="level-progress-title">
         <div><span class="section-kicker">PDF LEVEL PROGRESS</span><h2>538 三等级进度</h2></div>
         <small>按 PDF 第1类 / 第2类 / 第3类考点词分别统计</small>
       </div>
       <div class="level-progress-grid">${rows}</div>`;
-    if (host.innerHTML !== html) host.innerHTML = html;
   }
 
   function setTextIfChanged(el, text) {
