@@ -1,0 +1,165 @@
+// PDF-based level labels and per-level progress UI.
+(() => {
+  "use strict";
+
+  const DATA = window.__IELT_DATA_V2__;
+  if (!DATA) return;
+
+  const STORAGE_KEY = "ielt-memory-v3";
+  const DAY = 86400000;
+  const LEVEL_META = {
+    1: { label: "第1类·超高频", mastery: "滚瓜烂熟", className: "level-1" },
+    2: { label: "第2类·重要考点", mastery: "熟记10遍以上", className: "level-2" },
+    3: { label: "第3类·真题考点", mastery: "熟记5遍以上", className: "level-3" }
+  };
+
+  const coreByCard = new Map((DATA.allPrimaryWords || []).map((w) => [w.cardId, w]));
+
+  function readState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : { cards: {} };
+    } catch {
+      return { cards: {} };
+    }
+  }
+
+  function retrievability(c, ts = Date.now()) {
+    if (!c?.reps || !c.stability || !c.lastReview) return 0;
+    const elapsed = Math.max(0, (ts - c.lastReview) / DAY);
+    return Math.pow(0.9, elapsed / Math.max(0.05, c.stability));
+  }
+
+  function groupProgress(group, state) {
+    const words = group.words || [];
+    let learned = 0;
+    let mastered = 0;
+    for (const w of words) {
+      const c = state.cards?.[w.cardId];
+      if (c?.reps) learned++;
+      if (c?.reps && c.stability >= 21 && retrievability(c) >= 0.9) mastered++;
+    }
+    const total = words.length || 1;
+    return {
+      total: words.length,
+      learned,
+      mastered,
+      learnedPct: Math.round(learned / total * 100),
+      masteredPct: Math.round(mastered / total * 100)
+    };
+  }
+
+  function ensureProgressHost() {
+    let host = document.getElementById("levelProgressHost");
+    if (host) return host;
+    const dashboard = document.querySelector(".dashboard");
+    if (!dashboard) return null;
+    host = document.createElement("section");
+    host.id = "levelProgressHost";
+    host.className = "level-progress-panel";
+    host.setAttribute("aria-label", "538等级学习进度");
+    dashboard.insertAdjacentElement("afterend", host);
+    return host;
+  }
+
+  function renderLevelProgress() {
+    const host = ensureProgressHost();
+    if (!host) return;
+    const state = readState();
+    const rows = DATA.groups.map((group) => {
+      const meta = LEVEL_META[group.id];
+      const p = groupProgress(group, state);
+      return `
+        <article class="level-progress-card ${meta.className}">
+          <div class="level-progress-head">
+            <div>
+              <span class="level-chip ${meta.className}">${meta.label}</span>
+              <small>${meta.mastery} · ${group.rangeStart || group.words?.[0]?.id || ""}–${group.rangeEnd || group.words?.at?.(-1)?.id || ""}</small>
+            </div>
+            <strong>${p.learned}<span> / ${p.total}</span></strong>
+          </div>
+          <div class="level-track" title="已学习 ${p.learned} / ${p.total}">
+            <div class="level-fill" style="width:${p.learnedPct}%"></div>
+          </div>
+          <div class="level-progress-foot">
+            <span>已学习 ${p.learnedPct}%</span>
+            <span>稳定掌握 ${p.mastered} · ${p.masteredPct}%</span>
+          </div>
+        </article>`;
+    }).join("");
+
+    const html = `
+      <div class="level-progress-title">
+        <div><span class="section-kicker">PDF LEVEL PROGRESS</span><h2>538 三等级进度</h2></div>
+        <small>按 PDF 第1类 / 第2类 / 第3类考点词分别统计</small>
+      </div>
+      <div class="level-progress-grid">${rows}</div>`;
+    if (host.innerHTML !== html) host.innerHTML = html;
+  }
+
+  function setTextIfChanged(el, text) {
+    if (el && el.textContent !== text) el.textContent = text;
+  }
+
+  function decorateStudyCard() {
+    const root = document.getElementById("studyCard");
+    const title = root?.querySelector(".word-title");
+    const badge = root?.querySelector(".deck-badge");
+    if (!title || !badge) return;
+
+    const wordText = title.textContent.trim();
+    const word = (DATA.allPrimaryWords || []).find((w) => w.word === wordText || (w.aliases || []).includes(wordText));
+    if (!word) return;
+
+    const meta = LEVEL_META[word.groupId];
+    badge.classList.add("pdf-level-badge", meta.className);
+    setTextIfChanged(badge, `${meta.label} · #${word.id} · ${meta.mastery}`);
+  }
+
+  function decorateLibrary() {
+    document.querySelectorAll("#libraryList .library-item").forEach((item) => {
+      const word = coreByCard.get(item.dataset.card);
+      if (!word) return;
+      const meta = LEVEL_META[word.groupId];
+      const top = item.querySelector(".library-item-top > div");
+      if (!top) return;
+      let chip = top.querySelector(".level-chip");
+      if (!chip) {
+        chip = document.createElement("span");
+        top.appendChild(chip);
+      }
+      chip.className = `level-chip ${meta.className}`;
+      setTextIfChanged(chip, meta.label);
+    });
+
+    document.querySelectorAll("#deckFilter .filter-button").forEach((btn) => {
+      const id = btn.dataset.deck;
+      if (!/^g[123]$/.test(id || "")) return;
+      const level = Number(id.slice(1));
+      const group = DATA.groups.find((g) => g.id === level);
+      const meta = LEVEL_META[level];
+      if (group && meta) setTextIfChanged(btn, `${meta.label} · ${group.words.length}`);
+    });
+  }
+
+  let scheduled = false;
+  function refresh() {
+    scheduled = false;
+    renderLevelProgress();
+    decorateStudyCard();
+    decorateLibrary();
+  }
+
+  function scheduleRefresh() {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(refresh);
+  }
+
+  const observer = new MutationObserver(scheduleRefresh);
+  observer.observe(document.body, { childList: true, subtree: true });
+  window.addEventListener("storage", scheduleRefresh);
+  document.addEventListener("click", () => setTimeout(scheduleRefresh, 0));
+
+  refresh();
+})();
