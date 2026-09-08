@@ -1,0 +1,149 @@
+/* PDF level labels + per-level progress */
+.level-progress-panel {
+  margin: 18px 0 22px;
+  padding: 18px;
+  background: var(--card, #fff);
+  border: 1px solid var(--border, #e7e0d6);
+  border-radius: 16px;
+  box-shadow: var(--shadow, 0 2px 12px rgba(0,0,0,.06));
+}
+
+.level-progress-title {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.level-progress-title h2 {
+  margin: 2px 0 0;
+  font-size: 1.05rem;
+}
+
+.level-progress-title > small {
+  color: var(--muted, #82796d);
+  font-size: .78rem;
+  text-align: right;
+}
+
+.level-progress-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.level-progress-card {
+  padding: 14px;
+  border: 1px solid var(--border, #e7e0d6);
+  border-radius: 13px;
+  background: rgba(255,255,255,.72);
+}
+
+.level-progress-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 11px;
+}
+
+.level-progress-head > div {
+  min-width: 0;
+}
+
+.level-progress-head small {
+  display: block;
+  margin-top: 7px;
+  color: var(--muted, #82796d);
+  font-size: .72rem;
+  line-height: 1.35;
+}
+
+.level-progress-head strong {
+  white-space: nowrap;
+  font-size: 1.1rem;
+}
+
+.level-progress-head strong span {
+  color: var(--muted, #82796d);
+  font-size: .72rem;
+  font-weight: 500;
+}
+
+.level-track {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #eee9e2;
+}
+
+.level-fill {
+  height: 100%;
+  border-radius: inherit;
+  transition: width .25s ease;
+}
+
+.level-progress-card.level-1 .level-fill { background: #c84f4f; }
+.level-progress-card.level-2 .level-fill { background: #c88935; }
+.level-progress-card.level-3 .level-fill { background: #527fa3; }
+
+.level-progress-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 8px;
+  color: var(--muted, #82796d);
+  font-size: .72rem;
+}
+
+.level-chip,
+.pdf-level-badge {
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: .7rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: .01em;
+  border: 1px solid transparent;
+}
+
+.level-chip.level-1,
+.pdf-level-badge.level-1 {
+  color: #9e3030;
+  background: #fbecec;
+  border-color: #f0caca;
+}
+
+.level-chip.level-2,
+.pdf-level-badge.level-2 {
+  color: #8b5b18;
+  background: #fbf1de;
+  border-color: #efd9b0;
+}
+
+.level-chip.level-3,
+.pdf-level-badge.level-3 {
+  color: #355f80;
+  background: #eaf2f7;
+  border-color: #cbdde9;
+}
+
+.library-item-top > div .level-chip {
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.word-card-head .pdf-level-badge {
+  padding: 6px 10px;
+  font-size: .74rem;
+}
+
+@media (max-width: 760px) {
+  .level-progress-grid { grid-template-columns: 1fr; }
+  .level-progress-title { align-items: flex-start; flex-direction: column; }
+  .level-progress-title > small { text-align: left; }
+}
