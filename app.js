@@ -14,7 +14,6 @@
   const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
   const now = () => Date.now();
 
-  // v3 记忆系统保持不变，只把数据源扩展为 538 + Academic。
   const allWords = (DATA.allWords || DATA.groups.flatMap((g) => g.words))
     .map((w) => ({ ...w, group: DATA.groups.find((g) => String(g.id) === String(w.groupId)) || null }));
   const wordById = new Map(allWords.map((w) => [w.cardId, w]));
@@ -36,14 +35,23 @@
     return a;
   }
 
+  function normText(v) {
+    return String(v ?? "").toLowerCase().replace(/[.…]/g, "...").replace(/[’‘]/g, "'").replace(/\s+/g, " ").trim();
+  }
+
+  function uniqueNonEmpty(items) {
+    const out = [];
+    for (const item of items || []) {
+      const text = String(item ?? "").trim();
+      if (text && !out.some((x) => normText(x) === normText(text))) out.push(text);
+    }
+    return out;
+  }
+
   function freshState() {
     return {
       version: 3,
-      settings: {
-        dailyNew: 20,
-        targetRetention: 0.90,
-        repeatGap: 3
-      },
+      settings: { dailyNew: 20, targetRetention: 0.90, repeatGap: 3 },
       cards: {},
       daily: {},
       migratedLegacy: false
@@ -132,8 +140,8 @@
     save();
   }
 
-  // D/S/R 轻量自适应记忆模型：保持原实现。
-  // D = difficulty, S = stability(days), R = retrievability.
+  // D/S/R 模型不再让用户主观选择难易程度。
+  // 正确 => grade 3 (Good)，错误 => grade 1 (Again)。
   function retrievability(c, ts = now()) {
     if (!c.reps || !c.stability || !c.lastReview) return 0;
     const elapsed = Math.max(0, (ts - c.lastReview) / DAY);
@@ -145,51 +153,40 @@
     return Math.max(5 / 1440, stability * Math.log(target) / Math.log(0.9));
   }
 
-  function schedule(c, grade, persist = true) {
-    grade = clamp(Number(grade), 1, 4);
+  function schedule(c, grade) {
+    grade = grade === 1 ? 1 : 3;
     const ts = now();
     const oldR = retrievability(c, ts);
     const first = !c.reps || !c.stability;
 
     if (first) {
-      const initialS = [0, 0.15, 0.7, 2.2, 5.2][grade];
-      c.stability = initialS;
-      c.difficulty = clamp(7 - grade * 0.8, 1, 10);
+      c.stability = grade === 1 ? 0.15 : 2.2;
+      c.difficulty = grade === 1 ? 6.2 : 4.6;
       if (grade === 1) c.lapses++;
     } else if (grade === 1) {
       c.lapses++;
       c.difficulty = clamp(c.difficulty + 0.9, 1, 10);
       c.stability = Math.max(0.12, c.stability * (0.30 + 0.03 * (10 - c.difficulty)));
     } else {
-      const gradeFactor = { 2: 0.55, 3: 1.0, 4: 1.65 }[grade];
       const forgettingBoost = 1 + (1 - oldR) * 2.2;
       const difficultyPenalty = 1 - (c.difficulty - 5) * 0.045;
-      c.stability = Math.max(0.15, c.stability * (1 + gradeFactor * forgettingBoost * difficultyPenalty));
-      c.difficulty = clamp(c.difficulty + (3 - grade) * 0.22 - (grade === 4 ? 0.18 : 0), 1, 10);
+      c.stability = Math.max(0.15, c.stability * (1 + 1.0 * forgettingBoost * difficultyPenalty));
+      c.difficulty = clamp(c.difficulty - 0.08, 1, 10);
     }
 
     c.reps++;
     c.lastRating = grade;
-
-    if (persist) {
-      c.lastReview = ts;
-      c.due = ts + intervalDays(c.stability) * DAY;
-    }
+    c.lastReview = ts;
+    c.due = ts + intervalDays(c.stability) * DAY;
     return c;
   }
 
   function humanInterval(days) {
-    if (days < 1 / 24) return `${Math.max(1, Math.round(days * 1440))} 分`;
+    if (days < 1 / 24) return `${Math.max(1, Math.round(days * 1440))} 分钟`;
     if (days < 1) return `${Math.max(1, Math.round(days * 24))} 小时`;
     if (days < 30) return `${Math.max(1, Math.round(days))} 天`;
     if (days < 365) return `${Math.max(1, Math.round(days / 30))} 月`;
     return `${(days / 365).toFixed(1)} 年`;
-  }
-
-  function preview(cardId, grade) {
-    const clone = { ...card(cardId) };
-    schedule(clone, grade, false);
-    return humanInterval(intervalDays(clone.stability));
   }
 
   function dueWords() {
@@ -199,12 +196,8 @@
       .sort((a, b) => (state.cards[a.cardId].due || 0) - (state.cards[b.cardId].due || 0));
   }
 
-  // 新词顺序：先完成 376 个新版 538 主词，再进入 Academic 扩展；
-  // Academic 仍可随时在“词库”中点击单独学习。
   function unseenWords(limit = state.settings.dailyNew) {
-    return allWords
-      .filter((w) => !state.cards[w.cardId]?.reps)
-      .slice(0, Math.max(0, Number(limit) || 0));
+    return allWords.filter((w) => !state.cards[w.cardId]?.reps).slice(0, Math.max(0, Number(limit) || 0));
   }
 
   function memoryLabel(c) {
@@ -237,23 +230,14 @@
     d.setHours(0, 0, 0, 0);
     for (let i = 0; i < 2000; i++) {
       const k = dateKey(d.getTime());
-      if ((state.daily[k]?.reviews || 0) > 0) {
-        n++;
-      } else if (i > 0) {
-        break;
-      }
+      if ((state.daily[k]?.reviews || 0) > 0) n++;
+      else if (i > 0) break;
       d.setDate(d.getDate() - 1);
     }
     return n;
   }
 
-  let session = {
-    queue: [],
-    total: 0,
-    done: 0,
-    active: false,
-    answered: false
-  };
+  let session = { queue: [], total: 0, done: 0, active: false, answered: false, question: null };
 
   function buildSession(extraNew = null) {
     const due = dueWords().map((w) => ({ cardId: w.cardId, reason: "到期复习" }));
@@ -264,7 +248,8 @@
       total: due.length + fresh.length,
       done: 0,
       active: true,
-      answered: false
+      answered: false,
+      question: null
     };
     renderAll();
   }
@@ -276,37 +261,52 @@
     session.total++;
   }
 
-  function uniqueNonEmpty(items) {
-    return [...new Set((items || []).map((x) => String(x || "").trim()).filter(Boolean))];
+  // 538 使用“同义簇”互考：主词和替换词都可能成为题干或正确选项。
+  function synonymCluster(word) {
+    return uniqueNonEmpty([word.word, ...(word.sourceSynonyms || word.quizSynonyms || word.synonyms || [])]);
   }
 
-  function optionSet(word) {
+  function buildQuestion(word) {
     if (word.quizMode === "meaning") {
       const correct = word.chinese;
       const pool = uniqueNonEmpty(
-        allWords
-          .filter((w) => w.cardId !== word.cardId && w.chinese && w.quizMode === "meaning")
-          .map((w) => w.chinese)
-      ).filter((x) => x !== correct);
+        allWords.filter((w) => w.cardId !== word.cardId && w.chinese && w.quizMode === "meaning").map((w) => w.chinese)
+      ).filter((x) => normText(x) !== normText(correct));
       const distractors = shuffle(pool).slice(0, 3);
       if (distractors.length < 3) {
         const fallback = uniqueNonEmpty(allWords.map((w) => w.chinese))
-          .filter((x) => x !== correct && !distractors.includes(x));
+          .filter((x) => normText(x) !== normText(correct) && !distractors.some((d) => normText(d) === normText(x)));
         distractors.push(...shuffle(fallback).slice(0, 3 - distractors.length));
       }
-      return { correct, options: shuffle([correct, ...distractors]) };
+      return { prompt: word.word, correct, options: shuffle([correct, ...distractors]), cluster: [word.word, word.chinese], mode: "meaning" };
     }
 
-    const answers = word.quizSynonyms?.length ? word.quizSynonyms : (word.sourceSynonyms || word.synonyms || []);
-    const correct = answers[Math.floor(Math.random() * answers.length)];
-    const currentSet = new Set((word.sourceSynonyms || word.synonyms || []).map((x) => String(x).toLowerCase()));
+    const cluster = synonymCluster(word);
+    if (cluster.length < 2) {
+      return { prompt: word.word, correct: word.chinese, options: [word.chinese], cluster, mode: "fallback" };
+    }
+
+    const prompt = cluster[Math.floor(Math.random() * cluster.length)];
+    const answerCandidates = cluster.filter((x) => normText(x) !== normText(prompt));
+    const correct = answerCandidates[Math.floor(Math.random() * answerCandidates.length)];
+    const currentSet = new Set(cluster.map(normText));
+
     const pool = uniqueNonEmpty(
-      DATA.allPrimaryWords
+      (DATA.allPrimaryWords || [])
         .filter((w) => w.cardId !== word.cardId)
-        .flatMap((w) => w.quizSynonyms?.length ? w.quizSynonyms : (w.sourceSynonyms || w.synonyms || []))
-    ).filter((x) => !currentSet.has(String(x).toLowerCase()));
+        .flatMap((w) => synonymCluster(w))
+    ).filter((x) => !currentSet.has(normText(x)));
+
     const distractors = shuffle(pool).slice(0, 3);
-    return { correct, options: shuffle([correct, ...distractors]) };
+    return { prompt, correct, options: shuffle([correct, ...distractors]), cluster, mode: "synonym" };
+  }
+
+  function currentLevelSummary() {
+    const nextGroup = DATA.groups.find((g) => g.words.some((w) => !state.cards[w.cardId]?.reps));
+    if (!nextGroup) return DATA.academic?.words?.some((w) => !state.cards[w.cardId]?.reps) ? "538 已完成，新词进入 Academic" : "所有新词已学习";
+    const label = nextGroup.shortLabel || nextGroup.levelName || `第${nextGroup.id}类考点词`;
+    const order = nextGroup.rankMode === "equal" ? "组内重要性一致" : "按重要性顺序学习";
+    return `当前新词优先：${label}（${order}）`;
   }
 
   function renderDashboard() {
@@ -322,28 +322,29 @@
     const pct = session.total ? Math.min(100, session.done / session.total * 100) : 0;
     $("sessionProgressText").textContent = `${session.done} / ${session.total}`;
     $("sessionProgressBar").style.width = `${pct}%`;
-    $("todaySummary").textContent = `到期 ${dueWords().length} · 新词 ${unseenWords().length} · 答错后间隔 ${state.settings.repeatGap} 张卡再次出现`;
+    $("todaySummary").textContent = `到期 ${dueWords().length} · 新词 ${unseenWords().length} · ${currentLevelSummary()} · 错词隔 ${state.settings.repeatGap} 张重现`;
   }
 
   function deckBadge(word) {
     if (word.deckId === "academic") return `Academic · NAWL #${word.rank}`;
-    return `新版538 · 第${word.groupId}类 · #${word.id}`;
+    const label = word.group?.shortLabel || word.group?.levelName || `第${word.groupId}类考点词`;
+    return `${label} · #${word.id}`;
   }
 
-  function answerZone(word) {
+  function answerZone(word, q) {
     if (word.deckId === "academic") {
       return `
+        <div class="answer-row"><span class="answer-label">本题</span><span class="answer-value">${esc(q.prompt)} → ${esc(q.correct)}</span></div>
         <div class="answer-row"><span class="answer-label">中文</span><span class="answer-value">${esc(word.chinese)}</span></div>
-        <div class="answer-row"><span class="answer-label">NAWL 排名</span><span class="answer-value">#${esc(word.rank)} · ${esc(word.pos)}</span></div>
         <div class="answer-row"><span class="answer-label">来源</span><span class="answer-value">New Academic Word List 1.2 · CC BY-SA 4.0</span></div>`;
     }
 
     return `
-      <div class="answer-row"><span class="answer-label">新版表同义替换</span><span class="answer-value">${(word.sourceSynonyms || []).map(esc).join(" · ")}</span></div>
+      <div class="answer-row"><span class="answer-label">本题替换</span><span class="answer-value">${esc(q.prompt)} ↔ ${esc(q.correct)}</span></div>
+      <div class="answer-row"><span class="answer-label">完整同义组</span><span class="answer-value">${q.cluster.map(esc).join(" · ")}</span></div>
       <div class="answer-row"><span class="answer-label">常考词义</span><span class="answer-value">${esc(word.chinese)}</span></div>
       ${word.aliases?.length ? `<div class="answer-row"><span class="answer-label">拼写 / 别名</span><span class="answer-value">${word.aliases.map(esc).join(" · ")}</span></div>` : ""}
       ${word.sourceNote ? `<div class="answer-row"><span class="answer-label">数据校注</span><span class="answer-value">${esc(word.sourceNote)}</span></div>` : ""}
-      ${word.ieltsMeaning ? `<div class="answer-row"><span class="answer-label">阅读提示</span><span class="answer-value">${esc(word.ieltsMeaning)}</span></div>` : ""}
       ${word.example ? `<div class="answer-row"><span class="answer-label">例句</span><span class="answer-value example">${esc(word.example)}</span></div>` : ""}`;
   }
 
@@ -356,7 +357,7 @@
         <div class="empty-state">
           <div class="empty-icon">◌</div>
           <h3>今日学习还没开始</h3>
-          <p>先复习到期词，再学习今日新词；默认先完成新版 538，再进入 Academic 扩展。</p>
+          <p>系统根据你的答题正确/错误自动判断记忆状态；不再要求你主观选择难易程度。</p>
           <button class="button button-primary" id="inlineStart">开始今日学习</button>
         </div>`;
       $("inlineStart").onclick = () => buildSession();
@@ -368,7 +369,7 @@
         <div class="empty-state">
           <div class="empty-icon">✓</div>
           <h3>今日任务完成</h3>
-          <p>下一次出现时间已根据每个词的记忆稳定度单独计算。</p>
+          <p>下一次出现时间已根据你的实际正确率和每个词的记忆稳定度自动计算。</p>
           <button class="button button-ghost" id="extraTen">再学 10 个新词</button>
         </div>`;
       $("extraTen").onclick = () => {
@@ -384,105 +385,123 @@
     const word = wordById.get(item.cardId);
     if (!word) {
       session.queue.shift();
+      session.question = null;
       renderStudy();
       return;
     }
+
     const c = card(item.cardId);
-    const q = optionSet(word);
+    if (!session.question || session.question.cardId !== item.cardId) {
+      session.question = { cardId: item.cardId, ...buildQuestion(word) };
+    }
+    const q = session.question;
     session.answered = false;
 
     root.innerHTML = `
-      <div class="word-card">
+      <div class="word-card" data-card="${attr(word.cardId)}">
         <div class="word-card-head">
           <span class="deck-badge">${esc(deckBadge(word))}</span>
           <span class="memory-badge">${esc(item.reason)} · ${esc(memoryLabel(c))}</span>
         </div>
         <div class="word-main">
-          <h3 class="word-title">${esc(word.word)}</h3>
-          <div class="word-pos">${esc(word.pos)}</div>
-          <div class="word-actions">
-            <button class="icon-button" id="speakBtn" title="英式发音">🔊</button>
-          </div>
+          <h3 class="word-title">${esc(q.prompt)}</h3>
+          <div class="word-pos">${word.deckId === "academic" ? esc(word.pos) : "选择可互相替换的表达"}</div>
+          <div class="word-actions"><button class="icon-button" id="speakBtn" title="发音">🔊</button></div>
           <div class="options" id="options">
             ${q.options.map((o) => `<button class="option" data-option="${attr(o)}">${esc(o)}</button>`).join("")}
           </div>
         </div>
-        <div class="answer-zone" id="answerZone" hidden>${answerZone(word)}</div>
-        <div class="rating-box" id="ratingBox" hidden>
-          <p class="rating-hint" id="ratingHint">这次回忆有多轻松？</p>
-          <div class="rating-grid">
-            ${ratingButton(item.cardId, 1, "忘了", "Again")}
-            ${ratingButton(item.cardId, 2, "困难", "Hard")}
-            ${ratingButton(item.cardId, 3, "记住", "Good")}
-            ${ratingButton(item.cardId, 4, "太简单", "Easy")}
-          </div>
-        </div>
+        <div class="answer-zone" id="answerZone" hidden>${answerZone(word, q)}</div>
+        <div id="autoResult" hidden></div>
       </div>`;
 
-    $("speakBtn").onclick = () => speak(word.word);
+    $("speakBtn").onclick = () => speak(q.prompt);
     document.querySelectorAll(".option").forEach((btn) => {
-      btn.onclick = () => handleChoice(btn, q.correct, item, word);
+      btn.onclick = () => handleChoice(btn, q, item, word);
     });
   }
 
-  function ratingButton(cardId, grade, zh, en) {
-    const cls = ["", "again", "hard", "good", "easy"][grade];
-    return `<button class="rating ${cls}" data-grade="${grade}">${zh}<small>${en} · ${preview(cardId, grade)}</small></button>`;
-  }
-
-  function handleChoice(btn, correct, item, word) {
+  function handleChoice(btn, q, item, word) {
     if (session.answered) return;
     session.answered = true;
     const picked = btn.dataset.option;
-    const ok = picked === correct;
+    const ok = normText(picked) === normText(q.correct);
     const c = card(item.cardId);
+    const wasNew = !c.reps;
 
     document.querySelectorAll(".option").forEach((b) => {
       b.disabled = true;
-      if (b.dataset.option === correct) b.classList.add("correct");
+      if (normText(b.dataset.option) === normText(q.correct)) b.classList.add("correct");
       if (b === btn && !ok) b.classList.add("wrong");
     });
 
     if (ok) c.correct++;
     else c.wrong++;
 
+    const grade = ok ? 3 : 1;
+    schedule(c, grade);
+    logDaily(ok, wasNew);
+    if (!ok) requeue(item);
+    save();
+
     $("answerZone").hidden = false;
-    $("ratingBox").hidden = false;
-
-    if (!ok) {
-      $("ratingHint").textContent = "答错：自动按“忘了”记录，并在本轮再次出现。";
-      document.querySelectorAll(".rating").forEach((r) => {
-        if (Number(r.dataset.grade) !== 1) {
-          r.disabled = true;
-          r.style.opacity = "0.4";
-        }
-      });
-    }
-
-    document.querySelectorAll(".rating").forEach((r) => {
-      r.onclick = () => finishCard(item, Number(ok ? r.dataset.grade : 1), ok);
-    });
+    const result = $("autoResult");
+    result.hidden = false;
+    result.innerHTML = `
+      <div class="complete-banner" style="padding:16px 0 0">
+        <p style="margin-bottom:10px;color:${ok ? 'var(--green)' : 'var(--red)'}">${ok ? '回答正确：系统已自动记为“记住”' : '回答错误：系统已自动记为“忘记”，本轮会再次出现'}</p>
+        <p style="margin-bottom:12px;color:var(--sub);font-size:.82rem">下次预计：${humanInterval(Math.max(0, (c.due - now()) / DAY))}</p>
+        <button class="button button-primary" id="continueBtn">下一题</button>
+      </div>`;
+    $("continueBtn").onclick = () => {
+      session.queue.shift();
+      session.done++;
+      session.question = null;
+      renderAll();
+    };
   }
 
-  function finishCard(item, grade, ok) {
-    const c = card(item.cardId);
-    const wasNew = !c.reps;
-    schedule(c, grade, true);
-    logDaily(ok, wasNew);
-    session.queue.shift();
-    if (grade === 1) requeue(item);
-    session.done++;
-    save();
-    renderAll();
+  // Speech Synthesis: 提前加载 voices，优先使用本地英语 voice，避免每次点击都冷启动选声线。
+  const synth = "speechSynthesis" in window ? window.speechSynthesis : null;
+  let preferredVoice = null;
+
+  function choosePreferredVoice(voices) {
+    const english = voices.filter((v) => /^en([-_]|$)/i.test(v.lang || ""));
+    return english.find((v) => /^en-GB$/i.test(v.lang) && v.localService) ||
+      english.find((v) => v.localService) ||
+      english.find((v) => /^en-GB$/i.test(v.lang)) ||
+      english[0] ||
+      voices.find((v) => v.localService) ||
+      voices[0] || null;
+  }
+
+  function refreshVoices() {
+    if (!synth) return;
+    const voices = synth.getVoices();
+    if (voices.length) preferredVoice = choosePreferredVoice(voices);
+  }
+
+  function initSpeech() {
+    if (!synth) return;
+    refreshVoices();
+    if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", refreshVoices);
+    document.addEventListener("pointerdown", refreshVoices, { once: true, passive: true });
   }
 
   function speak(text) {
-    if (!("speechSynthesis" in window)) return toast("当前浏览器不支持朗读");
-    speechSynthesis.cancel();
+    if (!synth) return toast("当前浏览器不支持朗读");
+    if (!preferredVoice) refreshVoices();
+    if (synth.speaking || synth.pending) synth.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = "en-GB";
-    u.rate = 0.86;
-    speechSynthesis.speak(u);
+    if (preferredVoice) {
+      u.voice = preferredVoice;
+      u.lang = preferredVoice.lang || "en-GB";
+    } else {
+      u.lang = "en-GB";
+    }
+    u.rate = 0.94;
+    u.pitch = 1;
+    synth.speak(u);
   }
 
   let filterDeck = "all";
@@ -491,7 +510,7 @@
     const items = [
       { id: "all", label: `全部 ${DATA.counts.studyCards}` },
       { id: "reading538", label: `新版 538 · ${DATA.counts.primaryWords}` },
-      ...DATA.groups.map((g) => ({ id: `g${g.id}`, label: `第${g.id}类 ${g.words.length}` })),
+      ...DATA.groups.map((g) => ({ id: `g${g.id}`, label: `${g.levelName || `第${g.id}类考点词`} · ${g.words.length}` })),
       { id: "academic", label: `Academic ${DATA.counts.academicUnique}` }
     ];
     $("deckFilter").innerHTML = items.map((x) => `<button class="filter-button ${filterDeck === x.id ? "active" : ""}" data-deck="${x.id}">${esc(x.label)}</button>`).join("");
@@ -529,7 +548,7 @@
       const c = state.cards[w.cardId];
       const detail = w.deckId === "academic"
         ? `NAWL #${w.rank} · ${esc(w.pos)}`
-        : `新版表同义替换：${(w.sourceSynonyms || []).slice(0, 5).map(esc).join(" · ")}`;
+        : `同义组：${synonymCluster(w).slice(0, 6).map(esc).join(" · ")}`;
       return `<article class="library-item" data-card="${attr(w.cardId)}">
         <div class="library-item-top">
           <div><span class="library-word">${esc(w.word)}</span><span class="library-pos">${esc(w.pos)}</span></div>
@@ -542,7 +561,7 @@
 
     document.querySelectorAll(".library-item").forEach((el) => {
       el.onclick = () => {
-        session = { queue: [{ cardId: el.dataset.card, reason: "单词查看" }], total: 1, done: 0, active: true, answered: false };
+        session = { queue: [{ cardId: el.dataset.card, reason: "单词查看" }], total: 1, done: 0, active: true, answered: false, question: null };
         switchView("today");
         renderStudy();
       };
@@ -628,7 +647,7 @@
     if (!confirm("确定清空所有学习记录吗？此操作无法撤销。")) return;
     state = freshState();
     save();
-    session = { queue: [], total: 0, done: 0, active: false, answered: false };
+    session = { queue: [], total: 0, done: 0, active: false, answered: false, question: null };
     syncSettings();
     renderAll();
     toast("学习记录已清空");
@@ -685,6 +704,7 @@
   }
 
   migrateLegacy();
+  initSpeech();
   syncSettings();
   bind();
   renderAll();
