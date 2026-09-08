@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#f6f3ee" />
-  <title>IELT Memory · 雅思阅读 538</title>
+  <title>IELT Memory · 雅思阅读 538 + Academic</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -12,8 +12,8 @@
     <header class="topbar">
       <div>
         <div class="eyebrow">IELT MEMORY</div>
-        <h1>雅思阅读 538</h1>
-        <p class="subtitle">新版机考 / 笔试综合版 · 错词强化 · 自适应间隔复习</p>
+        <h1>雅思阅读 538 + Academic</h1>
+        <p class="subtitle">新版 376 主词逐条校验 · NAWL 学术扩展 · 错词强化 · 自适应间隔复习</p>
       </div>
       <div class="streak-chip">🔥 连续 <strong id="streakCount">0</strong> 天</div>
     </header>
@@ -32,7 +32,7 @@
       <article class="metric-card">
         <span class="metric-label">已学习</span>
         <strong id="learnedCount">0</strong>
-        <small>376 主词</small>
+        <small>538 + Academic</small>
       </article>
       <article class="metric-card">
         <span class="metric-label">薄弱词</span>
@@ -72,12 +72,12 @@
     <section class="view" id="view-library">
       <div class="library-toolbar">
         <div>
-          <div class="section-kicker">NEW EDITION DATA</div>
-          <h2>新版 538 词库</h2>
-          <p id="dataCountText">376 个主词 · 538 个学习目标</p>
+          <div class="section-kicker">AUDITED DATA + ACADEMIC EXPANSION</div>
+          <h2>新版阅读词库</h2>
+          <p id="dataCountText">376 个 538 主词 · 538 个学习目标 · Academic 扩展加载中</p>
         </div>
         <div class="search-box">
-          <input id="librarySearch" type="search" placeholder="搜索单词、中文或同义替换…" />
+          <input id="librarySearch" type="search" placeholder="搜索单词、中文、拼写或同义替换…" />
         </div>
       </div>
       <div class="deck-filter" id="deckFilter"></div>
@@ -88,7 +88,7 @@
       <div class="section-heading">
         <div class="section-kicker">MEMORY ANALYTICS</div>
         <h2>学习统计</h2>
-        <p>不是只看背了多少，而是看真正记住了多少。</p>
+        <p>538 与 Academic 共用同一套记忆状态，不重新计算、不丢旧进度。</p>
       </div>
 
       <div class="stats-grid">
@@ -122,7 +122,7 @@
 
       <div class="settings-grid">
         <label class="setting-card">
-          <span><strong>每日新词</strong><small>先复习到期词，再加入新词</small></span>
+          <span><strong>每日新词</strong><small>默认先完成新版 538，再进入 Academic</small></span>
           <input id="dailyNewInput" type="number" min="0" max="100" step="1" />
         </label>
         <label class="setting-card">
@@ -144,7 +144,7 @@
 
       <article class="algorithm-note">
         <h3>记忆算法</h3>
-        <p>每个词独立保存 Difficulty（难度）、Stability（稳定度）和 Retrievability（当前可回忆率）。答错会立即降低稳定度并进入本轮错词强化；跨天则根据遗忘曲线和目标记忆率自动计算下一次出现时间。</p>
+        <p>每个词独立保存 Difficulty（难度）、Stability（稳定度）和 Retrievability（当前可回忆率）。答错会立即降低稳定度并进入本轮错词强化；跨天则根据遗忘曲线和目标记忆率自动计算下一次出现时间。加入 Academic 后算法不变，只增加新卡片。</p>
       </article>
 
       <article class="data-panel">
@@ -164,6 +164,7 @@
   <div class="toast" id="toast"></div>
 
   <script src="data.js"></script>
+  <script src="academic-data.js"></script>
   <script src="data-v2.js"></script>
   <script src="app.js"></script>
 </body>
