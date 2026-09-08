@@ -3,7 +3,7 @@
 
   const DATA = window.__IELT_DATA_V2__;
   if (!DATA) {
-    document.body.innerHTML = '<p style="padding:2rem">新版数据加载失败，请检查 data.js 与 data-v2.js。</p>';
+    document.body.innerHTML = '<p style="padding:2rem">新版数据加载失败，请检查 data.js、academic-data.js 与 data-v2.js。</p>';
     return;
   }
 
@@ -14,7 +14,9 @@
   const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
   const now = () => Date.now();
 
-  const allWords = DATA.groups.flatMap((g) => g.words.map((w) => ({ ...w, group: g })));
+  // v3 记忆系统保持不变，只把数据源扩展为 538 + Academic。
+  const allWords = (DATA.allWords || DATA.groups.flatMap((g) => g.words))
+    .map((w) => ({ ...w, group: DATA.groups.find((g) => String(g.id) === String(w.groupId)) || null }));
   const wordById = new Map(allWords.map((w) => [w.cardId, w]));
 
   function dateKey(ts = Date.now()) {
@@ -113,7 +115,7 @@
         });
 
         Object.entries(legacy.mistakes || {}).forEach(([oldId, value]) => {
-          const w = allWords.find((x) => String(x.id) === String(oldId));
+          const w = DATA.allPrimaryWords.find((x) => String(x.id) === String(oldId));
           if (!w) return;
           const c = card(w.cardId);
           const n = Math.max(0, Number(value) || 0);
@@ -130,9 +132,8 @@
     save();
   }
 
-  // D/S/R 轻量自适应记忆模型：
+  // D/S/R 轻量自适应记忆模型：保持原实现。
   // D = difficulty, S = stability(days), R = retrievability.
-  // R 使用指数遗忘曲线，目标保持率决定下一次复习间隔。
   function retrievability(c, ts = now()) {
     if (!c.reps || !c.stability || !c.lastReview) return 0;
     const elapsed = Math.max(0, (ts - c.lastReview) / DAY);
@@ -198,8 +199,12 @@
       .sort((a, b) => (state.cards[a.cardId].due || 0) - (state.cards[b.cardId].due || 0));
   }
 
+  // 新词顺序：先完成 376 个新版 538 主词，再进入 Academic 扩展；
+  // Academic 仍可随时在“词库”中点击单独学习。
   function unseenWords(limit = state.settings.dailyNew) {
-    return allWords.filter((w) => !state.cards[w.cardId]?.reps).slice(0, Math.max(0, Number(limit) || 0));
+    return allWords
+      .filter((w) => !state.cards[w.cardId]?.reps)
+      .slice(0, Math.max(0, Number(limit) || 0));
   }
 
   function memoryLabel(c) {
@@ -271,14 +276,36 @@
     session.total++;
   }
 
+  function uniqueNonEmpty(items) {
+    return [...new Set((items || []).map((x) => String(x || "").trim()).filter(Boolean))];
+  }
+
   function optionSet(word) {
-    const answers = word.examSynonyms?.length ? word.examSynonyms : word.synonyms;
+    if (word.quizMode === "meaning") {
+      const correct = word.chinese;
+      const pool = uniqueNonEmpty(
+        allWords
+          .filter((w) => w.cardId !== word.cardId && w.chinese && w.quizMode === "meaning")
+          .map((w) => w.chinese)
+      ).filter((x) => x !== correct);
+      const distractors = shuffle(pool).slice(0, 3);
+      if (distractors.length < 3) {
+        const fallback = uniqueNonEmpty(allWords.map((w) => w.chinese))
+          .filter((x) => x !== correct && !distractors.includes(x));
+        distractors.push(...shuffle(fallback).slice(0, 3 - distractors.length));
+      }
+      return { correct, options: shuffle([correct, ...distractors]) };
+    }
+
+    const answers = word.quizSynonyms?.length ? word.quizSynonyms : (word.sourceSynonyms || word.synonyms || []);
     const correct = answers[Math.floor(Math.random() * answers.length)];
-    const pool = allWords
-      .filter((w) => w.cardId !== word.cardId)
-      .flatMap((w) => w.examSynonyms?.length ? w.examSynonyms : w.synonyms)
-      .filter((x) => !word.synonyms.some((s) => s.toLowerCase() === String(x).toLowerCase()));
-    const distractors = shuffle([...new Set(pool)]).slice(0, 3);
+    const currentSet = new Set((word.sourceSynonyms || word.synonyms || []).map((x) => String(x).toLowerCase()));
+    const pool = uniqueNonEmpty(
+      DATA.allPrimaryWords
+        .filter((w) => w.cardId !== word.cardId)
+        .flatMap((w) => w.quizSynonyms?.length ? w.quizSynonyms : (w.sourceSynonyms || w.synonyms || []))
+    ).filter((x) => !currentSet.has(String(x).toLowerCase()));
+    const distractors = shuffle(pool).slice(0, 3);
     return { correct, options: shuffle([correct, ...distractors]) };
   }
 
@@ -288,7 +315,7 @@
     $("learnedCount").textContent = allWords.filter((w) => state.cards[w.cardId]?.reps).length;
     $("weakCount").textContent = allWords.filter((w) => weakScore(w) >= 5.5).length;
     $("streakCount").textContent = streak();
-    $("dataCountText").textContent = `${DATA.counts.primaryWords} 个主词 · ${DATA.counts.totalTargets} 个新版学习目标`;
+    $("dataCountText").textContent = `${DATA.counts.primaryWords} 个 538 主词 · ${DATA.counts.totalTargets} 个 538 学习目标 · Academic ${DATA.counts.academicUnique} 词`;
   }
 
   function renderProgress() {
@@ -296,6 +323,28 @@
     $("sessionProgressText").textContent = `${session.done} / ${session.total}`;
     $("sessionProgressBar").style.width = `${pct}%`;
     $("todaySummary").textContent = `到期 ${dueWords().length} · 新词 ${unseenWords().length} · 答错后间隔 ${state.settings.repeatGap} 张卡再次出现`;
+  }
+
+  function deckBadge(word) {
+    if (word.deckId === "academic") return `Academic · NAWL #${word.rank}`;
+    return `新版538 · 第${word.groupId}类 · #${word.id}`;
+  }
+
+  function answerZone(word) {
+    if (word.deckId === "academic") {
+      return `
+        <div class="answer-row"><span class="answer-label">中文</span><span class="answer-value">${esc(word.chinese)}</span></div>
+        <div class="answer-row"><span class="answer-label">NAWL 排名</span><span class="answer-value">#${esc(word.rank)} · ${esc(word.pos)}</span></div>
+        <div class="answer-row"><span class="answer-label">来源</span><span class="answer-value">New Academic Word List 1.2 · CC BY-SA 4.0</span></div>`;
+    }
+
+    return `
+      <div class="answer-row"><span class="answer-label">新版表同义替换</span><span class="answer-value">${(word.sourceSynonyms || []).map(esc).join(" · ")}</span></div>
+      <div class="answer-row"><span class="answer-label">常考词义</span><span class="answer-value">${esc(word.chinese)}</span></div>
+      ${word.aliases?.length ? `<div class="answer-row"><span class="answer-label">拼写 / 别名</span><span class="answer-value">${word.aliases.map(esc).join(" · ")}</span></div>` : ""}
+      ${word.sourceNote ? `<div class="answer-row"><span class="answer-label">数据校注</span><span class="answer-value">${esc(word.sourceNote)}</span></div>` : ""}
+      ${word.ieltsMeaning ? `<div class="answer-row"><span class="answer-label">阅读提示</span><span class="answer-value">${esc(word.ieltsMeaning)}</span></div>` : ""}
+      ${word.example ? `<div class="answer-row"><span class="answer-label">例句</span><span class="answer-value example">${esc(word.example)}</span></div>` : ""}`;
   }
 
   function renderStudy() {
@@ -307,7 +356,7 @@
         <div class="empty-state">
           <div class="empty-icon">◌</div>
           <h3>今日学习还没开始</h3>
-          <p>先复习到期词，再学习今日新词；错词会在同一轮自动重现。</p>
+          <p>先复习到期词，再学习今日新词；默认先完成新版 538，再进入 Academic 扩展。</p>
           <button class="button button-primary" id="inlineStart">开始今日学习</button>
         </div>`;
       $("inlineStart").onclick = () => buildSession();
@@ -345,7 +394,7 @@
     root.innerHTML = `
       <div class="word-card">
         <div class="word-card-head">
-          <span class="deck-badge">新版538 · 第${word.groupId}类</span>
+          <span class="deck-badge">${esc(deckBadge(word))}</span>
           <span class="memory-badge">${esc(item.reason)} · ${esc(memoryLabel(c))}</span>
         </div>
         <div class="word-main">
@@ -358,13 +407,7 @@
             ${q.options.map((o) => `<button class="option" data-option="${attr(o)}">${esc(o)}</button>`).join("")}
           </div>
         </div>
-        <div class="answer-zone" id="answerZone" hidden>
-          <div class="answer-row"><span class="answer-label">命题同义替换</span><span class="answer-value">${(word.examSynonyms || []).map(esc).join(" · ")}</span></div>
-          ${word.relatedSynonyms?.length ? `<div class="answer-row"><span class="answer-label">其它近义词</span><span class="answer-value">${word.relatedSynonyms.map(esc).join(" · ")}</span></div>` : ""}
-          <div class="answer-row"><span class="answer-label">常考词义</span><span class="answer-value">${esc(word.chinese)}</span></div>
-          ${word.ieltsMeaning ? `<div class="answer-row"><span class="answer-label">阅读提示</span><span class="answer-value">${esc(word.ieltsMeaning)}</span></div>` : ""}
-          ${word.example ? `<div class="answer-row"><span class="answer-label">例句</span><span class="answer-value example">${esc(word.example)}</span></div>` : ""}
-        </div>
+        <div class="answer-zone" id="answerZone" hidden>${answerZone(word)}</div>
         <div class="rating-box" id="ratingBox" hidden>
           <p class="rating-hint" id="ratingHint">这次回忆有多轻松？</p>
           <div class="rating-grid">
@@ -442,44 +485,58 @@
     speechSynthesis.speak(u);
   }
 
-  let filterGroup = "all";
+  let filterDeck = "all";
 
   function renderFilters() {
     const items = [
-      { id: "all", label: `全部 ${DATA.counts.primaryWords}` },
-      ...DATA.groups.map((g) => ({ id: String(g.id), label: `第${g.id}类 ${g.words.length}` }))
+      { id: "all", label: `全部 ${DATA.counts.studyCards}` },
+      { id: "reading538", label: `新版 538 · ${DATA.counts.primaryWords}` },
+      ...DATA.groups.map((g) => ({ id: `g${g.id}`, label: `第${g.id}类 ${g.words.length}` })),
+      { id: "academic", label: `Academic ${DATA.counts.academicUnique}` }
     ];
-    $("deckFilter").innerHTML = items.map((x) => `<button class="filter-button ${filterGroup === x.id ? "active" : ""}" data-group="${x.id}">${esc(x.label)}</button>`).join("");
+    $("deckFilter").innerHTML = items.map((x) => `<button class="filter-button ${filterDeck === x.id ? "active" : ""}" data-deck="${x.id}">${esc(x.label)}</button>`).join("");
     document.querySelectorAll(".filter-button").forEach((b) => {
       b.onclick = () => {
-        filterGroup = b.dataset.group;
+        filterDeck = b.dataset.deck;
         renderFilters();
         renderLibrary();
       };
     });
   }
 
+  function matchesDeck(w) {
+    if (filterDeck === "all") return true;
+    if (filterDeck === "reading538") return w.deckId === "reading538";
+    if (filterDeck === "academic") return w.deckId === "academic";
+    if (/^g[123]$/.test(filterDeck)) return w.deckId === "reading538" && String(w.groupId) === filterDeck.slice(1);
+    return true;
+  }
+
   function renderLibrary() {
     const q = ($("librarySearch").value || "").trim().toLowerCase();
-    let words = allWords.filter((w) => filterGroup === "all" || String(w.groupId) === filterGroup);
+    let words = allWords.filter(matchesDeck);
     if (q) {
       words = words.filter((w) =>
         w.word.toLowerCase().includes(q) ||
-        w.chinese.includes(q) ||
-        w.synonyms.some((s) => s.toLowerCase().includes(q))
+        (w.chinese || "").includes(q) ||
+        (w.aliases || []).some((s) => s.toLowerCase().includes(q)) ||
+        (w.sourceSynonyms || []).some((s) => s.toLowerCase().includes(q))
       );
     }
 
-    const visible = words.slice(0, 180);
+    const visible = words.slice(0, 220);
     $("libraryList").innerHTML = visible.length ? visible.map((w) => {
       const c = state.cards[w.cardId];
+      const detail = w.deckId === "academic"
+        ? `NAWL #${w.rank} · ${esc(w.pos)}`
+        : `新版表同义替换：${(w.sourceSynonyms || []).slice(0, 5).map(esc).join(" · ")}`;
       return `<article class="library-item" data-card="${attr(w.cardId)}">
         <div class="library-item-top">
           <div><span class="library-word">${esc(w.word)}</span><span class="library-pos">${esc(w.pos)}</span></div>
           <span class="memory-badge">${esc(memoryLabel(c))}</span>
         </div>
         <div class="library-cn">${esc(w.chinese)}</div>
-        <div class="library-syn">命题替换：${(w.examSynonyms || []).slice(0, 5).map(esc).join(" · ")}</div>
+        <div class="library-syn">${detail}</div>
       </article>`;
     }).join("") : '<div class="empty-state" style="min-height:220px"><p>没有匹配的词。</p></div>';
 
@@ -510,7 +567,7 @@
 
     $("weakList").innerHTML = weak.length ? weak.map(({ w, c, score }) => `
       <div class="weak-row">
-        <div><strong>${esc(w.word)} <small>${esc(w.chinese)}</small></strong><small>错误 ${c.wrong} · 遗忘 ${c.lapses} · 回忆率 ${Math.round(retrievability(c) * 100)}%</small></div>
+        <div><strong>${esc(w.word)} <small>${esc(w.chinese)}</small></strong><small>${esc(w.deckName || "")} · 错误 ${c.wrong} · 遗忘 ${c.lapses} · 回忆率 ${Math.round(retrievability(c) * 100)}%</small></div>
         <span class="weak-score">${score.toFixed(1)}</span>
       </div>`).join("") : '<p style="color:var(--muted)">还没有学习记录。</p>';
 
