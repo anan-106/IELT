@@ -57,7 +57,7 @@
   margin-top: 7px;
   color: var(--muted, #82796d);
   font-size: .72rem;
-  line-height: 1.35;
+  line-height: 1.45;
 }
 
 .level-progress-head strong {
@@ -95,6 +95,15 @@
   margin-top: 8px;
   color: var(--muted, #82796d);
   font-size: .72rem;
+}
+
+.level-progress-rule {
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border, #e7e0d6);
+  color: var(--text, #2c2416);
+  font-size: .72rem;
+  line-height: 1.45;
 }
 
 .level-chip,
@@ -140,6 +149,24 @@
 .word-card-head .pdf-level-badge {
   padding: 6px 10px;
   font-size: .74rem;
+}
+
+.pdf-level-info {
+  margin: 8px 0 0;
+  padding: 7px 10px;
+  border-radius: 9px;
+  background: #f7f4ef;
+  color: var(--muted, #82796d);
+  font-size: .74rem;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.pdf-level-library-rule {
+  margin-top: 8px;
+  color: var(--muted, #82796d);
+  font-size: .72rem;
+  line-height: 1.4;
 }
 
 @media (max-width: 760px) {
