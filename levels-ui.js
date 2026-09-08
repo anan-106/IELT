@@ -6,7 +6,6 @@
   if (!DATA) return;
 
   const STORAGE_KEY = "ielt-memory-v3";
-  const DAY = 86400000;
   const LEVEL_META = {
     1: {
       label: "第1类考点词·超高频",
@@ -48,12 +47,6 @@
     }
   }
 
-  function retrievability(c, ts = Date.now()) {
-    if (!c?.reps || !c.stability || !c.lastReview) return 0;
-    const elapsed = Math.max(0, (ts - c.lastReview) / DAY);
-    return Math.pow(0.9, elapsed / Math.max(0.05, c.stability));
-  }
-
   function groupProgress(group, state) {
     const words = group.words || [];
     let learned = 0;
@@ -61,7 +54,7 @@
     for (const w of words) {
       const c = state.cards?.[w.cardId];
       if (c?.reps) learned++;
-      if (c?.reps && c.stability >= 21 && retrievability(c) >= 0.9) mastered++;
+      if (c?.reps && (c.stability || 0) >= 31) mastered++;
     }
     const total = words.length || 1;
     return {
@@ -81,7 +74,7 @@
     host = document.createElement("section");
     host.id = "levelProgressHost";
     host.className = "level-progress-panel";
-    host.setAttribute("aria-label", "538等级学习进度");
+    host.setAttribute("aria-label", "538三类考点词进度");
     dashboard.insertAdjacentElement("afterend", host);
     return host;
   }
@@ -111,7 +104,7 @@
           </div>
           <div class="level-progress-foot">
             <span>已学习 ${p.learnedPct}%</span>
-            <span>稳定掌握 ${p.mastered} · ${p.masteredPct}%</span>
+            <span>31天阶段及以上 ${p.mastered} · ${p.masteredPct}%</span>
           </div>
           <div class="level-progress-rule">${meta.order}</div>
         </article>`;
@@ -120,7 +113,7 @@
     host.innerHTML = `
       <div class="level-progress-title">
         <div><span class="section-kicker">PDF LEVEL PROGRESS</span><h2>538 三类考点词进度</h2></div>
-        <small>第1类优先 → 第2类 → 第3类；第3类组内不再区分重要性</small>
+        <small>第1类优先 → 第2类 → 第3类；第3类组内重要性一致</small>
       </div>
       <div class="level-progress-grid">${rows}</div>`;
   }
@@ -129,37 +122,21 @@
     if (el && el.textContent !== text) el.textContent = text;
   }
 
-  function decorateTodaySummary() {
-    const el = document.getElementById("todaySummary");
-    if (!el) return;
-    const state = readState();
-    const next = (DATA.allPrimaryWords || []).find((w) => !state.cards?.[w.cardId]?.reps);
-    const base = el.textContent.split(" · 当前新词优先：")[0];
-    if (!next) {
-      setTextIfChanged(el, `${base} · 538主词已全部进入记忆系统`);
-      return;
-    }
-    const meta = LEVEL_META[next.groupId];
-    setTextIfChanged(el, `${base} · 当前新词优先：${meta.shortLabel}（${meta.order}）`);
-  }
-
   function decorateStudyCard() {
-    const root = document.getElementById("studyCard");
-    const title = root?.querySelector(".word-title");
-    const badge = root?.querySelector(".deck-badge");
-    if (!title || !badge) return;
+    const cardEl = document.querySelector("#studyCard .word-card[data-card]");
+    const badge = cardEl?.querySelector(".deck-badge");
+    if (!cardEl || !badge) return;
 
-    const wordText = title.textContent.trim();
-    const word = (DATA.allPrimaryWords || []).find((w) => w.word === wordText || (w.aliases || []).includes(wordText));
+    const word = coreByCard.get(cardEl.dataset.card);
     if (!word) return;
 
     const meta = LEVEL_META[word.groupId];
     badge.classList.add("pdf-level-badge", meta.className);
     setTextIfChanged(badge, `${meta.label} · #${word.id}`);
 
-    const head = root.querySelector(".word-card-head");
+    const head = cardEl.querySelector(".word-card-head");
     if (!head) return;
-    let info = root.querySelector(".pdf-level-info");
+    let info = cardEl.querySelector(".pdf-level-info");
     if (!info) {
       info = document.createElement("div");
       info.className = "pdf-level-info";
@@ -206,7 +183,6 @@
   function refresh() {
     scheduled = false;
     renderLevelProgress();
-    decorateTodaySummary();
     decorateStudyCard();
     decorateLibrary();
   }
