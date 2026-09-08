@@ -8,9 +8,33 @@
   const STORAGE_KEY = "ielt-memory-v3";
   const DAY = 86400000;
   const LEVEL_META = {
-    1: { label: "第1类·超高频", mastery: "滚瓜烂熟", className: "level-1" },
-    2: { label: "第2类·重要考点", mastery: "熟记10遍以上", className: "level-2" },
-    3: { label: "第3类·真题考点", mastery: "熟记5遍以上", className: "level-3" }
+    1: {
+      label: "第1类考点词·超高频",
+      shortLabel: "第1类·超高频",
+      range: "1–20",
+      hitRate: "约90%会被命题考查",
+      mastery: "滚瓜烂熟",
+      order: "严格按重要性排名学习",
+      className: "level-1"
+    },
+    2: {
+      label: "第2类考点词·重要考点",
+      shortLabel: "第2类·重要考点",
+      range: "21–120",
+      hitRate: "约60%会被命题考查",
+      mastery: "熟记10遍以上",
+      order: "按重要性顺序学习",
+      className: "level-2"
+    },
+    3: {
+      label: "第3类考点词·真题考点",
+      shortLabel: "第3类·真题考点",
+      range: "121–376",
+      hitRate: "真题中实际被考查过",
+      mastery: "熟记5遍以上",
+      order: "组内重要性一致，不再人为排高低",
+      className: "level-3"
+    }
   };
 
   const coreByCard = new Map((DATA.allPrimaryWords || []).map((w) => [w.cardId, w]));
@@ -73,14 +97,12 @@
 
     const rows = progress.map(({ group, p }) => {
       const meta = LEVEL_META[group.id];
-      const start = group.rangeStart || group.words?.[0]?.id || "";
-      const end = group.rangeEnd || group.words?.[group.words.length - 1]?.id || "";
       return `
         <article class="level-progress-card ${meta.className}">
           <div class="level-progress-head">
             <div>
               <span class="level-chip ${meta.className}">${meta.label}</span>
-              <small>${meta.mastery} · ${start}–${end}</small>
+              <small>${meta.range} · ${meta.hitRate} · ${meta.mastery}</small>
             </div>
             <strong>${p.learned}<span> / ${p.total}</span></strong>
           </div>
@@ -91,13 +113,14 @@
             <span>已学习 ${p.learnedPct}%</span>
             <span>稳定掌握 ${p.mastered} · ${p.masteredPct}%</span>
           </div>
+          <div class="level-progress-rule">${meta.order}</div>
         </article>`;
     }).join("");
 
     host.innerHTML = `
       <div class="level-progress-title">
-        <div><span class="section-kicker">PDF LEVEL PROGRESS</span><h2>538 三等级进度</h2></div>
-        <small>按 PDF 第1类 / 第2类 / 第3类考点词分别统计</small>
+        <div><span class="section-kicker">PDF LEVEL PROGRESS</span><h2>538 三类考点词进度</h2></div>
+        <small>第1类优先 → 第2类 → 第3类；第3类组内不再区分重要性</small>
       </div>
       <div class="level-progress-grid">${rows}</div>`;
   }
@@ -118,7 +141,17 @@
 
     const meta = LEVEL_META[word.groupId];
     badge.classList.add("pdf-level-badge", meta.className);
-    setTextIfChanged(badge, `${meta.label} · #${word.id} · ${meta.mastery}`);
+    setTextIfChanged(badge, `${meta.label} · #${word.id}`);
+
+    const head = root.querySelector(".word-card-head");
+    if (!head) return;
+    let info = head.querySelector(".pdf-level-info");
+    if (!info) {
+      info = document.createElement("div");
+      info.className = "pdf-level-info";
+      head.insertAdjacentElement("afterend", info);
+    }
+    setTextIfChanged(info, `${meta.hitRate} · ${meta.mastery} · ${meta.order}`);
   }
 
   function decorateLibrary() {
@@ -134,7 +167,15 @@
         top.appendChild(chip);
       }
       chip.className = `level-chip ${meta.className}`;
-      setTextIfChanged(chip, meta.label);
+      setTextIfChanged(chip, meta.shortLabel);
+
+      let rule = item.querySelector(".pdf-level-library-rule");
+      if (!rule) {
+        rule = document.createElement("div");
+        rule.className = "pdf-level-library-rule";
+        item.appendChild(rule);
+      }
+      setTextIfChanged(rule, `${meta.range} · ${meta.hitRate} · ${meta.mastery}`);
     });
 
     document.querySelectorAll("#deckFilter .filter-button").forEach((btn) => {
@@ -143,7 +184,7 @@
       const level = Number(id.slice(1));
       const group = DATA.groups.find((g) => g.id === level);
       const meta = LEVEL_META[level];
-      if (group && meta) setTextIfChanged(btn, `${meta.label} · ${group.words.length}`);
+      if (group && meta) setTextIfChanged(btn, `${meta.shortLabel} · ${group.words.length}`);
     });
   }
 
