@@ -127,8 +127,8 @@
           <input id="dailyNewInput" type="number" min="0" max="100" step="1" />
         </label>
         <label class="setting-card">
-          <span><strong>当天错词重现间隔</strong><small>答错后隔几张其它卡重新出现；之后必须答对2次</small></span>
-          <input id="repeatGapInput" type="number" min="1" max="10" step="1" />
+          <span><strong>当天错词重新证明间隔</strong><small>两次证明不能连续出现；每次至少隔 3 道其它题</small></span>
+          <input id="repeatGapInput" type="number" min="3" max="10" step="1" />
         </label>
       </div>
 
@@ -136,7 +136,7 @@
 
       <article class="algorithm-note">
         <h3>学习与复习规则</h3>
-        <p><strong>当天学习：</strong>首次答对即可通过；只要答错过一次，之后必须在当天后续题目中再答对2次才通过，中途再次答错则重新从2次开始。538 同义组会随机改变题干与正确答案方向。</p>
+        <p><strong>当天学习：</strong>首次答对即可通过；只要答错过一次，之后必须在当天后续题目中再答对2次才通过。两次重新证明必须分开出现，每次至少隔 3 道其它题；中途再次答错则重新从2次开始。538 同义组会随机改变题干与正确答案方向。</p>
         <p style="margin-top:8px"><strong>跨天复习：</strong>只有当天通过后才开始计时，按本地日历日执行 <strong>1 → 2 → 6 → 31 天</strong>；之后进入 <strong>60 → 120 天</strong>长期维护。答错并完成当天两次补答后，跨天阶段重置为明天。</p>
       </article>
 
@@ -159,6 +159,7 @@
   <script src="data.js"></script>
   <script src="academic-data.js"></script>
   <script src="data-v2.js"></script>
+  <script src="spacing-policy.js"></script>
   <script src="app.js"></script>
   <script src="levels-ui.js"></script>
 </body>
