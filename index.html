@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#f6f3ee" />
-  <title>IELT Memory · 雅思阅读 538 + PDF词义 + Academic</title>
+  <title>IELT Memory · 雅思阅读 538 + 488词义 + Academic</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="levels-ui.css" />
 </head>
@@ -13,8 +13,8 @@
     <header class="topbar">
       <div>
         <div class="eyebrow">IELT MEMORY</div>
-        <h1>雅思阅读 538 + PDF词义 + Academic</h1>
-        <p class="subtitle">538 同义替换训练 · PDF 词义记忆 · 错词当天强化 · 艾宾浩斯按天复习</p>
+        <h1>雅思阅读 538 + 488词义 + Academic</h1>
+        <p class="subtitle">538 同义替换训练 · 488总表词义记忆 · 错词当天强化 · 艾宾浩斯按天复习</p>
       </div>
       <div class="streak-chip">🔥 连续 <strong id="streakCount">0</strong> 天</div>
     </header>
@@ -33,7 +33,7 @@
       <article class="metric-card">
         <span class="metric-label">已学习</span>
         <strong id="learnedCount">0</strong>
-        <small>538 + PDF词义 + Academic</small>
+        <small>538 + 488词义 + Academic</small>
       </article>
       <article class="metric-card">
         <span class="metric-label">薄弱词</span>
@@ -75,7 +75,7 @@
         <div>
           <div class="section-kicker">AUDITED DATA + MEANING + ACADEMIC</div>
           <h2>新版阅读词库</h2>
-          <p id="dataCountText">376 个 538 主词 · PDF词义加载中 · Academic 扩展加载中</p>
+          <p id="dataCountText">376 个 538 主词 · 488总表词义加载中 · Academic 扩展加载中</p>
         </div>
         <div class="search-box">
           <input id="librarySearch" type="search" placeholder="搜索单词、中文、拼写或同义替换…" />
@@ -123,7 +123,7 @@
 
       <div class="settings-grid">
         <label class="setting-card">
-          <span><strong>每日新词</strong><small>默认先完成第1类 → 第2类 → 第3类 → PDF词义记忆，再进入 Academic</small></span>
+          <span><strong>每日新词</strong><small>第1类 → 第2类 → 第3类 → 488总表词义 → Academic</small></span>
           <input id="dailyNewInput" type="number" min="0" max="100" step="1" />
         </label>
         <label class="setting-card">
@@ -137,9 +137,10 @@
       <article class="algorithm-note">
         <h3>学习与复习规则</h3>
         <p><strong>538 同义替换：</strong>训练考点词与真题替换表达之间的识别；题干与正确答案方向可互换。</p>
-        <p style="margin-top:8px"><strong>PDF 词义记忆：</strong>只训练“英文 → 中文词义”，不使用同义替换；答错后同样需要在当天后续题目中分开重新答对 2 次。</p>
-        <p style="margin-top:8px"><strong>今日复习（可选）：</strong>当天学习完成后可以再做主动检索复习。它单独统计，不推进也不延后跨天到期日。</p>
-        <p style="margin-top:8px"><strong>跨天复习：</strong>只有当天通过后才开始计时，按本地日历日执行 <strong>1 → 2 → 6 → 31 天</strong>；之后进入 <strong>60 → 120 天</strong>长期维护。</p>
+        <p style="margin-top:8px"><strong>488总表词义：</strong>以后附总表为准，已经作为 538 同义替换出现的词不重复进入；剩余词只训练“英文 → 中文词义”。</p>
+        <p style="margin-top:8px"><strong>当天强化：</strong>首次答对即可通过；只要答错过一次，之后必须在当天后续题目中分开再答对 2 次，中途再错则重新从 2 次开始。</p>
+        <p style="margin-top:8px"><strong>今日复习（可选）：</strong>当天学习完成后可以再做主动检索复习，不推进也不延后跨天到期日。</p>
+        <p style="margin-top:8px"><strong>跨天复习：</strong>当天通过后按本地日历日执行 <strong>1 → 2 → 6 → 31 天</strong>；之后进入 <strong>60 → 120 天</strong>长期维护。</p>
       </article>
 
       <article class="data-panel">
@@ -162,13 +163,11 @@
   <script src="academic-data.js"></script>
   <script src="legacy488-data.js"></script>
   <script src="data-v2.js"></script>
-  <script src="legacy488-integration.js"></script>
   <script src="pdf-meaning-deck.js"></script>
   <script src="spacing-policy.js"></script>
   <script src="app.js"></script>
   <script src="same-day-review.js"></script>
   <script src="levels-ui.js"></script>
-  <script src="total-list-ui.js"></script>
   <script src="pdf-meaning-ui.js"></script>
 </body>
 </html>
