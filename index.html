@@ -75,7 +75,7 @@
         <div>
           <div class="section-kicker">AUDITED DATA + ACADEMIC EXPANSION</div>
           <h2>新版阅读词库</h2>
-          <p id="dataCountText">376 个 538 主词 · 538 个学习目标 · Academic 扩展加载中</p>
+          <p id="dataCountText">376 个 538 主词 · 后附总表核验中 · Academic 扩展加载中</p>
         </div>
         <div class="search-box">
           <input id="librarySearch" type="search" placeholder="搜索单词、中文、拼写或同义替换…" />
@@ -123,7 +123,7 @@
 
       <div class="settings-grid">
         <label class="setting-card">
-          <span><strong>每日新词</strong><small>默认先完成第1类 → 第2类 → 第3类，再进入 Academic</small></span>
+          <span><strong>每日新词</strong><small>默认先完成第1类 → 第2类 → 第3类 → 后附总表补充，再进入 Academic</small></span>
           <input id="dailyNewInput" type="number" min="0" max="100" step="1" />
         </label>
         <label class="setting-card">
@@ -159,10 +159,13 @@
 
   <script src="data.js"></script>
   <script src="academic-data.js"></script>
+  <script src="legacy488-data.js"></script>
   <script src="data-v2.js"></script>
+  <script src="legacy488-integration.js"></script>
   <script src="spacing-policy.js"></script>
   <script src="app.js"></script>
   <script src="same-day-review.js"></script>
   <script src="levels-ui.js"></script>
+  <script src="total-list-ui.js"></script>
 </body>
 </html>
