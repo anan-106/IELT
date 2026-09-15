@@ -5,11 +5,15 @@
   const audit = DATA?.totalListAudit;
   if (!DATA || !audit) return;
 
+  function setText(el, text) {
+    if (el && el.textContent !== text) el.textContent = text;
+  }
+
   function updateCountText() {
     const el = document.getElementById("dataCountText");
     if (!el) return;
     const academic = DATA.counts?.academicUnique ?? 0;
-    el.textContent = `376 个主词 · 后附总表 ${audit.uniqueTerms}/${audit.uniqueTerms} 已纳入 · 新补 ${audit.supplementAdded} 项 · Academic ${academic} 词`;
+    setText(el, `376 个主词 · 后附总表 ${audit.uniqueTerms}/${audit.uniqueTerms} 已纳入 · 新补 ${audit.supplementAdded} 项 · Academic ${academic} 词`);
   }
 
   function ensureNotice() {
@@ -34,7 +38,7 @@
   function updateSettingsCopy() {
     const input = document.getElementById("dailyNewInput");
     const small = input?.closest(".setting-card")?.querySelector("small");
-    if (small) small.textContent = "第1类 → 第2类 → 第3类 → 后附总表补充 → Academic";
+    setText(small, "第1类 → 第2类 → 第3类 → 后附总表补充 → Academic");
   }
 
   function refresh() {
@@ -43,7 +47,15 @@
     updateSettingsCopy();
   }
 
-  const observer = new MutationObserver(() => requestAnimationFrame(refresh));
+  let scheduled = false;
+  const observer = new MutationObserver(() => {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      refresh();
+    });
+  });
   observer.observe(document.body, { childList: true, subtree: true });
   refresh();
 })();
