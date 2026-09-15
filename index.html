@@ -14,7 +14,7 @@
       <div>
         <div class="eyebrow">IELT MEMORY</div>
         <h1>雅思阅读 538 + 488词义 + Academic</h1>
-        <p class="subtitle">538 同义替换训练 · 488总表词义记忆 · 错词当天强化 · 艾宾浩斯按天复习</p>
+        <p class="subtitle">538 同义替换训练 · 488总表词义记忆 · 30天自动计划 · 艾宾浩斯按天复习</p>
       </div>
       <div class="streak-chip">🔥 连续 <strong id="streakCount">0</strong> 天</div>
     </header>
@@ -28,7 +28,7 @@
       <article class="metric-card">
         <span class="metric-label">今日新词</span>
         <strong id="newCount">0</strong>
-        <small>按每日上限</small>
+        <small>按自动计划</small>
       </article>
       <article class="metric-card">
         <span class="metric-label">已学习</span>
@@ -118,12 +118,12 @@
       <div class="section-heading">
         <div class="section-kicker">DAILY LEARNING + REVIEW</div>
         <h2>学习设置</h2>
-        <p>所有学习记录只保存在你当前浏览器本地。</p>
+        <p>所有学习记录、30天计划和复习阶段都保存在浏览器本地。</p>
       </div>
 
       <div class="settings-grid">
         <label class="setting-card">
-          <span><strong>每日新词</strong><small>第1类 → 第2类 → 第3类 → 488总表词义 → Academic</small></span>
+          <span><strong>每日新词</strong><small>自动计划开启时由系统根据剩余天数计算</small></span>
           <input id="dailyNewInput" type="number" min="0" max="100" step="1" />
         </label>
         <label class="setting-card">
@@ -164,10 +164,13 @@
   <script src="legacy488-data.js"></script>
   <script src="data-v2.js"></script>
   <script src="pdf-meaning-deck.js"></script>
+  <script src="study-plan-preload.js"></script>
   <script src="spacing-policy.js"></script>
   <script src="app.js"></script>
+  <script src="study-plan-ui.js"></script>
   <script src="same-day-review.js"></script>
   <script src="levels-ui.js"></script>
   <script src="pdf-meaning-ui.js"></script>
+  <script src="local-memory.js"></script>
 </body>
 </html>
