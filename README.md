@@ -54,6 +54,28 @@
 
 538 强化时会尽量改变同义组出题方向；488总表词义强化始终只考中文意思。
 
+## 键盘学习与自动英音
+
+- 每道题出现后自动用 `en-GB` 英音朗读英文题干；
+- 按 **1 / 2 / 3 / 4** 可直接选择第 1–4 个选项；
+- 作答完成后按 **Enter** 进入下一题；
+- 选项旁会显示对应数字快捷键；
+- **同义替换题作答后自动朗读正确选项**，无论用户本题是否答对；
+- 词义题不会朗读中文选项；
+- 🔊 按钮仍可手动重播英音。
+
+## 错词本
+
+所有答错过的卡会自动进入独立的 **错词本**：
+
+- 错词本显示历史错词数量、累计错误次数与重复错误词；
+- 默认按错误次数优先排序；
+- 每天都可以点击“开始今日错词复习”；
+- 错词本复习不删除历史错误记录；
+- 错词再次答错，同样要求在后续题目中分开再答对 2 次；
+- 两次重新证明至少隔 3 道其它题；
+- 错词本的每日复习完成情况单独保存在本地。
+
 ## 今日复习与跨天复习
 
 当天完成学习后可以选择“今日复习”。今日复习属于同日主动检索，不推进跨天阶段。
@@ -63,6 +85,14 @@
 **1 → 2 → 6 → 31 天 → 60 → 120 天**
 
 答错后完成当天两次重新证明，跨天阶段从明天重新开始。
+
+## 30 天自动计划
+
+默认目标为 30 天，目标天数可在设置中修改。系统按：
+
+**剩余未学卡 ÷ 剩余计划天数**
+
+动态计算当天新学数量；漏学后会自动把进度重新平摊到后续日期。到期复习始终优先，不人为截断。
 
 ## Academic 扩展
 
@@ -87,16 +117,23 @@ IELT/
 ├── index.html
 ├── styles.css
 ├── levels-ui.css
-├── data.js                    # 原始 538 数据
-├── data-v2.js                 # 新版 376 主词 / 等级 / 校注
-├── legacy488-data.js          # 后附总表的数据化版本
-├── pdf-meaning-deck.js        # 排除同义替换后建立总表词义 deck
-├── academic-data.js           # NAWL Top 200
-├── app.js                     # 学习、答题、当天强化、跨天调度
-├── spacing-policy.js          # 当天重新证明间隔规则
-├── same-day-review.js         # 今日复习
-├── levels-ui.js               # 三类等级与进度 UI
-├── pdf-meaning-ui.js          # 488总表词义 UI
+├── data.js
+├── data-v2.js
+├── legacy488-data.js
+├── pdf-meaning-deck.js
+├── academic-data.js
+├── app.js
+├── spacing-policy.js
+├── same-day-review.js
+├── wrong-book.js               # 错词本与每日错词复习
+├── auto-pronunciation.js       # 自动 en-GB 英音
+├── keyboard-shortcuts.js       # 1–4 选项、Enter 下一题、正确选项朗读
+├── study-plan-preload.js
+├── study-plan-ui.js
+├── study-plan-sync.js
+├── levels-ui.js
+├── pdf-meaning-ui.js
+├── local-memory.js
 ├── DATA_AUDIT.md
 ├── TOTAL_LIST_AUDIT.md
 └── THIRD_PARTY_NOTICES.md
@@ -104,7 +141,7 @@ IELT/
 
 ## 使用
 
-直接打开 `index.html` 即可运行。学习记录保存在浏览器 localStorage，可导出 / 导入 JSON 备份。
+推荐使用 `启动IELT.bat` 在固定本地地址打开，学习记录保存在浏览器 localStorage，可导出 / 导入 JSON 备份。
 
 ## License
 
