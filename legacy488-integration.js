@@ -24,6 +24,7 @@
     if (k) covered.add(k);
   };
 
+  // "在里面"按学习系统能实际识别到来判断：主词、别名、同义替换任一命中即算覆盖。
   (DATA.allPrimaryWords || []).forEach((w) => {
     [w.word, w.sourceWord, ...(w.aliases || []), ...(w.sourceSynonyms || []),
       ...(w.quizSynonyms || []), ...(w.examSynonyms || []), ...(w.relatedSynonyms || [])]
@@ -62,11 +63,16 @@
     };
   });
 
+  const learnableSupplement = supplementWords.filter((w) => !w.sourceOnly);
+  const sourceOnlySupplement = supplementWords.filter((w) => w.sourceOnly);
   const academicWords = DATA.academic?.words || [];
+
   DATA.supplement488 = {
     id: "reading538-supplement",
     name: "后附总表补充",
-    words: supplementWords
+    words: supplementWords,
+    learnableWords: learnableSupplement,
+    sourceOnlyWords: sourceOnlySupplement
   };
   DATA.totalListAudit = {
     printedTitle: SRC.sourcePrintedTitle,
@@ -76,18 +82,22 @@
     coveredBeforeSupplement: SRC.uniqueTermCount - missingBeforeSupplement.length,
     missingBeforeSupplement: missingBeforeSupplement.length,
     supplementAdded: supplementWords.length,
-    sourceOnlyAdded: supplementWords.filter((w) => w.sourceOnly).length,
-    missingTerms: missingBeforeSupplement
+    learnableSupplementAdded: learnableSupplement.length,
+    sourceOnlyAdded: sourceOnlySupplement.length,
+    missingTerms: missingBeforeSupplement,
+    sourceOnlyTerms: sourceOnlySupplement.map((w) => w.word)
   };
 
-  // Learning order: 376 primary words -> newly supplemented total-list words -> Academic.
-  DATA.allWords = [...(DATA.allPrimaryWords || []), ...supplementWords, ...academicWords];
+  // 学习顺序：376 主词 -> 有可靠中文释义的后附总表补充 -> Academic。
+  // 释义尚未被上传资料覆盖的词也已写进数据层，但不自动出题，避免教错。
+  DATA.allWords = [...(DATA.allPrimaryWords || []), ...learnableSupplement, ...academicWords];
   DATA.counts = {
     ...(DATA.counts || {}),
     printedTotalUnique: SRC.uniqueTermCount,
     printedTotalCoveredBeforeSupplement: DATA.totalListAudit.coveredBeforeSupplement,
     printedTotalSupplementAdded: supplementWords.length,
-    printedTotalSourceOnlyAdded: DATA.totalListAudit.sourceOnlyAdded,
+    printedTotalSupplementLearnable: learnableSupplement.length,
+    printedTotalSourceOnlyAdded: sourceOnlySupplement.length,
     studyCards: DATA.allWords.length
   };
 
