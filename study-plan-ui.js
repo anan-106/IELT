@@ -6,7 +6,6 @@
   if (!DATA) return;
 
   const STORAGE_KEY = "ielt-memory-v3";
-  const REVIEW_INTERVALS = [1, 2, 6, 31, 60, 120];
 
   const esc = (v) => String(v ?? "")
     .replaceAll("&", "&amp;")
@@ -104,7 +103,6 @@
     }));
     const byDate = new Map(rows.map((r) => [r.date, r]));
 
-    // Existing scheduled cards: count their next due review if it lands in the window.
     for (const w of words) {
       const c = cards[w.cardId];
       if (!c?.reps || !c.due) continue;
@@ -112,8 +110,6 @@
       if (byDate.has(dueKey)) byDate.get(dueKey).reviewCount++;
     }
 
-    // Distribute unseen cards across remaining plan days, then project the first
-    // few expanding-interval reviews for those future learning days.
     let remaining = s.remaining;
     let remainingDays = s.remainingDays;
     for (let i = 0; i < days && remaining > 0; i++) {
@@ -123,11 +119,9 @@
       remaining -= planned;
       remainingDays = Math.max(1, remainingDays - 1);
 
-      // New cards: first review +1 day, then +2, then +6 from the prior review.
-      const d1 = addDays(row.date, 1);
-      const d2 = addDays(row.date, 3);
-      const d3 = addDays(row.date, 9);
-      [d1, d2, d3].forEach((key) => {
+      // The current app uses expanding intervals between successful reviews:
+      // learning day -> +1 -> +2 -> +6, so cumulative dates are +1 / +3 / +9.
+      [addDays(row.date, 1), addDays(row.date, 3), addDays(row.date, 9)].forEach((key) => {
         if (byDate.has(key)) byDate.get(key).reviewCount += planned;
       });
     }
@@ -153,6 +147,22 @@
     if (!panel) return;
     const s = snapshot();
     const forecast = estimateForecast(7);
+    const signature = JSON.stringify({
+      targetDays: s.targetDays,
+      dayNumber: s.dayNumber,
+      totalCards: s.totalCards,
+      completed: s.completed,
+      remaining: s.remaining,
+      learnedToday: s.learnedToday,
+      todayNewRemaining: s.todayNewRemaining,
+      dueToday: s.dueToday,
+      goalDate: s.goalDate,
+      enabled: s.enabled,
+      forecast
+    });
+    if (panel.dataset.signature === signature) return;
+    panel.dataset.signature = signature;
+
     const status = s.remaining === 0
       ? "全部新词已进入记忆系统"
       : s.overdue
@@ -181,7 +191,7 @@
             <tbody>${forecast.map((r) => `<tr><td style="padding:6px">${displayDate(r.date)}</td><td style="text-align:right;padding:6px">${r.newCount}</td><td style="text-align:right;padding:6px">${r.reviewCount}</td><td style="text-align:right;padding:6px">${r.newCount + r.reviewCount}</td></tr>`).join("")}</tbody>
           </table>
         </div>
-        <p style="margin:8px 0 0;color:var(--sub);font-size:.72rem">复习数是按当前到期卡 + 计划中新词的 1→2→6 天间隔估算；实际数量会随答错、补答和进度变化自动调整。</p>
+        <p style="margin:8px 0 0;color:var(--sub);font-size:.72rem">复习数是按当前到期卡 + 计划中新词的复习间隔估算；实际数量会随答错、补答和进度变化自动调整。</p>
       </details>`;
   }
 
