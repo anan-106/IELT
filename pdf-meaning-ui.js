@@ -1,4 +1,4 @@
-// UI integration for the separate PDF meaning-only deck.
+// UI integration for the 488 total-list meaning-only deck.
 (() => {
   "use strict";
 
@@ -7,7 +7,7 @@
   if (!DATA || !deck) return;
 
   const STORAGE_KEY = "ielt-memory-v3";
-  const SEARCH_TOKEN = "PDF词义记忆";
+  const SEARCH_TOKEN = "488总表词义";
   const byCard = new Map((deck.words || []).map((w) => [w.cardId, w]));
 
   function readState() {
@@ -30,7 +30,7 @@
       btn = document.createElement("button");
       btn.className = "filter-button";
       btn.dataset.pdfMeaningFilter = "1";
-      btn.textContent = `PDF词义记忆 · ${deck.learnableCount}`;
+      btn.textContent = `488总表词义 · ${deck.learnableCount}`;
       host.insertBefore(btn, host.querySelector('[data-deck="academic"]') || null);
       btn.addEventListener("click", (event) => {
         event.preventDefault();
@@ -62,13 +62,13 @@
       const word = byCard.get(item.dataset.card);
       if (!word) return;
       const detail = item.querySelector(".library-syn");
-      if (detail) detail.textContent = `只记词义：${word.chinese}`;
+      if (detail) detail.textContent = `中文词义：${word.chinese}`;
 
       const top = item.querySelector(".library-item-top > div");
       if (top && !top.querySelector(".pdf-meaning-chip")) {
         const chip = document.createElement("span");
         chip.className = "level-chip pdf-meaning-chip";
-        chip.textContent = "PDF词义";
+        chip.textContent = "488词义";
         chip.style.marginLeft = "8px";
         top.appendChild(chip);
       }
@@ -81,7 +81,7 @@
     const word = byCard.get(cardEl.dataset.card);
     if (!word) return;
 
-    setText(cardEl.querySelector(".deck-badge"), `PDF词义记忆 · #${word.rank}`);
+    setText(cardEl.querySelector(".deck-badge"), `488总表·词义记忆 · #${word.rank}`);
     setText(cardEl.querySelector(".word-pos"), "选择正确中文词义 · 不考同义替换");
 
     const answer = cardEl.querySelector("#answerZone");
@@ -89,7 +89,7 @@
       answer.innerHTML = `
         <div class="answer-row"><span class="answer-label">英文</span><span class="answer-value">${escapeHtml(word.word)}</span></div>
         <div class="answer-row"><span class="answer-label">中文词义</span><span class="answer-value">${escapeHtml(word.chinese)}</span></div>
-        <div class="answer-row"><span class="answer-label">训练规则</span><span class="answer-value">只记词义，不进行同义替换训练</span></div>
+        <div class="answer-row"><span class="answer-label">训练规则</span><span class="answer-value">只记词义；已经作为538同义替换出现的词不会重复进入本词库</span></div>
         <div class="answer-row"><span class="answer-label">来源</span><span class="answer-value">${escapeHtml(word.sourceNote || "用户上传 PDF")}</span></div>`;
     }
 
@@ -107,19 +107,19 @@
     const count = document.getElementById("dataCountText");
     if (count) {
       const academic = DATA.counts?.academicUnique ?? 0;
-      count.textContent = `376 个538主词 · PDF词义 ${deck.learnableCount} 词 · Academic ${academic} 词`;
+      count.textContent = `376 个538主词 · 488总表词义 ${deck.learnableCount} 词 · 已排除同义替换 ${deck.excludedAsReplacementCount} 项 · Academic ${academic} 词`;
     }
 
     const state = readState();
     const unseenMeaning = (deck.words || []).filter((w) => !state.cards?.[w.cardId]?.reps).length;
     const summary = document.getElementById("todaySummary");
     if (summary && unseenMeaning > 0 && summary.textContent.includes("538 已完成，新词进入 Academic")) {
-      summary.textContent = summary.textContent.replace("538 已完成，新词进入 Academic", `538 同义替换完成，新词进入 PDF词义记忆（剩 ${unseenMeaning}）`);
+      summary.textContent = summary.textContent.replace("538 已完成，新词进入 Academic", `538 同义替换完成，新词进入488总表词义（剩 ${unseenMeaning}）`);
     }
 
     const input = document.getElementById("dailyNewInput");
     const small = input?.closest(".setting-card")?.querySelector("small");
-    if (small) small.textContent = "第1类 → 第2类 → 第3类 → PDF词义记忆 → Academic";
+    if (small) small.textContent = "第1类 → 第2类 → 第3类 → 488总表词义 → Academic";
   }
 
   function ensureNotice() {
@@ -133,10 +133,10 @@
     note.style.marginBottom = "16px";
     const missing = deck.missingMeaningCount || 0;
     note.innerHTML = `
-      <h3>PDF词义记忆</h3>
-      <p>这部分只训练 <strong>英文 → 中文词义</strong>，不使用任何同义替换。当前有 <strong>${deck.learnableCount}</strong> 个词可直接学习。${missing ? `另有 <strong>${missing}</strong> 个总表词目前没有被已上传资料提供可靠中文释义，因此只保留在核验清单中，不自动出题。` : ""}</p>`;
-    const audit = document.getElementById("printedTotalAuditNotice");
-    (audit || toolbar).insertAdjacentElement("afterend", note);
+      <h3>488总表 · 词义记忆</h3>
+      <p>以 PDF 后附总表为准，先从总表中排除 <strong>${deck.excludedAsReplacementCount}</strong> 个已经承担“同义替换”作用的词/词组，避免重复训练。剩余 <strong>${deck.sourceTermCount}</strong> 项只做 <strong>英文 → 中文词义</strong>。</p>
+      <p style="margin-top:8px">当前已补全并可直接学习 <strong>${deck.learnableCount}</strong> 项。${missing ? `仍有 <strong>${missing}</strong> 项未获得可靠中文义，已保留在核验清单但暂不自动出题。` : "所有进入本词库的词都已有中文释义。"}</p>`;
+    toolbar.insertAdjacentElement("afterend", note);
   }
 
   function escapeHtml(v) {
