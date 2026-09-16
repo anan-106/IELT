@@ -26,6 +26,23 @@
     }
   }
 
+  function uniqueCards(items) {
+    const seen = new Set();
+    return (items || []).filter((w) => {
+      if (!w?.cardId || w.quizMode === "source-only" || seen.has(w.cardId)) return false;
+      seen.add(w.cardId);
+      return true;
+    });
+  }
+
+  function planWords() {
+    return uniqueCards([
+      ...(DATA.allPrimaryWords || []),
+      ...(DATA.pdfMeaningDeck?.words || []),
+      ...(DATA.academic?.words || [])
+    ]);
+  }
+
   function desiredQuota() {
     const state = readState();
     const plan = state.studyPlan || {};
@@ -33,17 +50,15 @@
     const today = dateKey();
     const learnedToday = Number(state.daily?.[today]?.newCards || 0);
 
-    // Prefer the review-load-smoothed target calculated at page load.
     if (plan.lastCalculatedDate === today && Number.isFinite(Number(plan.smoothedDailyTarget))) {
       return Math.max(0, Number(plan.smoothedDailyTarget) - learnedToday);
     }
 
-    // Fallback for older saved plans that predate load smoothing.
     const targetDays = Math.max(1, Number(plan.targetDays) || 30);
     const startDate = plan.startDate || today;
     const elapsed = Math.max(0, dayNumber(today) - dayNumber(startDate));
     const remainingDays = Math.max(1, targetDays - elapsed);
-    const words = (DATA.allWords || []).filter((w) => w.quizMode !== "source-only");
+    const words = planWords();
     const cards = state.cards || {};
     const remaining = words.filter((w) => !cards[w.cardId]?.reps).length;
     const fullTarget = remaining ? Math.ceil(remaining / remainingDays) : 0;
