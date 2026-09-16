@@ -52,8 +52,55 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }
 
+  function uniqueCards(items) {
+    const seen = new Set();
+    return (items || []).filter((w) => {
+      if (!w?.cardId || w.quizMode === "source-only" || seen.has(w.cardId)) return false;
+      seen.add(w.cardId);
+      return true;
+    });
+  }
+
+  // The plan explicitly contains all three decks in this order.
   function planWords() {
-    return (DATA.allWords || []).filter((w) => w.quizMode !== "source-only");
+    return uniqueCards([
+      ...(DATA.allPrimaryWords || []),
+      ...(DATA.pdfMeaningDeck?.words || []),
+      ...(DATA.academic?.words || [])
+    ]);
+  }
+
+  function deckKey(w) {
+    if (w.deckId === "reading538") return "reading538";
+    if (w.deckId === "pdf-meaning") return "pdfMeaning";
+    if (w.deckId === "academic") return "academic";
+    return "other";
+  }
+
+  function deckBreakdown(words, cards) {
+    const out = {
+      reading538: { total: 0, completed: 0, remaining: 0 },
+      pdfMeaning: { total: 0, completed: 0, remaining: 0 },
+      academic: { total: 0, completed: 0, remaining: 0 }
+    };
+    for (const w of words) {
+      const key = deckKey(w);
+      if (!out[key]) continue;
+      out[key].total++;
+      if (cards[w.cardId]?.reps > 0) out[key].completed++;
+      else out[key].remaining++;
+    }
+    return out;
+  }
+
+  function todayNewBreakdown(words, cards, count) {
+    const out = { reading538: 0, pdfMeaning: 0, academic: 0 };
+    const unseen = words.filter((w) => !cards[w.cardId]?.reps).slice(0, Math.max(0, count));
+    for (const w of unseen) {
+      const key = deckKey(w);
+      if (key in out) out[key]++;
+    }
+    return out;
   }
 
   function countDueToday(words, cards) {
@@ -104,6 +151,8 @@
       smoothedDailyTarget,
       todayNewRemaining,
       dueToday,
+      deckBreakdown: deckBreakdown(words, cards),
+      todayNewBreakdown: todayNewBreakdown(words, cards, todayNewRemaining),
       avgDueNext7: Number(plan.avgDueNext7 || 0),
       loadAdjustment: Number(plan.loadAdjustment || (smoothedDailyTarget - baseDailyTarget)),
       completionPct,
@@ -144,7 +193,6 @@
       remaining -= planned;
       remainingDays = Math.max(1, remainingDays - 1);
 
-      // Successful reviews use expanding gaps: +1, then +2, then +6 days.
       [addDays(row.date, 1), addDays(row.date, 3), addDays(row.date, 9)].forEach((key) => {
         if (byDate.has(key)) byDate.get(key).reviewCount += planned;
       });
@@ -166,6 +214,10 @@
     return panel;
   }
 
+  function deckCard(label, data, extra = "") {
+    return `<article class="stat-panel"><span>${esc(label)}</span><strong>${data.completed}<small style="font-size:.78rem;font-weight:600;color:var(--sub)"> / ${data.total}</small></strong><small style="color:var(--sub)">剩 ${data.remaining}${extra ? ` · ${esc(extra)}` : ""}</small></article>`;
+  }
+
   function renderPlanPanel() {
     const panel = ensurePlanPanel();
     if (!panel) return;
@@ -185,6 +237,8 @@
       loadAdjustment: s.loadAdjustment,
       goalDate: s.goalDate,
       enabled: s.enabled,
+      deckBreakdown: s.deckBreakdown,
+      todayNewBreakdown: s.todayNewBreakdown,
       forecast
     });
     if (panel.dataset.signature === signature) return;
@@ -201,21 +255,29 @@
       : s.loadAdjustment < 0
         ? `今日复习较重，新词比均分计划少 ${Math.abs(s.loadAdjustment)} 张`
         : `今日复习较轻，新词比均分计划多 ${s.loadAdjustment} 张`;
+    const b = s.deckBreakdown;
+    const n = s.todayNewBreakdown;
 
     panel.innerHTML = `
       <div class="level-progress-title">
         <div><span class="section-kicker">AUTO STUDY PLAN</span><h2>${s.targetDays} 天自动计划</h2></div>
         <small>${esc(status)} · 目标 ${esc(s.goalDate)}</small>
       </div>
-      <div class="stats-grid" style="margin-bottom:14px">
+      <div class="stats-grid" style="margin-bottom:12px">
         <article class="stat-panel"><span>计划总卡</span><strong>${s.totalCards}</strong></article>
         <article class="stat-panel"><span>已完成新学</span><strong>${s.completed}</strong></article>
         <article class="stat-panel"><span>今日新学</span><strong>${s.todayNewRemaining}</strong></article>
         <article class="stat-panel"><span>今日到期复习</span><strong>${s.dueToday}</strong></article>
       </div>
+      <div class="stats-grid" style="margin:0 0 14px">
+        ${deckCard("538 同义替换", b.reading538, `今日 ${n.reading538}`)}
+        ${deckCard("488 总表词义", b.pdfMeaning, `今日 ${n.pdfMeaning}`)}
+        ${deckCard("Academic", b.academic, `今日 ${n.academic}`)}
+      </div>
       <div class="level-track" title="计划完成 ${s.completionPct}%"><div class="level-fill" style="width:${s.completionPct}%;background:#527fa3"></div></div>
       <div class="level-progress-foot"><span>完成 ${s.completionPct}% · 剩 ${s.remaining}</span><span>今日基础任务约 ${totalToday} 张（错题强化另算）</span></div>
-      <p style="margin:9px 0 0;color:var(--sub);font-size:.75rem">负荷平滑：${esc(loadText)}。均分基准 ${s.baseDailyTarget} 张，今日目标 ${s.smoothedDailyTarget} 张。</p>
+      <p style="margin:8px 0 0;color:var(--sub);font-size:.75rem"><strong>计划顺序：</strong>538 → 488总表词义 → Academic。488词义已经正式计入总卡数、每日新学量和未来复习量。</p>
+      <p style="margin:7px 0 0;color:var(--sub);font-size:.75rem">负荷平滑：${esc(loadText)}。均分基准 ${s.baseDailyTarget} 张，今日目标 ${s.smoothedDailyTarget} 张。</p>
       <details style="margin-top:12px">
         <summary style="cursor:pointer;font-size:.82rem;font-weight:700">未来 7 天预计任务量</summary>
         <div style="overflow:auto;margin-top:10px">
@@ -239,7 +301,7 @@
     box.style.marginBottom = "18px";
     box.innerHTML = `
       <h3>自动学习计划</h3>
-      <p>默认目标是 30 天。系统先按“剩余未学卡 ÷ 剩余天数”计算基准，再根据未来复习负荷平滑当天新词量；漏学后会自动补进度。到期复习始终优先。</p>
+      <p>计划范围明确包含 <strong>538 同义替换 + 488总表词义 + Academic</strong>。默认目标 30 天，先按“剩余未学卡 ÷ 剩余天数”计算基准，再根据未来复习负荷平滑当天新词量；到期复习始终优先。</p>
       <div style="display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-top:12px">
         <label style="display:grid;gap:5px;font-size:.78rem">目标天数
           <input id="studyPlanDays" type="number" min="7" max="180" value="${s.targetDays}" style="min-width:110px" />
