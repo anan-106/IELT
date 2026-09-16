@@ -27,7 +27,8 @@
     [...document.querySelectorAll("#studyCard .option")].filter(isVisible).forEach((btn, index) => {
       if (index > 3) return;
       btn.dataset.shortcut = String(index + 1);
-      btn.title = `${index + 1} · ${btn.textContent.trim()}`;
+      const optionText = btn.dataset.option || btn.childNodes?.[0]?.textContent?.trim() || btn.textContent.trim();
+      btn.title = `${index + 1} · ${optionText}`;
     });
   }
 
@@ -38,8 +39,10 @@
     if (!word || word.quizMode === "meaning") return;
 
     const correct = [...cardEl.querySelectorAll(".option.correct")].find(isVisible);
-    const text = correct?.textContent?.trim();
-    if (!text) return;
+    // IMPORTANT: use data-option, not textContent. After answer, option-meanings.js
+    // appends a Chinese gloss, which must never be sent to the English TTS voice.
+    const text = correct?.dataset?.option || "";
+    if (!text.trim()) return;
 
     // Use the en-GB voice layer already installed by auto-pronunciation.js.
     setTimeout(() => {
@@ -111,6 +114,14 @@
     options.insertAdjacentElement("afterend", hint);
   }
 
+  function loadOptionMeanings() {
+    if (window.__IELT_OPTION_MEANINGS__ || document.querySelector('script[data-option-meanings="1"]')) return;
+    const script = document.createElement("script");
+    script.src = "option-meanings.js";
+    script.dataset.optionMeanings = "1";
+    document.body.appendChild(script);
+  }
+
   let scheduled = false;
   function refresh() {
     scheduled = false;
@@ -124,6 +135,7 @@
   }
 
   injectStyles();
+  loadOptionMeanings();
   const root = document.getElementById("studyCard");
   if (root) new MutationObserver(scheduleRefresh).observe(root, { childList: true, subtree: true });
   document.addEventListener("click", () => setTimeout(scheduleRefresh, 0));
