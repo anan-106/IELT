@@ -14,7 +14,7 @@
       <div>
         <div class="eyebrow">IELT MEMORY</div>
         <h1>雅思阅读 538 + 488词义 + Academic</h1>
-        <p class="subtitle">538 同义替换训练 · 488总表词义记忆 · 30天自动计划 · 自动英音 · 错词本 · 键盘学习</p>
+        <p class="subtitle">538 同义替换 · 488词义 · 自适应干扰 · 复习负荷平滑 · 自动英音 · 错词本</p>
       </div>
       <div class="streak-chip">🔥 连续 <strong id="streakCount">0</strong> 天</div>
     </header>
@@ -118,12 +118,12 @@
       <div class="section-heading">
         <div class="section-kicker">DAILY LEARNING + REVIEW</div>
         <h2>学习设置</h2>
-        <p>所有学习记录、30天计划和复习阶段都保存在浏览器本地。</p>
+        <p>所有学习记录、计划、错词和个性化信号都保存在浏览器本地。</p>
       </div>
 
       <div class="settings-grid">
         <label class="setting-card">
-          <span><strong>每日新词</strong><small>自动计划开启时由系统根据剩余天数计算</small></span>
+          <span><strong>每日新词</strong><small>自动计划开启时由系统根据剩余天数和复习负荷计算</small></span>
           <input id="dailyNewInput" type="number" min="0" max="100" step="1" />
         </label>
         <label class="setting-card">
@@ -138,7 +138,8 @@
         <h3>学习与复习规则</h3>
         <p><strong>538 同义替换：</strong>训练考点词与真题替换表达之间的识别；题干与正确答案方向可互换。</p>
         <p style="margin-top:8px"><strong>488总表词义：</strong>以后附总表为准，已经作为 538 同义替换出现的词不重复进入；剩余词只训练“英文 → 中文词义”。</p>
-        <p style="margin-top:8px"><strong>当天强化：</strong>首次答对即可通过；只要答错过一次，之后必须在当天后续题目中分开再答对 2 次，中途再错则重新从 2 次开始。</p>
+        <p style="margin-top:8px"><strong>当天强化：</strong>首次答对即可通过；只要答错过一次，之后必须在当天后续题目中分开再答对 2 次，中途再错则重新从 2 次开始；刷新后也会继续记住未完成强化。</p>
+        <p style="margin-top:8px"><strong>个性化：</strong>系统记录真实误选和反应时间；历史上经常误选的表达会优先作为以后同义替换题的干扰项，反应时间只作辅助，不改变对错。</p>
         <p style="margin-top:8px"><strong>错词本：</strong>所有答错过的词自动收集，可每天单独复习；错词本复习中的错误同样需要后续分开再答对 2 次。</p>
         <p style="margin-top:8px"><strong>键盘：</strong>1–4 选择选项，Enter 进入下一题；同义替换题作答后自动朗读正确选项。</p>
         <p style="margin-top:8px"><strong>今日复习（可选）：</strong>当天学习完成后可以再做主动检索复习，不推进也不延后跨天到期日。</p>
@@ -168,6 +169,7 @@
   <script src="data-v2.js"></script>
   <script src="pdf-meaning-deck.js"></script>
   <script src="pdf-meaning-rebuild.js"></script>
+  <script src="health-check.js"></script>
   <script src="study-plan-preload.js"></script>
   <script src="spacing-policy.js"></script>
   <script src="app.js"></script>
@@ -181,5 +183,7 @@
   <script src="auto-pronunciation.js"></script>
   <script src="wrong-book.js"></script>
   <script src="keyboard-shortcuts.js"></script>
+  <script src="adaptive-learning.js"></script>
+  <script src="session-recovery.js"></script>
 </body>
 </html>
