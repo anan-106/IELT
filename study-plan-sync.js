@@ -31,6 +31,14 @@
     const plan = state.studyPlan || {};
     if (plan.enabled === false) return null;
     const today = dateKey();
+    const learnedToday = Number(state.daily?.[today]?.newCards || 0);
+
+    // Prefer the review-load-smoothed target calculated at page load.
+    if (plan.lastCalculatedDate === today && Number.isFinite(Number(plan.smoothedDailyTarget))) {
+      return Math.max(0, Number(plan.smoothedDailyTarget) - learnedToday);
+    }
+
+    // Fallback for older saved plans that predate load smoothing.
     const targetDays = Math.max(1, Number(plan.targetDays) || 30);
     const startDate = plan.startDate || today;
     const elapsed = Math.max(0, dayNumber(today) - dayNumber(startDate));
@@ -39,7 +47,6 @@
     const cards = state.cards || {};
     const remaining = words.filter((w) => !cards[w.cardId]?.reps).length;
     const fullTarget = remaining ? Math.ceil(remaining / remainingDays) : 0;
-    const learnedToday = Number(state.daily?.[today]?.newCards || 0);
     return Math.max(0, fullTarget - learnedToday);
   }
 
