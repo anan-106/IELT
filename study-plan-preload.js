@@ -95,8 +95,15 @@
     return out;
   }
 
+  // Review load distinguishes reviews missed before today from reviews whose due
+  // date is today. Both are mandatory and both reduce the day's new-card pressure.
   function reviewLoad(words, cards, today, days = 7) {
-    const rows = Array.from({ length: days }, (_, i) => ({ date: addDays(today, i), count: 0 }));
+    const rows = Array.from({ length: days }, (_, i) => ({
+      date: addDays(today, i),
+      count: 0,
+      overdue: 0,
+      dueOnDate: 0
+    }));
     const index = new Map(rows.map((r, i) => [r.date, i]));
     const todayNum = localDayNumber(today);
 
@@ -105,10 +112,16 @@
       if (!c?.reps || !c.due) continue;
       const dueKey = dateKey(c.due);
       const dueNum = localDayNumber(dueKey);
-      if (dueNum <= todayNum) {
+      if (dueNum < todayNum) {
         rows[0].count++;
+        rows[0].overdue++;
+      } else if (dueNum === todayNum) {
+        rows[0].count++;
+        rows[0].dueOnDate++;
       } else if (index.has(dueKey)) {
-        rows[index.get(dueKey)].count++;
+        const row = rows[index.get(dueKey)];
+        row.count++;
+        row.dueOnDate++;
       }
     }
     return rows;
@@ -119,14 +132,28 @@
     if (remainingDays <= 2 || remaining <= baseTarget * 2) return Math.min(remaining, baseTarget);
 
     const dueToday = loadRows[0]?.count || 0;
+    const overdue = loadRows[0]?.overdue || 0;
     const avgDue = loadRows.length
       ? loadRows.reduce((sum, r) => sum + r.count, 0) / loadRows.length
       : dueToday;
 
+    // First smooth against the normal 7-day review load.
     const adjustment = Math.round((avgDue - dueToday) * 0.25);
     const lower = Math.max(baseTarget > 0 ? 1 : 0, Math.ceil(baseTarget * 0.6));
     const upper = Math.max(lower, Math.ceil(baseTarget * 1.4));
-    return Math.min(remaining, clamp(baseTarget + adjustment, lower, upper));
+    let target = Math.min(remaining, clamp(baseTarget + adjustment, lower, upper));
+
+    // Historical review debt receives explicit priority. We lower new learning
+    // conservatively instead of letting old due cards pile up behind new material.
+    if (overdue > 0) {
+      const backlogPenalty = Math.min(
+        Math.ceil(baseTarget * 0.5),
+        Math.ceil(overdue / 4)
+      );
+      target = Math.max(0, target - backlogPenalty);
+    }
+
+    return Math.min(remaining, target);
   }
 
   function calculate(state) {
@@ -150,6 +177,9 @@
     const avgDueNext7 = loadRows.length
       ? Number((loadRows.reduce((sum, r) => sum + r.count, 0) / loadRows.length).toFixed(1))
       : 0;
+    const overdueReviews = Number(loadRows[0]?.overdue || 0);
+    const todayDueReviews = Number(loadRows[0]?.dueOnDate || 0);
+    const mandatoryReviewsToday = overdueReviews + todayDueReviews;
 
     return {
       enabled,
@@ -167,7 +197,10 @@
       fullDayTarget: smoothedDailyTarget,
       learnedToday,
       todayNewRemaining,
-      dueToday: loadRows[0]?.count || 0,
+      overdueReviews,
+      todayDueReviews,
+      mandatoryReviewsToday,
+      dueToday: mandatoryReviewsToday,
       avgDueNext7,
       reviewLoadNext7: loadRows,
       loadAdjustment: smoothedDailyTarget - baseDailyTarget,
