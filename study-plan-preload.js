@@ -14,10 +14,20 @@
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   }
 
+  function addDays(key, days) {
+    const d = new Date(`${key}T00:00:00`);
+    d.setDate(d.getDate() + days);
+    return dateKey(d.getTime());
+  }
+
   function localDayNumber(value) {
     const d = typeof value === "string" ? new Date(`${value}T00:00:00`) : new Date(value);
     d.setHours(0, 0, 0, 0);
     return Math.floor(d.getTime() / 86400000);
+  }
+
+  function clamp(n, a, b) {
+    return Math.max(a, Math.min(b, n));
   }
 
   function readState() {
@@ -37,6 +47,43 @@
     return (DATA.allWords || []).filter((w) => w.quizMode !== "source-only");
   }
 
+  function reviewLoad(words, cards, today, days = 7) {
+    const rows = Array.from({ length: days }, (_, i) => ({ date: addDays(today, i), count: 0 }));
+    const index = new Map(rows.map((r, i) => [r.date, i]));
+    const todayNum = localDayNumber(today);
+
+    for (const w of words) {
+      const c = cards[w.cardId];
+      if (!c?.reps || !c.due) continue;
+      const dueKey = dateKey(c.due);
+      const dueNum = localDayNumber(dueKey);
+      if (dueNum <= todayNum) {
+        rows[0].count++;
+      } else if (index.has(dueKey)) {
+        rows[index.get(dueKey)].count++;
+      }
+    }
+    return rows;
+  }
+
+  function smoothedTarget(baseTarget, remaining, remainingDays, loadRows) {
+    if (!baseTarget || !remaining) return 0;
+    // Near the deadline, finish the plan rather than smoothing too aggressively.
+    if (remainingDays <= 2 || remaining <= baseTarget * 2) return Math.min(remaining, baseTarget);
+
+    const dueToday = loadRows[0]?.count || 0;
+    const avgDue = loadRows.length
+      ? loadRows.reduce((sum, r) => sum + r.count, 0) / loadRows.length
+      : dueToday;
+
+    // Shift some new cards away from unusually heavy review days and toward lighter days.
+    // The cap keeps the heuristic conservative; missed work is still caught up automatically.
+    const adjustment = Math.round((avgDue - dueToday) * 0.25);
+    const lower = Math.max(baseTarget > 0 ? 1 : 0, Math.ceil(baseTarget * 0.6));
+    const upper = Math.max(lower, Math.ceil(baseTarget * 1.4));
+    return Math.min(remaining, clamp(baseTarget + adjustment, lower, upper));
+  }
+
   function calculate(state) {
     const today = dateKey();
     const words = planWords();
@@ -49,10 +96,15 @@
     const remainingDays = Math.max(1, targetDays - elapsed);
     const completed = words.filter((w) => cards[w.cardId]?.reps > 0).length;
     const remaining = Math.max(0, words.length - completed);
-    const fullDayTarget = remaining ? Math.ceil(remaining / remainingDays) : 0;
+    const baseDailyTarget = remaining ? Math.ceil(remaining / remainingDays) : 0;
+    const loadRows = reviewLoad(words, cards, today, 7);
+    const smoothedDailyTarget = smoothedTarget(baseDailyTarget, remaining, remainingDays, loadRows);
     const learnedToday = Number(state.daily?.[today]?.newCards || 0);
-    const todayNewRemaining = Math.max(0, fullDayTarget - learnedToday);
+    const todayNewRemaining = Math.max(0, smoothedDailyTarget - learnedToday);
     const enabled = existing.enabled !== false;
+    const avgDueNext7 = loadRows.length
+      ? Number((loadRows.reduce((sum, r) => sum + r.count, 0) / loadRows.length).toFixed(1))
+      : 0;
 
     return {
       enabled,
@@ -63,9 +115,15 @@
       totalCards: words.length,
       completed,
       remaining,
-      fullDayTarget,
+      baseDailyTarget,
+      smoothedDailyTarget,
+      fullDayTarget: smoothedDailyTarget,
       learnedToday,
       todayNewRemaining,
+      dueToday: loadRows[0]?.count || 0,
+      avgDueNext7,
+      reviewLoadNext7: loadRows,
+      loadAdjustment: smoothedDailyTarget - baseDailyTarget,
       lastCalculatedDate: today
     };
   }
@@ -76,7 +134,7 @@
   state.studyPlan = { ...(state.studyPlan || {}), ...snapshot };
 
   // When auto-plan is enabled, dailyNew means "remaining new cards for today".
-  // This automatically catches up after missed days and decreases when ahead.
+  // Review-heavy days receive fewer new cards; light days receive slightly more.
   if (snapshot.enabled) state.settings.dailyNew = snapshot.todayNewRemaining;
 
   writeState(state);
