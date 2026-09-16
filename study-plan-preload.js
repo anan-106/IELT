@@ -43,8 +43,56 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   }
 
+  function uniqueCards(items) {
+    const seen = new Set();
+    return (items || []).filter((w) => {
+      if (!w?.cardId || w.quizMode === "source-only" || seen.has(w.cardId)) return false;
+      seen.add(w.cardId);
+      return true;
+    });
+  }
+
+  // Explicit plan membership and order. The 488 meaning deck is a first-class part
+  // of the plan, not merely included accidentally through DATA.allWords.
   function planWords() {
-    return (DATA.allWords || []).filter((w) => w.quizMode !== "source-only");
+    return uniqueCards([
+      ...(DATA.allPrimaryWords || []),
+      ...(DATA.pdfMeaningDeck?.words || []),
+      ...(DATA.academic?.words || [])
+    ]);
+  }
+
+  function deckKey(w) {
+    if (w.deckId === "reading538") return "reading538";
+    if (w.deckId === "pdf-meaning") return "pdfMeaning";
+    if (w.deckId === "academic") return "academic";
+    return "other";
+  }
+
+  function deckBreakdown(words, cards) {
+    const out = {
+      reading538: { total: 0, completed: 0, remaining: 0 },
+      pdfMeaning: { total: 0, completed: 0, remaining: 0 },
+      academic: { total: 0, completed: 0, remaining: 0 }
+    };
+    for (const w of words) {
+      const key = deckKey(w);
+      if (!out[key]) continue;
+      out[key].total++;
+      if (cards[w.cardId]?.reps > 0) out[key].completed++;
+      else out[key].remaining++;
+    }
+    return out;
+  }
+
+  function newBreakdown(words, cards, count) {
+    const out = { reading538: 0, pdfMeaning: 0, academic: 0 };
+    const unseen = words.filter((w) => !cards[w.cardId]?.reps).slice(0, Math.max(0, count));
+    for (const w of unseen) {
+      const key = deckKey(w);
+      if (key in out) out[key]++;
+    }
+    return out;
   }
 
   function reviewLoad(words, cards, today, days = 7) {
@@ -68,7 +116,6 @@
 
   function smoothedTarget(baseTarget, remaining, remainingDays, loadRows) {
     if (!baseTarget || !remaining) return 0;
-    // Near the deadline, finish the plan rather than smoothing too aggressively.
     if (remainingDays <= 2 || remaining <= baseTarget * 2) return Math.min(remaining, baseTarget);
 
     const dueToday = loadRows[0]?.count || 0;
@@ -76,8 +123,6 @@
       ? loadRows.reduce((sum, r) => sum + r.count, 0) / loadRows.length
       : dueToday;
 
-    // Shift some new cards away from unusually heavy review days and toward lighter days.
-    // The cap keeps the heuristic conservative; missed work is still caught up automatically.
     const adjustment = Math.round((avgDue - dueToday) * 0.25);
     const lower = Math.max(baseTarget > 0 ? 1 : 0, Math.ceil(baseTarget * 0.6));
     const upper = Math.max(lower, Math.ceil(baseTarget * 1.4));
@@ -115,6 +160,8 @@
       totalCards: words.length,
       completed,
       remaining,
+      deckBreakdown: deckBreakdown(words, cards),
+      todayNewBreakdown: newBreakdown(words, cards, todayNewRemaining),
       baseDailyTarget,
       smoothedDailyTarget,
       fullDayTarget: smoothedDailyTarget,
@@ -133,8 +180,6 @@
   const snapshot = calculate(state);
   state.studyPlan = { ...(state.studyPlan || {}), ...snapshot };
 
-  // When auto-plan is enabled, dailyNew means "remaining new cards for today".
-  // Review-heavy days receive fewer new cards; light days receive slightly more.
   if (snapshot.enabled) state.settings.dailyNew = snapshot.todayNewRemaining;
 
   writeState(state);
