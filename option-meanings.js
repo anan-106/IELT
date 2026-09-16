@@ -1,5 +1,5 @@
-// Show Chinese meanings for every option after a 538 synonym question is answered.
-// Correct and distractor options are both annotated; meanings stay hidden before answering.
+// Show Chinese meanings for the prompt and every option after a 538 synonym question is answered.
+// Meanings stay hidden before answering so they never leak the answer.
 (() => {
   "use strict";
 
@@ -37,17 +37,15 @@
     for (const alias of w.aliases || []) addMeaning(alias, w.chinese, 28);
   }
 
-  // 2) The Word/PDF total list may contain direct Chinese meanings for terms that
-  // are not independent study cards.
+  // 2) Direct meanings from the uploaded Word/PDF vocabulary sources.
   for (const src of [window.__IELT_DOCX_488_TOTAL__, window.__IELT_PRINTED_488_TOTAL__]) {
     for (const [term, chinese] of Object.entries(src?.meanings || {})) {
       addMeaning(term, chinese, 35);
     }
   }
 
-  // 3) Every 538 replacement expression inherits the contextual Chinese sense of
-  // its parent test word. This guarantees distractors generated from synonym groups
-  // still get a useful IELTS-context gloss after the user answers.
+  // 3) A 538 replacement expression inherits the IELTS-context Chinese sense
+  // of its parent test word when no stronger direct lexical meaning exists.
   for (const w of DATA.allPrimaryWords || []) {
     const linked = [
       ...(w.sourceSynonyms || []),
@@ -71,13 +69,27 @@
     return word?.quizMode === "synonym" || word?.deckId === "reading538";
   }
 
-  function decorateAnsweredOptions() {
-    const cardEl = document.querySelector("#studyCard .word-card[data-card]");
-    if (!cardEl || !isSynonymCard(cardEl)) return;
-
+  function hasBeenAnswered(cardEl) {
     const buttons = [...cardEl.querySelectorAll(".option[data-option]")];
-    if (!buttons.length || !buttons.some((b) => b.disabled)) return;
+    return buttons.length > 0 && buttons.some((b) => b.disabled);
+  }
 
+  function decoratePromptMeaning(cardEl) {
+    if (cardEl.querySelector(".prompt-meaning")) return;
+    const title = cardEl.querySelector(".word-title");
+    if (!title) return;
+
+    const prompt = title.textContent?.trim() || "";
+    if (!prompt) return;
+
+    const line = document.createElement("div");
+    line.className = "prompt-meaning";
+    line.innerHTML = `<span class="prompt-meaning-label">题干中文</span><span>${escapeHtml(glossFor(prompt))}</span>`;
+    title.insertAdjacentElement("afterend", line);
+  }
+
+  function decorateOptionMeanings(cardEl) {
+    const buttons = [...cardEl.querySelectorAll(".option[data-option]")];
     for (const btn of buttons) {
       if (btn.querySelector(".option-meaning")) continue;
       const term = btn.dataset.option || "";
@@ -88,11 +100,53 @@
     }
   }
 
+  function decorateAnsweredQuestion() {
+    const cardEl = document.querySelector("#studyCard .word-card[data-card]");
+    if (!cardEl || !isSynonymCard(cardEl) || !hasBeenAnswered(cardEl)) return;
+
+    decoratePromptMeaning(cardEl);
+    decorateOptionMeanings(cardEl);
+  }
+
+  // Backward-compatible function name used by older layers.
+  function decorateAnsweredOptions() {
+    decorateAnsweredQuestion();
+  }
+
+  function escapeHtml(v) {
+    return String(v ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
   function injectStyle() {
     if (document.getElementById("optionMeaningStyle")) return;
     const style = document.createElement("style");
     style.id = "optionMeaningStyle";
     style.textContent = `
+      .prompt-meaning{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:8px;
+        flex-wrap:wrap;
+        margin-top:10px;
+        color:var(--sub, var(--muted));
+        font-size:.86rem;
+        line-height:1.45;
+        text-align:center;
+      }
+      .prompt-meaning-label{
+        padding:3px 7px;
+        border-radius:999px;
+        background:#f0ece5;
+        color:#77736c;
+        font-size:.68rem;
+        font-weight:800;
+      }
       .option .option-meaning{
         display:block;
         margin-top:5px;
@@ -111,7 +165,7 @@
 
   const root = document.getElementById("studyCard");
   if (root) {
-    const observer = new MutationObserver(() => requestAnimationFrame(decorateAnsweredOptions));
+    const observer = new MutationObserver(() => requestAnimationFrame(decorateAnsweredQuestion));
     observer.observe(root, {
       childList: true,
       subtree: true,
@@ -122,13 +176,17 @@
 
   document.addEventListener("click", (event) => {
     if (!event.target.closest?.("#studyCard .option")) return;
-    setTimeout(decorateAnsweredOptions, 0);
+    setTimeout(decorateAnsweredQuestion, 0);
   });
 
   document.addEventListener("keydown", (event) => {
     if (!["1", "2", "3", "4"].includes(event.key)) return;
-    setTimeout(decorateAnsweredOptions, 0);
+    setTimeout(decorateAnsweredQuestion, 0);
   });
 
-  window.__IELT_OPTION_MEANINGS__ = { glossFor, decorateAnsweredOptions };
+  window.__IELT_OPTION_MEANINGS__ = {
+    glossFor,
+    decorateAnsweredOptions,
+    decorateAnsweredQuestion
+  };
 })();
