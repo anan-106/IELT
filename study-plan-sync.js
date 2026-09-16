@@ -50,6 +50,8 @@
     const today = dateKey();
     const learnedToday = Number(state.daily?.[today]?.newCards || 0);
 
+    // Prefer the review-load-smoothed target. Historical overdue reviews are part
+    // of that load and can reduce today's new-card quota.
     if (plan.lastCalculatedDate === today && Number.isFinite(Number(plan.smoothedDailyTarget))) {
       return Math.max(0, Number(plan.smoothedDailyTarget) - learnedToday);
     }
@@ -90,6 +92,15 @@
     };
   }
 
+  function loadReviewBacklogPlan() {
+    if (window.__IELT_REVIEW_BACKLOG_PLAN__ || document.querySelector('script[data-review-backlog-plan="1"]')) return;
+    const script = document.createElement("script");
+    script.src = "review-backlog-plan.js";
+    script.dataset.reviewBacklogPlan = "1";
+    document.body.appendChild(script);
+  }
+
   wrap("startSessionBtn");
   wrap("rebuildSessionBtn");
+  loadReviewBacklogPlan();
 })();
