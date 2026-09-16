@@ -42,14 +42,21 @@
     for (const alias of w.aliases || []) addToMap(directMeaningMap, alias, w.chinese, 28);
   }
 
-  // 2) Uploaded Word/PDF meanings are the strongest direct-source meanings.
+  // 2) Uploaded Word/PDF meanings remain authoritative course-material meanings.
   for (const src of [window.__IELT_DOCX_488_TOTAL__, window.__IELT_PRINTED_488_TOTAL__]) {
     for (const [term, chinese] of Object.entries(src?.meanings || {})) {
       addToMap(directMeaningMap, term, chinese, 35);
     }
   }
 
-  // 3) Keep the IELTS replacement sense in a separate map. A replacement phrase
+  // 3) Web-researched / learner-dictionary original meanings fill gaps and, when
+  // the course material also has a direct meaning, appear alongside it rather
+  // than being confused with the current synonym-question sense.
+  for (const [term, chinese] of Object.entries(window.__IELT_ORIGINAL_MEANINGS__?.meanings || {})) {
+    addToMap(directMeaningMap, term, chinese, 35);
+  }
+
+  // 4) Keep the IELTS replacement sense in a separate map. A replacement phrase
   // inherits the contextual sense of its parent 538 test word only for this layer.
   for (const w of DATA.allPrimaryWords || []) {
     addToMap(contextMeaningMap, w.word, w.chinese, 20);
@@ -71,7 +78,7 @@
   }
 
   function directGlossFor(term) {
-    return meaningsFrom(directMeaningMap, term) || "资料未提供独立本义";
+    return meaningsFrom(directMeaningMap, term) || "原本词义待补充";
   }
 
   function genericContextGlossFor(term) {
@@ -97,13 +104,13 @@
     return genericContextGlossFor(prompt);
   }
 
-  // Options continue to show the most useful learner gloss after answering:
-  // prefer a direct lexical meaning; otherwise fall back to IELTS contextual sense.
+  // Options show their own lexical meaning where available. Context meaning is
+  // only a fallback, never mislabeled as the expression's original meaning.
   function optionGlossFor(term) {
     const direct = meaningsFrom(directMeaningMap, term);
     if (direct) return direct;
     const context = meaningsFrom(contextMeaningMap, term);
-    return context || "暂无中文释义";
+    return context ? `本题语境：${context}` : "暂无中文释义";
   }
 
   function isSynonymCard(cardEl) {
@@ -133,7 +140,7 @@
     box.className = "prompt-meaning";
     box.innerHTML = `
       <div class="prompt-meaning-row">
-        <span class="prompt-meaning-label prompt-original-label">原本词义</span>
+        <span class="prompt-meaning-label prompt-original-label">原本词义（雅思常用义）</span>
         <span class="prompt-meaning-value">${escapeHtml(original)}</span>
       </div>
       <div class="prompt-meaning-row">
@@ -163,7 +170,6 @@
     decorateOptionMeanings(cardEl);
   }
 
-  // Backward-compatible function name used by older layers.
   function decorateAnsweredOptions() {
     decorateAnsweredQuestion();
   }
@@ -197,7 +203,7 @@
       }
       .prompt-meaning-row{
         display:grid;
-        grid-template-columns:112px 1fr;
+        grid-template-columns:152px 1fr;
         align-items:start;
         gap:8px;
       }
