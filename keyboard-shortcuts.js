@@ -23,6 +23,32 @@
     return [...document.querySelectorAll("#studyCard .option:not(:disabled)")].filter(isVisible).slice(0, 4);
   }
 
+  function currentPromptText() {
+    const title = document.querySelector("#studyCard .word-title");
+    return title && isVisible(title) ? title.textContent.trim() : "";
+  }
+
+  function replayCurrentPrompt() {
+    const text = currentPromptText();
+    if (!text) return false;
+
+    const api = window.__IELT_PRONUNCIATION__;
+    if (api?.speakBritish) {
+      api.speakBritish(text, { force: true });
+      return true;
+    }
+
+    if ("speechSynthesis" in window) {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "en-GB";
+      u.rate = 0.94;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+      return true;
+    }
+    return false;
+  }
+
   function decorateOptions() {
     [...document.querySelectorAll("#studyCard .option")].filter(isVisible).forEach((btn, index) => {
       if (index > 3) return;
@@ -68,6 +94,15 @@
   document.addEventListener("keydown", (event) => {
     if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || isTypingTarget(event.target)) return;
 
+    // Tab is intentionally repurposed inside study mode as "read the current prompt again".
+    // Prevent the browser's normal focus navigation only when there is an active study prompt.
+    if (event.key === "Tab" && !event.shiftKey) {
+      if (!currentPromptText()) return;
+      event.preventDefault();
+      if (!event.repeat) replayCurrentPrompt();
+      return;
+    }
+
     if (/^[1-4]$/.test(event.key)) {
       const options = activeOptions();
       const index = Number(event.key) - 1;
@@ -79,7 +114,7 @@
     }
 
     if (event.key === "Enter") {
-      const selectors = ["#continueBtn", "#sameDayContinue", "#wrongBookContinue"];
+      const selectors = ["#continueBtn", "#sameDayContinue", "#wrongBookContinue", "#recoveryContinue"];
       const next = selectors.map((s) => document.querySelector(s)).find(isVisible);
       if (!next) return;
       event.preventDefault();
@@ -110,7 +145,7 @@
     if (!parent || parent.querySelector(":scope > .keyboard-hint")) return;
     const hint = document.createElement("div");
     hint.className = "keyboard-hint";
-    hint.textContent = "键盘：1–4 选择 · Enter 下一题";
+    hint.textContent = "键盘：1–4 选择 · Tab 再读题干 · Enter 下一题";
     options.insertAdjacentElement("afterend", hint);
   }
 
