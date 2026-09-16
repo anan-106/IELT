@@ -1,5 +1,5 @@
-// Show Chinese meanings for the prompt and every option after a 538 synonym question is answered.
-// Meanings stay hidden before answering so they never leak the answer.
+// Show two Chinese meaning layers for the prompt, plus meanings for every option,
+// after a 538 synonym question is answered. Nothing is revealed before answering.
 (() => {
   "use strict";
 
@@ -13,59 +13,103 @@
     .replace(/\s+/g, " ")
     .trim();
 
-  const meaningMap = new Map();
+  const wordById = new Map((DATA.allWords || []).map((w) => [w.cardId, w]));
 
-  function addMeaning(term, chinese, priority = 0) {
+  // Direct/original lexical meanings and IELTS contextual replacement meanings
+  // are deliberately stored separately so one can never silently replace the other.
+  const directMeaningMap = new Map();
+  const contextMeaningMap = new Map();
+
+  function addToMap(map, term, chinese, priority = 0) {
     const key = norm(term);
     const gloss = String(chinese || "").trim();
     if (!key || !gloss) return;
 
-    const old = meaningMap.get(key);
+    const old = map.get(key);
     if (!old || priority > old.priority) {
-      meaningMap.set(key, { meanings: [gloss], priority });
+      map.set(key, { meanings: [gloss], priority });
       return;
     }
-    if (priority === old.priority && !old.meanings.some((x) => x === gloss)) {
+    if (priority === old.priority && !old.meanings.includes(gloss)) {
       old.meanings.push(gloss);
     }
   }
 
-  // 1) Exact lexical meanings have the highest priority.
+  // 1) Direct lexical meanings from independent learning cards.
   for (const w of DATA.allWords || []) {
-    addMeaning(w.word, w.chinese, 30);
-    addMeaning(w.sourceWord, w.chinese, 30);
-    for (const alias of w.aliases || []) addMeaning(alias, w.chinese, 28);
+    addToMap(directMeaningMap, w.word, w.chinese, 30);
+    addToMap(directMeaningMap, w.sourceWord, w.chinese, 30);
+    for (const alias of w.aliases || []) addToMap(directMeaningMap, alias, w.chinese, 28);
   }
 
-  // 2) Direct meanings from the uploaded Word/PDF vocabulary sources.
+  // 2) Uploaded Word/PDF meanings are the strongest direct-source meanings.
   for (const src of [window.__IELT_DOCX_488_TOTAL__, window.__IELT_PRINTED_488_TOTAL__]) {
     for (const [term, chinese] of Object.entries(src?.meanings || {})) {
-      addMeaning(term, chinese, 35);
+      addToMap(directMeaningMap, term, chinese, 35);
     }
   }
 
-  // 3) A 538 replacement expression inherits the IELTS-context Chinese sense
-  // of its parent test word when no stronger direct lexical meaning exists.
+  // 3) Keep the IELTS replacement sense in a separate map. A replacement phrase
+  // inherits the contextual sense of its parent 538 test word only for this layer.
   for (const w of DATA.allPrimaryWords || []) {
+    addToMap(contextMeaningMap, w.word, w.chinese, 20);
+    addToMap(contextMeaningMap, w.sourceWord, w.chinese, 20);
+    for (const alias of w.aliases || []) addToMap(contextMeaningMap, alias, w.chinese, 18);
+
     const linked = [
       ...(w.sourceSynonyms || []),
       ...(w.quizSynonyms || []),
       ...(w.examSynonyms || []),
       ...(w.relatedSynonyms || [])
     ];
-    for (const term of linked) addMeaning(term, w.chinese, 10);
+    for (const term of linked) addToMap(contextMeaningMap, term, w.chinese, 10);
   }
 
-  function glossFor(term) {
-    const hit = meaningMap.get(norm(term));
-    if (!hit?.meanings?.length) return "暂无中文释义";
-    return hit.meanings.slice(0, 2).join("；");
+  function meaningsFrom(map, term) {
+    const hit = map.get(norm(term));
+    return hit?.meanings?.length ? hit.meanings.slice(0, 2).join("；") : "";
+  }
+
+  function directGlossFor(term) {
+    return meaningsFrom(directMeaningMap, term) || "资料未提供独立本义";
+  }
+
+  function genericContextGlossFor(term) {
+    return meaningsFrom(contextMeaningMap, term) || "暂无单独标注的替换义";
+  }
+
+  // For the prompt, the current card is the strongest evidence for the exact
+  // replacement sense being tested in this question.
+  function promptContextGloss(cardEl, prompt) {
+    const word = wordById.get(cardEl?.dataset?.card || "");
+    if (word?.deckId === "reading538" && String(word.chinese || "").trim()) {
+      const cluster = [
+        word.word,
+        word.sourceWord,
+        ...(word.aliases || []),
+        ...(word.sourceSynonyms || []),
+        ...(word.quizSynonyms || []),
+        ...(word.examSynonyms || []),
+        ...(word.relatedSynonyms || [])
+      ].filter(Boolean).map(norm);
+      if (cluster.includes(norm(prompt))) return String(word.chinese).trim();
+    }
+    return genericContextGlossFor(prompt);
+  }
+
+  // Options continue to show the most useful learner gloss after answering:
+  // prefer a direct lexical meaning; otherwise fall back to IELTS contextual sense.
+  function optionGlossFor(term) {
+    const direct = meaningsFrom(directMeaningMap, term);
+    if (direct) return direct;
+    const context = meaningsFrom(contextMeaningMap, term);
+    return context || "暂无中文释义";
   }
 
   function isSynonymCard(cardEl) {
     const cardId = cardEl?.dataset?.card;
     if (!cardId) return false;
-    const word = (DATA.allWords || []).find((w) => w.cardId === cardId);
+    const word = wordById.get(cardId);
     return word?.quizMode === "synonym" || word?.deckId === "reading538";
   }
 
@@ -82,10 +126,21 @@
     const prompt = title.textContent?.trim() || "";
     if (!prompt) return;
 
-    const line = document.createElement("div");
-    line.className = "prompt-meaning";
-    line.innerHTML = `<span class="prompt-meaning-label">题干中文</span><span>${escapeHtml(glossFor(prompt))}</span>`;
-    title.insertAdjacentElement("afterend", line);
+    const original = directGlossFor(prompt);
+    const replacement = promptContextGloss(cardEl, prompt);
+
+    const box = document.createElement("div");
+    box.className = "prompt-meaning";
+    box.innerHTML = `
+      <div class="prompt-meaning-row">
+        <span class="prompt-meaning-label prompt-original-label">原本词义</span>
+        <span class="prompt-meaning-value">${escapeHtml(original)}</span>
+      </div>
+      <div class="prompt-meaning-row">
+        <span class="prompt-meaning-label prompt-context-label">本题同义替换义</span>
+        <span class="prompt-meaning-value">${escapeHtml(replacement)}</span>
+      </div>`;
+    title.insertAdjacentElement("afterend", box);
   }
 
   function decorateOptionMeanings(cardEl) {
@@ -95,7 +150,7 @@
       const term = btn.dataset.option || "";
       const gloss = document.createElement("span");
       gloss.className = "option-meaning";
-      gloss.textContent = glossFor(term);
+      gloss.textContent = optionGlossFor(term);
       btn.appendChild(gloss);
     }
   }
@@ -128,25 +183,35 @@
     style.id = "optionMeaningStyle";
     style.textContent = `
       .prompt-meaning{
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        gap:8px;
-        flex-wrap:wrap;
-        margin-top:10px;
-        color:var(--sub, var(--muted));
-        font-size:.86rem;
+        width:min(620px,100%);
+        display:grid;
+        gap:7px;
+        margin-top:12px;
+        padding:10px 12px;
+        border:1px solid var(--line,#e6e2da);
+        border-radius:12px;
+        background:var(--surface-soft,#fbfaf7);
+        color:var(--sub,var(--muted));
+        font-size:.84rem;
         line-height:1.45;
-        text-align:center;
+      }
+      .prompt-meaning-row{
+        display:grid;
+        grid-template-columns:112px 1fr;
+        align-items:start;
+        gap:8px;
       }
       .prompt-meaning-label{
+        display:inline-flex;
+        width:max-content;
         padding:3px 7px;
         border-radius:999px;
-        background:#f0ece5;
-        color:#77736c;
-        font-size:.68rem;
+        font-size:.67rem;
         font-weight:800;
       }
+      .prompt-original-label{background:#f0ece5;color:#77736c}
+      .prompt-context-label{background:#edf2f7;color:#526b83}
+      .prompt-meaning-value{font-weight:600;color:var(--ink,#20231f)}
       .option .option-meaning{
         display:block;
         margin-top:5px;
@@ -157,6 +222,9 @@
       }
       .option.correct .option-meaning{opacity:.9}
       .option.wrong .option-meaning{opacity:.9}
+      @media(max-width:560px){
+        .prompt-meaning-row{grid-template-columns:1fr;gap:4px}
+      }
     `;
     document.head.appendChild(style);
   }
@@ -185,7 +253,9 @@
   });
 
   window.__IELT_OPTION_MEANINGS__ = {
-    glossFor,
+    glossFor: optionGlossFor,
+    directGlossFor,
+    contextGlossFor: genericContextGlossFor,
     decorateAnsweredOptions,
     decorateAnsweredQuestion
   };
