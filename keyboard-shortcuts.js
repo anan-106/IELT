@@ -65,12 +65,9 @@
     if (!word || word.quizMode === "meaning") return;
 
     const correct = [...cardEl.querySelectorAll(".option.correct")].find(isVisible);
-    // IMPORTANT: use data-option, not textContent. After answer, option-meanings.js
-    // appends a Chinese gloss, which must never be sent to the English TTS voice.
     const text = correct?.dataset?.option || "";
     if (!text.trim()) return;
 
-    // Use the en-GB voice layer already installed by auto-pronunciation.js.
     setTimeout(() => {
       const api = window.__IELT_PRONUNCIATION__;
       if (api?.speakBritish) api.speakBritish(text, { force: true });
@@ -87,15 +84,12 @@
   document.addEventListener("click", (event) => {
     const option = event.target.closest?.("#studyCard .option");
     if (!option) return;
-    // Let the quiz handler mark .correct/.wrong first.
     setTimeout(() => speakCorrectSynonym(option), 0);
   });
 
   document.addEventListener("keydown", (event) => {
     if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || isTypingTarget(event.target)) return;
 
-    // Tab is intentionally repurposed inside study mode as "read the current prompt again".
-    // Prevent the browser's normal focus navigation only when there is an active study prompt.
     if (event.key === "Tab" && !event.shiftKey) {
       if (!currentPromptText()) return;
       event.preventDefault();
@@ -149,12 +143,38 @@
     options.insertAdjacentElement("afterend", hint);
   }
 
-  function loadOptionMeanings() {
-    if (window.__IELT_OPTION_MEANINGS__ || document.querySelector('script[data-option-meanings="1"]')) return;
+  function appendScript(src, dataKey, onload) {
+    const existing = document.querySelector(`script[data-addon="${dataKey}"]`);
+    if (existing) {
+      if (typeof onload === "function") {
+        if (existing.dataset.loaded === "1") onload();
+        else existing.addEventListener("load", onload, { once: true });
+      }
+      return;
+    }
     const script = document.createElement("script");
-    script.src = "option-meanings.js";
-    script.dataset.optionMeanings = "1";
+    script.src = src;
+    script.dataset.addon = dataKey;
+    script.addEventListener("load", () => {
+      script.dataset.loaded = "1";
+      if (typeof onload === "function") onload();
+    }, { once: true });
     document.body.appendChild(script);
+  }
+
+  function loadOptionMeanings() {
+    if (window.__IELT_OPTION_MEANINGS__) return;
+
+    const loadGlossLayer = () => {
+      if (window.__IELT_OPTION_MEANINGS__) return;
+      appendScript("option-meanings.js", "option-meanings");
+    };
+
+    if (window.__IELT_ORIGINAL_MEANINGS__) {
+      loadGlossLayer();
+    } else {
+      appendScript("ielts-original-meanings.js", "original-meanings", loadGlossLayer);
+    }
   }
 
   let scheduled = false;
