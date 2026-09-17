@@ -95,6 +95,24 @@
 - 本地自动保存草稿
 - 实时 word count
 
+### GRE 资料库（GRE-All-In-One）
+
+项目新增“资料库”标签页，整理 `RuiWang6188/GRE-All-In-One` 中比较实用的外部资料入口：
+
+- **词汇**：17天搞定GRE单词、GRE-WORD-REVIEW、大三千精练、GRE救命800、短语搭配；
+- **Verbal**：长难句、阅读逻辑线、阅读机经240、GRE36套、填空1250题与解析；
+- **Quant**：ETS Math Review / Math Conventions、巍哥170难题、数学满分宝典、数学词汇；
+- **写作**：Issue 资料、新GRE写作5.5；Argument 只标记为历史资料；
+- **综合**：OG 源资料入口。
+
+资料库支持：
+
+- 按词汇 / Verbal / Quant / 写作 / 综合筛选；
+- 本地勾选“已完成”；
+- 根据目标天数显示冲刺 / 均衡 / 长期型资料路线提示。
+
+由于该仓库根目录未发现明确的 `LICENSE` 文件，并且其中大量文件属于教材、ETS、培训机构或其他第三方作者，本项目**不重新分发这些 PDF / Office 文档正文**，只提供源仓库跳转与用途说明。详细记录见 `GRE_ALL_IN_ONE_SOURCES.md`。
+
 ### 错题本
 
 统一记录词汇、Verbal、Quant 历史错误，可单独复习。
@@ -121,22 +139,25 @@
 - 计划天数
 - 发音语速
 - GRE-CN 词汇缓存与佛脚/霍V6优先级缓存
+- GRE-All-In-One 资料完成状态
 
 ## 主要文件
 
 ```text
-index.html           # GRE 主界面
-gre-styles.css       # UI
-gre-data.js          # 原创 Verbal/Quant/AWA starter bank + 网络失败兜底词汇
-gre-cn-import.js     # GRE-CN 大三千/Magoosh/霍V6 CSV 同步
-gre-priority.js      # 大三千主库过滤 + Magoosh/霍V6/佛脚交叉优先级
-gre-app.js           # 计划、记忆、答题、统计、错题本、TTS
-GRE_CN_SOURCES.md    # 数据来源、加权规则、许可说明
+index.html                    # GRE 主界面
+gre-styles.css                # UI
+gre-data.js                   # 原创 Verbal/Quant/AWA starter bank + 网络失败兜底词汇
+gre-cn-import.js              # GRE-CN 大三千/Magoosh/霍V6 CSV 同步
+gre-priority.js               # 大三千主库过滤 + Magoosh/霍V6/佛脚交叉优先级
+gre-app.js                    # 计划、记忆、答题、统计、错题本、TTS
+gre-resources.js              # GRE-All-In-One 外部资料库与本地完成状态
+GRE_CN_SOURCES.md             # GRE-CN 数据来源、加权规则、许可说明
+GRE_ALL_IN_ONE_SOURCES.md     # GRE-All-In-One 资料导航与版权边界
 ```
 
 ## 版权边界
 
 - GRE-CN 中 CSV/TXT/代码的许可见其仓库 BSD-3-Clause；
-- PDF/Office 资料不自动复制进本项目；
+- `RuiWang6188/GRE-All-In-One` 的第三方 PDF/Office 只做源链接，不复制正文；
 - 本项目没有嵌入 POWERPREP 或 ETS 官方试题；
 - “GRE”是 ETS 的注册商标，本项目与 ETS 无隶属或官方合作关系。
