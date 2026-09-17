@@ -1,148 +1,141 @@
-# IELT Memory — 雅思阅读 538 + 488总表词义 + Academic
+# GRE Prep — 自适应 GRE General Test 备考工具
 
-个人雅思阅读词汇训练工具。项目现在分成三套互不混淆的学习目标：
+这是从原 IELTS 项目学习引擎派生出的 **GRE 专用分支**。IELTS 主项目保留在 `main`，GRE 版本位于 `gre-prep`，两套数据互不影响。
 
-1. **新版 538 同义替换训练**：训练考点词与真题替换表达之间的识别；
-2. **488总表词义记忆**：以后附总表为来源，排除已经作为 538 同义替换出现的词，只练英文 → 中文意思；
-3. **Academic 扩展**：NAWL 学术阅读词汇。
+## 当前 GRE 结构
 
-所有可学习卡共用同一套当天错词强化和按天复习系统。
+项目按 ETS 当前短版 GRE General Test 设计：
 
-## 新版 538
+| Measure | Section | Questions | Time |
+| --- | --- | ---: | ---: |
+| Analytical Writing | Analyze an Issue | 1 | 30 min |
+| Verbal Reasoning | Section 1 | 12 | 18 min |
+| Verbal Reasoning | Section 2 | 15 | 23 min |
+| Quantitative Reasoning | Section 1 | 12 | 21 min |
+| Quantitative Reasoning | Section 2 | 15 | 26 min |
 
-“538”按项目当前新版口径表示 **376 个主考点词 + 162 个额外同义替换学习目标 = 538**：
+总考试时间约 **1 小时 58 分钟**。Verbal 与 Quant 的第二节难度取决于第一节整体表现。
 
-| 类别 | 主考点词 | 额外同义替换 | 合计 | 掌握要求 |
-| --- | ---: | ---: | ---: | --- |
-| 第1类 | 20 | 34 | 54 | 滚瓜烂熟 |
-| 第2类 | 100 | 71 | 171 | 熟记10遍以上 |
-| 第3类 | 256 | 57 | 313 | 熟记5遍以上 |
-| **总计** | **376** | **162** | **538** | — |
+官方说明：
+- https://www.ets.org/gre/test-takers/general-test/prepare/test-structure.html
+- https://www.ets.org/gre/test-takers/general-test/prepare/content/verbal-reasoning.html
+- https://www.ets.org/gre/test-takers/general-test/prepare/content/quantitative-reasoning.html
+- https://www.ets.org/gre/test-takers/general-test/prepare/content/analytical-writing.html
 
-主词等级保持：
+## 项目模块
 
-- 第1类：1–20，超高频，严格按重要性顺序；
-- 第2类：21–120，重要考点，按重要性顺序；
-- 第3类：121–376，真题考点，组内重要性一致。
+### 1. GRE 词汇
 
-538 题型以同义替换识别为核心，题干和正确替换表达可以换方向出现。
+- 三层高频词汇 starter deck；
+- 英文 → 中文识别；
+- 展示近义词；
+- 自动英语发音；
+- `Tab` 重读；
+- `1–4` 键盘选项；
+- `Enter` 下一题；
+- 答错后必须在后续题目中 **再答对 2 次**；
+- 两次重新证明至少间隔 3 道其他题；
+- 跨天复习：**1 → 2 → 6 → 31 → 60 → 120 天**。
 
-## 488总表词义记忆
+> 词汇表是项目独立整理的 GRE-oriented starter deck，不是 ETS 官方词表。
 
-用户上传 PDF 的页 12–14 后附有“488 个雅思阅读考点词库总表”。该总表只有英文词形，没有逐项中文释义。
+### 2. Verbal Reasoning
 
-项目把这一部分独立处理：
+覆盖当前 GRE 的三类 Verbal 题型：
 
-- 读取后附总表中的全部唯一词 / 词组；
-- 先建立新版 538 的同义替换词集合；
-- **凡已经作为同义替换出现的词，不再重复进入词义 deck**；
-- 剩余词只训练 **英文 → 中文词义**，绝不生成同义替换题；
-- 中文释义优先来自 PDF 主词表和用户上传的中英词义表；缺项补充简洁学习义；
-- 无可靠中文义的项不自动出题。
+- Reading Comprehension
+- Text Completion
+- Sentence Equivalence
 
-详细核验见 `TOTAL_LIST_AUDIT.md`。
+当前题库为 **原创仿题**，不复制 ETS 真题。ETS 明确限制在第三方网站转载 GRE 受版权保护材料，因此本项目只链接官方资源，不嵌入官方真题。
 
-## 当天学习规则
+### 3. Quantitative Reasoning
 
-系统不要求用户自己选择“困难 / 简单”。只看实际答题结果。
+覆盖：
 
-- 第一次答对：当天通过；
-- 只要答错一次：该词进入当天强化；
-- 之后必须在后续题目中 **再答对 2 次** 才能通过；
-- 两次重新证明不能连续出现，每次至少隔 3 道其它题；
-- 强化过程中再次答错：重新回到“还需答对 2 次”。
+- Quantitative Comparison
+- Multiple Choice — Select One
+- Multiple Choice — Select One or More
+- Numeric Entry
+- 后续可继续扩展 Data Interpretation sets
 
-538 强化时会尽量改变同义组出题方向；488总表词义强化始终只考中文意思。
+当前题库同样为原创训练题。
 
-## 键盘学习与自动英音
+### 4. Analytical Writing
 
-- 每道题出现后自动用 `en-GB` 英音朗读英文题干；
-- 按 **1 / 2 / 3 / 4** 可直接选择第 1–4 个选项；
-- 作答完成后按 **Enter** 进入下一题；
-- 选项旁会显示对应数字快捷键；
-- **同义替换题作答后自动朗读正确选项**，无论用户本题是否答对；
-- 词义题不会朗读中文选项；
-- 🔊 按钮仍可手动重播英音。
+- Analyze an Issue；
+- 30 分钟计时；
+- 本地自动保存草稿；
+- 实时 word count；
+- 原创训练题。
 
-## 错词本
+### 5. 错题本
 
-所有答错过的卡会自动进入独立的 **错词本**：
+统一记录：
 
-- 错词本显示历史错词数量、累计错误次数与重复错误词；
-- 默认按错误次数优先排序；
-- 每天都可以点击“开始今日错词复习”；
-- 错词本复习不删除历史错误记录；
-- 错词再次答错，同样要求在后续题目中分开再答对 2 次；
-- 两次重新证明至少隔 3 道其它题；
-- 错词本的每日复习完成情况单独保存在本地。
+- 词汇错词；
+- Verbal 错题；
+- Quant 错题。
 
-## 今日复习与跨天复习
+历史错误次数会持续保留，可单独进入错题复习。
 
-当天完成学习后可以选择“今日复习”。今日复习属于同日主动检索，不推进跨天阶段。
+### 6. 动态学习计划
 
-跨天复习按本地日历日执行：
+目标天数可设为 **7–180 天**。
 
-**1 → 2 → 6 → 31 天 → 60 → 120 天**
+计划优先级：
 
-答错后完成当天两次重新证明，跨天阶段从明天重新开始。
+**历史欠复习 → 今日到期复习 → 今日新词 → Verbal → Quant**
 
-## 30 天自动计划
+词汇新学量会按照：
 
-默认目标为 30 天，目标天数可在设置中修改。系统按：
+**剩余未学词 ÷ 剩余天数**
 
-**剩余未学卡 ÷ 剩余计划天数**
+动态计算；如果有大量历史欠复习，会自动降低当天新词压力。
 
-动态计算当天新学数量；漏学后会自动把进度重新平摊到后续日期。到期复习始终优先，不人为截断。
+### 7. 本地记忆
 
-## Academic 扩展
+所有数据保存在浏览器 `localStorage`：
 
-当前加入 NAWL 1.2 Top 200：
+- 词汇复习阶段；
+- 正误次数；
+- Verbal / Quant 题型表现；
+- 错题本；
+- 写作草稿；
+- 计划起始日期与目标天数；
+- 发音语速。
 
-- 使用 NAWL frequency ranking / headword / PoS；
-- 中文释义由项目整理；
-- 与主词自动去重；
-- 使用英文 → 中文学术义识别题型；
-- 不属于 PDF 第1/2/3类体系。
+支持 JSON 导入 / 导出备份。
 
-## 默认学习顺序
+## 键盘
 
-**第1类 → 第2类 → 第3类 → 488总表词义 → Academic**
+- `1–6`：选择题选项
+- `Tab`：重新朗读当前词汇
+- `Enter`：下一题；多选题作答阶段用于提交答案
 
-到期复习始终优先于新词。
-
-## 主要文件
+## 文件
 
 ```text
-IELT/
-├── index.html
-├── styles.css
-├── levels-ui.css
-├── data.js
-├── data-v2.js
-├── legacy488-data.js
-├── pdf-meaning-deck.js
-├── academic-data.js
-├── app.js
-├── spacing-policy.js
-├── same-day-review.js
-├── wrong-book.js               # 错词本与每日错词复习
-├── auto-pronunciation.js       # 自动 en-GB 英音
-├── keyboard-shortcuts.js       # 1–4 选项、Enter 下一题、正确选项朗读
-├── study-plan-preload.js
-├── study-plan-ui.js
-├── study-plan-sync.js
-├── levels-ui.js
-├── pdf-meaning-ui.js
-├── local-memory.js
-├── DATA_AUDIT.md
-├── TOTAL_LIST_AUDIT.md
-└── THIRD_PARTY_NOTICES.md
+index.html        # GRE 主界面
+gre-styles.css    # GRE UI
+gre-data.js       # GRE 词汇 + 原创 Verbal/Quant/AWA starter bank
+gre-app.js        # 计划、记忆、答题、统计、错题本、TTS
 ```
 
-## 使用
+原 IELTS 文件仍保留在分支历史/仓库中，但 GRE 页面只加载 `gre-data.js` 与 `gre-app.js`。
 
-推荐使用 `启动IELT.bat` 在固定本地地址打开，学习记录保存在浏览器 localStorage，可导出 / 导入 JSON 备份。
+## 版权边界
 
-## License
+- 本项目没有嵌入 POWERPREP 或 ETS 官方题目；
+- “GRE”是 ETS 的注册商标；本项目与 ETS 无隶属或官方合作关系；
+- 官方备考材料请从 ETS 网站获取。
 
-项目代码沿用原仓库 MIT License。Academic 的 NAWL 数据许可见 `THIRD_PARTY_NOTICES.md`。教材相关数据仅用于个人学习与研究。
+## 后续扩展
+
+建议按顺序继续：
+
+1. 扩 GRE 词汇到 1000–3000 词，并为每个词增加 GRE 高频义、反义/近义和例句；
+2. 扩 Verbal 原创题库并增加按题型难度自适应；
+3. 扩 Quant 到完整 ETS Math Review 四大领域；
+4. 增加 12/15 题的完整 Section Simulator；
+5. 增加 V/Q 目标分数和正确题数估算面板。
