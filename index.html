@@ -1,189 +1,103 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#f6f3ee" />
-  <title>IELT Memory · 雅思阅读 538 + 488词义 + Academic</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="levels-ui.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#111827" />
+  <title>GRE Prep · 自适应备考</title>
+  <link rel="stylesheet" href="gre-styles.css" />
 </head>
 <body>
-  <main class="app-shell">
-    <header class="topbar">
+  <main class="shell">
+    <header class="hero">
       <div>
-        <div class="eyebrow">IELT MEMORY</div>
-        <h1>雅思阅读 538 + 488词义 + Academic</h1>
-        <p class="subtitle">538 同义替换 · 488词义 · 自适应干扰 · 复习负荷平滑 · 自动英音 · 错词本</p>
+        <div class="eyebrow">GRE PREP</div>
+        <h1>GRE 自适应备考</h1>
+        <p>词汇记忆 · Verbal · Quant · Issue 写作 · 错题本 · 动态学习计划</p>
       </div>
-      <div class="streak-chip">🔥 连续 <strong id="streakCount">0</strong> 天</div>
+      <div class="hero-side">
+        <div class="streak">🔥 连续 <strong id="streakCount">0</strong> 天</div>
+        <button class="ghost" id="healthBtn">✓ 本地数据</button>
+      </div>
     </header>
 
-    <section class="dashboard" aria-label="学习概览">
-      <article class="metric-card metric-primary">
-        <span class="metric-label">今日到期</span>
-        <strong id="dueCount">0</strong>
-        <small>跨天复习优先</small>
-      </article>
-      <article class="metric-card">
-        <span class="metric-label">今日新词</span>
-        <strong id="newCount">0</strong>
-        <small>按自动计划</small>
-      </article>
-      <article class="metric-card">
-        <span class="metric-label">已学习</span>
-        <strong id="learnedCount">0</strong>
-        <small>538 + 488词义 + Academic</small>
-      </article>
-      <article class="metric-card">
-        <span class="metric-label">薄弱词</span>
-        <strong id="weakCount">0</strong>
-        <small>优先回炉</small>
-      </article>
+    <section class="exam-strip">
+      <article><span>Verbal</span><strong>27</strong><small>12题/18min + 15题/23min</small></article>
+      <article><span>Quant</span><strong>27</strong><small>12题/21min + 15题/26min</small></article>
+      <article><span>Writing</span><strong>1</strong><small>Analyze an Issue · 30min</small></article>
+      <article><span>总时长</span><strong>≈1h58m</strong><small>当前 GRE General Test</small></article>
     </section>
 
-    <nav class="nav-tabs" aria-label="主要功能">
-      <button class="nav-tab active" data-view="today">今日学习</button>
-      <button class="nav-tab" data-view="library">词库</button>
-      <button class="nav-tab" data-view="stats">统计</button>
-      <button class="nav-tab" data-view="settings">设置</button>
+    <section id="planPanel" class="panel plan-panel"></section>
+
+    <nav class="tabs" aria-label="GRE备考模块">
+      <button class="tab active" data-view="today">今日计划</button>
+      <button class="tab" data-view="vocab">词汇</button>
+      <button class="tab" data-view="verbal">Verbal</button>
+      <button class="tab" data-view="quant">Quant</button>
+      <button class="tab" data-view="writing">写作</button>
+      <button class="tab" data-view="wrongbook">错题本</button>
+      <button class="tab" data-view="stats">统计</button>
+      <button class="tab" data-view="settings">设置</button>
     </nav>
 
     <section class="view active" id="view-today">
-      <div class="session-toolbar">
-        <div>
-          <div class="section-kicker">DAILY SESSION</div>
-          <h2>今日学习</h2>
-          <p id="todaySummary">到期 0 · 新词 0 · 答错后当天需再答对2次</p>
-        </div>
-        <div>
-          <button class="button button-ghost" id="rebuildSessionBtn">重新生成</button>
-          <button class="button button-primary" id="startSessionBtn">开始学习</button>
-        </div>
-      </div>
-
-      <div class="session-progress">
-        <div class="progress-meta"><span>本轮通过进度</span><span id="sessionProgressText">0 / 0</span></div>
-        <div class="progress-track"><div class="progress-value" id="sessionProgressBar"></div></div>
-      </div>
-
-      <div class="study-card" id="studyCard"></div>
+      <div class="section-head"><div><div class="kicker">DAILY PLAN</div><h2>今日任务</h2><p>历史欠复习优先，然后到期复习，再做新学和专项。</p></div><button class="primary" id="startTodayBtn">开始今日任务</button></div>
+      <div id="todayCards" class="metric-grid"></div>
+      <div id="studyCard" class="study-card"></div>
     </section>
 
-    <section class="view" id="view-library">
-      <div class="library-toolbar">
-        <div>
-          <div class="section-kicker">AUDITED DATA + MEANING + ACADEMIC</div>
-          <h2>新版阅读词库</h2>
-          <p id="dataCountText">376 个 538 主词 · 488总表词义加载中 · Academic 扩展加载中</p>
-        </div>
-        <div class="search-box">
-          <input id="librarySearch" type="search" placeholder="搜索单词、中文、拼写或同义替换…" />
-        </div>
-      </div>
-      <div class="deck-filter" id="deckFilter"></div>
-      <div class="library-list" id="libraryList"></div>
+    <section class="view" id="view-vocab">
+      <div class="section-head"><div><div class="kicker">VOCABULARY</div><h2>GRE 高频词汇</h2><p>按频率分层 + 艾宾浩斯复习 + 错词后当天重新证明两次。</p></div><div class="search"><input id="vocabSearch" placeholder="搜索英文 / 中文 / 同义词" /></div></div>
+      <div id="vocabFilters" class="chips"></div>
+      <div id="vocabList" class="list-grid"></div>
+    </section>
+
+    <section class="view" id="view-verbal">
+      <div class="section-head"><div><div class="kicker">VERBAL REASONING</div><h2>Verbal 专项</h2><p>Text Completion · Sentence Equivalence · Reading Comprehension。题库为原创仿题，不复制 ETS 真题。</p></div><button class="primary" id="startVerbalBtn">开始专项</button></div>
+      <div class="module-grid" id="verbalModules"></div>
+      <div id="verbalCard" class="study-card compact"></div>
+    </section>
+
+    <section class="view" id="view-quant">
+      <div class="section-head"><div><div class="kicker">QUANTITATIVE REASONING</div><h2>Quant 专项</h2><p>Quantitative Comparison · 单选 · 多选 · Numeric Entry · Data Interpretation。</p></div><button class="primary" id="startQuantBtn">开始专项</button></div>
+      <div class="module-grid" id="quantModules"></div>
+      <div id="quantCard" class="study-card compact"></div>
+    </section>
+
+    <section class="view" id="view-writing">
+      <div class="section-head"><div><div class="kicker">ANALYTICAL WRITING</div><h2>Analyze an Issue</h2><p>30 分钟模拟；本地自动保存草稿。题目为原创训练题。</p></div><div><button class="ghost" id="newIssueBtn">换一题</button><button class="primary" id="startEssayTimerBtn">开始30分钟</button></div></div>
+      <article class="panel"><h3 id="issuePrompt"></h3><p id="issueInstruction" class="muted"></p><div id="essayTimer" class="timer">30:00</div><textarea id="essayDraft" class="essay" placeholder="在这里写 Issue essay…"></textarea><div class="essay-tools"><span id="wordCount">0 words</span><button class="ghost" id="clearEssayBtn">清空草稿</button></div></article>
+    </section>
+
+    <section class="view" id="view-wrongbook">
+      <div class="section-head"><div><div class="kicker">ERROR NOTEBOOK</div><h2>错题本</h2><p>词汇误选、Verbal 和 Quant 错题统一收集。</p></div><button class="primary" id="reviewWrongBtn">复习错题</button></div>
+      <div id="wrongStats" class="metric-grid"></div>
+      <div id="wrongList" class="wrong-list"></div>
     </section>
 
     <section class="view" id="view-stats">
-      <div class="section-heading">
-        <div class="section-kicker">MEMORY ANALYTICS</div>
-        <h2>学习统计</h2>
-        <p>当天学习强化与跨天复习分开记录；答错的词必须当天重新答对两次才算通过。</p>
-      </div>
-
-      <div class="stats-grid">
-        <article class="stat-panel"><span>今日作答</span><strong id="statTodayReviews">0</strong></article>
-        <article class="stat-panel"><span>今日正确率</span><strong id="statTodayAccuracy">—</strong></article>
-        <article class="stat-panel"><span>稳定掌握</span><strong id="statMastered">0</strong></article>
-        <article class="stat-panel"><span>平均复习间隔</span><strong id="statAvgStability">—</strong></article>
-      </div>
-
-      <article class="activity-panel">
-        <div class="panel-heading">
-          <div><h3>近 7 天学习量</h3><p>每根柱代表当天完成的作答次数。</p></div>
-        </div>
-        <div class="activity-chart" id="activityChart"></div>
-      </article>
-
-      <article class="activity-panel">
-        <div class="panel-heading">
-          <div><h3>当前最薄弱的词</h3><p>结合答错次数、遗忘次数和当前复习阶段排序。</p></div>
-        </div>
-        <div class="weak-list" id="weakList"></div>
-      </article>
+      <div class="section-head"><div><div class="kicker">ANALYTICS</div><h2>学习统计</h2><p>正确率、反应时间、题型表现和词汇记忆进度。</p></div></div>
+      <div id="statsGrid" class="metric-grid"></div>
+      <div class="two-col"><article class="panel"><h3>Verbal 题型</h3><div id="verbalStats"></div></article><article class="panel"><h3>Quant 题型</h3><div id="quantStats"></div></article></div>
     </section>
 
     <section class="view" id="view-settings">
-      <div class="section-heading">
-        <div class="section-kicker">DAILY LEARNING + REVIEW</div>
-        <h2>学习设置</h2>
-        <p>所有学习记录、计划、错词和个性化信号都保存在浏览器本地。</p>
-      </div>
-
+      <div class="section-head"><div><div class="kicker">SETTINGS</div><h2>设置</h2><p>计划和学习记录都保存在当前浏览器本地。</p></div></div>
       <div class="settings-grid">
-        <label class="setting-card">
-          <span><strong>每日新词</strong><small>自动计划开启时由系统根据剩余天数和复习负荷计算</small></span>
-          <input id="dailyNewInput" type="number" min="0" max="100" step="1" />
-        </label>
-        <label class="setting-card">
-          <span><strong>当天错词重新证明间隔</strong><small>两次证明不能连续出现；每次至少隔 3 道其它题</small></span>
-          <input id="repeatGapInput" type="number" min="3" max="10" step="1" />
-        </label>
+        <label class="setting"><span><strong>目标天数</strong><small>7–180天，自动重算每日任务</small></span><input id="planDaysInput" type="number" min="7" max="180" /></label>
+        <label class="setting"><span><strong>每日 Verbal 题数</strong><small>计划会结合剩余天数与历史表现</small></span><input id="dailyVerbalInput" type="number" min="0" max="50" /></label>
+        <label class="setting"><span><strong>每日 Quant 题数</strong><small>计划会结合剩余天数与历史表现</small></span><input id="dailyQuantInput" type="number" min="0" max="50" /></label>
+        <label class="setting"><span><strong>自动英语发音</strong><small>新词出现时自动朗读</small></span><input id="autoSpeakInput" type="checkbox" /></label>
+        <label class="setting"><span><strong>语速</strong><small>Tab 可重读当前单词</small></span><input id="speechRateInput" type="range" min="0.8" max="1.4" step="0.05" /><b id="speechRateText">1.00×</b></label>
       </div>
-
-      <button class="button button-primary" id="saveSettingsBtn">保存设置</button>
-
-      <article class="algorithm-note">
-        <h3>学习与复习规则</h3>
-        <p><strong>538 同义替换：</strong>训练考点词与真题替换表达之间的识别；题干与正确答案方向可互换。</p>
-        <p style="margin-top:8px"><strong>488总表词义：</strong>以后附总表为准，已经作为 538 同义替换出现的词不重复进入；剩余词只训练“英文 → 中文词义”。</p>
-        <p style="margin-top:8px"><strong>当天强化：</strong>首次答对即可通过；只要答错过一次，之后必须在当天后续题目中分开再答对 2 次，中途再错则重新从 2 次开始；刷新后也会继续记住未完成强化。</p>
-        <p style="margin-top:8px"><strong>个性化：</strong>系统记录真实误选和反应时间；历史上经常误选的表达会优先作为以后同义替换题的干扰项，反应时间只作辅助，不改变对错。</p>
-        <p style="margin-top:8px"><strong>错词本：</strong>所有答错过的词自动收集，可每天单独复习；错词本复习中的错误同样需要后续分开再答对 2 次。</p>
-        <p style="margin-top:8px"><strong>键盘：</strong>1–4 选择选项，Enter 进入下一题；同义替换题作答后自动朗读正确选项。</p>
-        <p style="margin-top:8px"><strong>今日复习（可选）：</strong>当天学习完成后可以再做主动检索复习，不推进也不延后跨天到期日。</p>
-        <p style="margin-top:8px"><strong>跨天复习：</strong>当天通过后按本地日历日执行 <strong>1 → 2 → 6 → 31 天</strong>；之后进入 <strong>60 → 120 天</strong>长期维护。</p>
-      </article>
-
-      <article class="data-panel">
-        <div>
-          <h3>学习数据备份</h3>
-          <p>导出 JSON 可用于换电脑或清浏览器前备份。</p>
-        </div>
-        <div class="data-actions">
-          <button class="button button-ghost" id="exportBtn">导出备份</button>
-          <label class="button button-ghost file-button">导入备份<input id="importInput" type="file" accept="application/json" /></label>
-          <button class="button button-danger" id="resetBtn">清空记录</button>
-        </div>
-      </article>
+      <div class="actions"><button class="primary" id="saveSettingsBtn">保存设置</button><button class="ghost" id="restartPlanBtn">从今天重新开始计划</button><button class="ghost" id="exportBtn">导出备份</button><label class="ghost file">导入备份<input id="importInput" type="file" accept="application/json" /></label><button class="danger" id="resetBtn">清空记录</button></div>
+      <article class="panel note"><h3>当前 GRE General Test 结构</h3><p>本项目按 2023-09-22 起的短版 GRE General Test 设计：1 个 30 分钟 Issue 写作；Verbal 两节 12/15 题、18/23 分钟；Quant 两节 12/15 题、21/26 分钟。第二节难度取决于第一节整体表现。</p></article>
     </section>
   </main>
 
   <div class="toast" id="toast"></div>
-
-  <script src="data.js"></script>
-  <script src="academic-data.js"></script>
-  <script src="legacy488-data.js"></script>
-  <script src="docx488-source.js"></script>
-  <script src="data-v2.js"></script>
-  <script src="pdf-meaning-deck.js"></script>
-  <script src="pdf-meaning-rebuild.js"></script>
-  <script src="health-check.js"></script>
-  <script src="study-plan-preload.js"></script>
-  <script src="spacing-policy.js"></script>
-  <script src="app.js"></script>
-  <script src="study-plan-ui.js"></script>
-  <script src="study-plan-sync.js"></script>
-  <script src="same-day-review.js"></script>
-  <script src="levels-ui.js"></script>
-  <script src="pdf-meaning-ui.js"></script>
-  <script src="pdf-meaning-library.js"></script>
-  <script src="local-memory.js"></script>
-  <script src="auto-pronunciation.js"></script>
-  <script src="wrong-book.js"></script>
-  <script src="keyboard-shortcuts.js"></script>
-  <script src="adaptive-learning.js"></script>
-  <script src="session-recovery.js"></script>
+  <script src="gre-data.js"></script>
+  <script src="gre-app.js"></script>
 </body>
 </html>
