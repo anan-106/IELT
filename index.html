@@ -48,7 +48,7 @@
     </section>
 
     <section class="view" id="view-vocab">
-      <div class="section-head"><div><div class="kicker">VOCABULARY</div><h2>GRE 高频词汇</h2><p>按频率分层 + 艾宾浩斯复习 + 错词后当天重新证明两次。</p></div><div class="search"><input id="vocabSearch" placeholder="搜索英文 / 中文 / 同义词" /></div></div>
+      <div class="section-head"><div><div class="kicker">VOCABULARY</div><h2>GRE 高频词汇</h2><p>大三千完整主词库 · Magoosh / 霍V6 / 佛脚交叉命中优先级 · 艾宾浩斯复习</p></div><div class="search"><input id="vocabSearch" placeholder="搜索英文 / 中文 / 同义词 / 来源" /></div></div>
       <div id="vocabFilters" class="chips"></div>
       <div id="vocabList" class="list-grid"></div>
     </section>
@@ -92,6 +92,7 @@
         <label class="setting"><span><strong>语速</strong><small>Tab 可重读当前单词</small></span><input id="speechRateInput" type="range" min="0.8" max="1.4" step="0.05" /><b id="speechRateText">1.00×</b></label>
       </div>
       <div class="actions"><button class="primary" id="saveSettingsBtn">保存设置</button><button class="ghost" id="restartPlanBtn">从今天重新开始计划</button><button class="ghost" id="exportBtn">导出备份</button><label class="ghost file">导入备份<input id="importInput" type="file" accept="application/json" /></label><button class="danger" id="resetBtn">清空记录</button></div>
+      <article class="panel note"><h3>GRE 词汇优先级</h3><p>大三千是唯一主词库。Magoosh、霍V6、佛脚仅用于交叉命中加权；优先级不是 ETS 官方词频。S/A/B/C 会影响新词学习顺序。</p></article>
       <article class="panel note"><h3>当前 GRE General Test 结构</h3><p>本项目按 2023-09-22 起的短版 GRE General Test 设计：1 个 30 分钟 Issue 写作；Verbal 两节 12/15 题、18/23 分钟；Quant 两节 12/15 题、21/26 分钟。第二节难度取决于第一节整体表现。</p></article>
     </section>
   </main>
@@ -99,6 +100,7 @@
   <div class="toast" id="toast"></div>
   <script src="gre-data.js"></script>
   <script src="gre-cn-import.js"></script>
+  <script src="gre-priority.js"></script>
   <script src="gre-app.js"></script>
 </body>
 </html>
