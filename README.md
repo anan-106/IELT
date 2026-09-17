@@ -2,9 +2,55 @@
 
 这是从原 IELTS 项目学习引擎派生出的 **GRE 专用分支**。IELTS 主项目保留在 `main`，GRE 版本位于 `gre-prep`，两套数据互不影响。
 
-## 当前 GRE 结构
+## GRE 词汇系统
 
-项目按 ETS 当前短版 GRE General Test 设计：
+### 主词库
+
+**再要你命3000是唯一完整主词库。**
+
+项目从 `LER0ever/GRE-CN` 的 CSV 数据同步大三千，然后用三套资料做交叉命中：
+
+- Magoosh Flashcards
+- 霍V6 机经词汇
+- 佛脚词表
+
+这些补充来源不会把自己的独有单词额外塞进主词库，只用于给大三千中的词加权、补充例句/音标/题位。
+
+### GRE 交叉优先级
+
+每个大三千词基础 1 分：
+
+- Magoosh 命中：+2
+- 霍V6 命中：+3
+- 佛脚命中：+2
+- 霍V6 同一词出现在多个不同题位：额外 +0~2
+
+等级：
+
+- **S：8+**
+- **A：5–7**
+- **B：3–4**
+- **C：1–2**
+
+新词默认按：**优先级分数 → 交叉来源数 → 霍V6题位数** 排序，所以 S/A 词会优先进入每日计划。
+
+> 这是“跨主流词表/机经词表的交叉命中优先级”，不是 ETS 官方词频，也不是完整 GRE 真题语料统计。
+
+详细来源与许可见 `GRE_CN_SOURCES.md`。
+
+### 记忆规则
+
+- 英文 → 中文识别；
+- 展示近义词与来源；
+- 自动英语发音，语速可调；
+- `Tab` 重读；
+- `1–4` 键盘选项；
+- `Enter` 下一题；
+- 一旦答错，后面必须分开再答对 2 次；
+- 两次重新证明至少间隔 3 道其他题；
+- 跨天复习：**1 → 2 → 6 → 31 → 60 → 120 天**。
+
+## 当前 GRE General Test 结构
 
 | Measure | Section | Questions | Time |
 | --- | --- | ---: | ---: |
@@ -22,120 +68,75 @@
 - https://www.ets.org/gre/test-takers/general-test/prepare/content/quantitative-reasoning.html
 - https://www.ets.org/gre/test-takers/general-test/prepare/content/analytical-writing.html
 
-## 项目模块
+## 其他模块
 
-### 1. GRE 词汇
+### Verbal
 
-- 三层高频词汇 starter deck；
-- 英文 → 中文识别；
-- 展示近义词；
-- 自动英语发音；
-- `Tab` 重读；
-- `1–4` 键盘选项；
-- `Enter` 下一题；
-- 答错后必须在后续题目中 **再答对 2 次**；
-- 两次重新证明至少间隔 3 道其他题；
-- 跨天复习：**1 → 2 → 6 → 31 → 60 → 120 天**。
-
-> 词汇表是项目独立整理的 GRE-oriented starter deck，不是 ETS 官方词表。
-
-### 2. Verbal Reasoning
-
-覆盖当前 GRE 的三类 Verbal 题型：
-
+覆盖：
 - Reading Comprehension
 - Text Completion
 - Sentence Equivalence
 
-当前题库为 **原创仿题**，不复制 ETS 真题。ETS 明确限制在第三方网站转载 GRE 受版权保护材料，因此本项目只链接官方资源，不嵌入官方真题。
+当前题库为原创仿题，不复制 ETS 真题。
 
-### 3. Quantitative Reasoning
+### Quant
 
 覆盖：
-
 - Quantitative Comparison
 - Multiple Choice — Select One
 - Multiple Choice — Select One or More
 - Numeric Entry
-- 后续可继续扩展 Data Interpretation sets
+- Data Interpretation 可继续扩展
 
-当前题库同样为原创训练题。
+### Analytical Writing
 
-### 4. Analytical Writing
+- Analyze an Issue
+- 30 分钟计时
+- 本地自动保存草稿
+- 实时 word count
 
-- Analyze an Issue；
-- 30 分钟计时；
-- 本地自动保存草稿；
-- 实时 word count；
-- 原创训练题。
+### 错题本
 
-### 5. 错题本
+统一记录词汇、Verbal、Quant 历史错误，可单独复习。
 
-统一记录：
-
-- 词汇错词；
-- Verbal 错题；
-- Quant 错题。
-
-历史错误次数会持续保留，可单独进入错题复习。
-
-### 6. 动态学习计划
+## 动态学习计划
 
 目标天数可设为 **7–180 天**。
 
-计划优先级：
+每日优先级：
 
 **历史欠复习 → 今日到期复习 → 今日新词 → Verbal → Quant**
 
-词汇新学量会按照：
+新词量按剩余未学词和剩余天数动态计算；大三千新词本身已经按 S/A/B/C 优先级排好顺序。
 
-**剩余未学词 ÷ 剩余天数**
+## 本地记忆
 
-动态计算；如果有大量历史欠复习，会自动降低当天新词压力。
+所有数据保存在浏览器 `localStorage`，支持 JSON 导入/导出备份，包括：
 
-### 7. 本地记忆
+- 词汇复习阶段
+- 正误次数
+- Verbal / Quant 表现
+- 错题本
+- 写作草稿
+- 计划天数
+- 发音语速
+- GRE-CN 词汇缓存与佛脚/霍V6优先级缓存
 
-所有数据保存在浏览器 `localStorage`：
-
-- 词汇复习阶段；
-- 正误次数；
-- Verbal / Quant 题型表现；
-- 错题本；
-- 写作草稿；
-- 计划起始日期与目标天数；
-- 发音语速。
-
-支持 JSON 导入 / 导出备份。
-
-## 键盘
-
-- `1–6`：选择题选项
-- `Tab`：重新朗读当前词汇
-- `Enter`：下一题；多选题作答阶段用于提交答案
-
-## 文件
+## 主要文件
 
 ```text
-index.html        # GRE 主界面
-gre-styles.css    # GRE UI
-gre-data.js       # GRE 词汇 + 原创 Verbal/Quant/AWA starter bank
-gre-app.js        # 计划、记忆、答题、统计、错题本、TTS
+index.html           # GRE 主界面
+gre-styles.css       # UI
+gre-data.js          # 原创 Verbal/Quant/AWA starter bank + 网络失败兜底词汇
+gre-cn-import.js     # GRE-CN 大三千/Magoosh/霍V6 CSV 同步
+gre-priority.js      # 大三千主库过滤 + Magoosh/霍V6/佛脚交叉优先级
+gre-app.js           # 计划、记忆、答题、统计、错题本、TTS
+GRE_CN_SOURCES.md    # 数据来源、加权规则、许可说明
 ```
-
-原 IELTS 文件仍保留在分支历史/仓库中，但 GRE 页面只加载 `gre-data.js` 与 `gre-app.js`。
 
 ## 版权边界
 
-- 本项目没有嵌入 POWERPREP 或 ETS 官方题目；
-- “GRE”是 ETS 的注册商标；本项目与 ETS 无隶属或官方合作关系；
-- 官方备考材料请从 ETS 网站获取。
-
-## 后续扩展
-
-建议按顺序继续：
-
-1. 扩 GRE 词汇到 1000–3000 词，并为每个词增加 GRE 高频义、反义/近义和例句；
-2. 扩 Verbal 原创题库并增加按题型难度自适应；
-3. 扩 Quant 到完整 ETS Math Review 四大领域；
-4. 增加 12/15 题的完整 Section Simulator；
-5. 增加 V/Q 目标分数和正确题数估算面板。
+- GRE-CN 中 CSV/TXT/代码的许可见其仓库 BSD-3-Clause；
+- PDF/Office 资料不自动复制进本项目；
+- 本项目没有嵌入 POWERPREP 或 ETS 官方试题；
+- “GRE”是 ETS 的注册商标，本项目与 ETS 无隶属或官方合作关系。
