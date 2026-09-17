@@ -6,10 +6,11 @@
   if (!DATA) return;
 
   const CACHE_KEY = "gre-priority-cache-v1";
-  const CACHE_VERSION = "2026-09-17-v1";
-  const RELOAD_FLAG = "gre-priority-reloaded-v1";
+  const CACHE_VERSION = "2026-09-17-v2";
+  const RELOAD_FLAG = "gre-priority-reloaded-v2";
   const STATE_KEY = "gre-prep-v1";
   const FOJIAO_URL = "https://raw.githubusercontent.com/LER0ever/GRE-CN/master/L-GRE-%E8%AF%8D%E6%B1%87/L-GRE-%E4%BD%9B%E8%84%9A%E8%AF%8D%E6%B1%87/L-GRE-%E4%BD%9B%E8%84%9A%E8%AF%8D%E6%B1%87/L-GRE-%E4%BD%9B%E8%84%9A%E8%AF%8D%E8%A1%A8.csv";
+  const HUO_URL = "https://raw.githubusercontent.com/LER0ever/GRE-CN/master/L-GRE-%E8%AF%8D%E6%B1%87/L-GRE-%E6%9C%BA%E7%BB%8F%E8%AF%8D%E6%B1%87/L-GRE-%E6%9C%BA%E7%BB%8F%E8%AF%8D%E6%B1%87-%E9%9C%8DV6/L-GRE-%E6%9C%BA%E7%BB%8F%E8%AF%8D%E6%B1%87-%E9%9C%8DV6.CSV";
 
   const norm = (v) => String(v ?? "").replace(/^\uFEFF/, "").toLowerCase().replace(/[’‘]/g, "'").replace(/\s+/g, " ").trim();
   const esc = (v) => String(v ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
@@ -34,7 +35,7 @@
   function readCache() {
     try {
       const x = JSON.parse(localStorage.getItem(CACHE_KEY) || "null");
-      return x && x.version === CACHE_VERSION && Array.isArray(x.fojiao) ? x : null;
+      return x && x.version === CACHE_VERSION && Array.isArray(x.fojiao) && x.huoRefs ? x : null;
     } catch { return null; }
   }
 
@@ -53,30 +54,45 @@
     return set;
   }
 
-  function priorityTier(score) {
-    if (score >= 8) return "S";  // 大三千 + Magoosh + 霍V6 + 佛脚
-    if (score >= 5) return "A";  // 至少两套强交叉，或霍V6 + 一套
-    if (score >= 3) return "B";  // 至少命中一套补充词表
-    return "C";                  // 仅大三千
+  function getHuoRefs(rows) {
+    const map = new Map();
+    for (let i = 1; i < rows.length; i++) {
+      const r = rows[i];
+      const word = String(r[3] || "").trim();
+      if (!word) continue;
+      const k = norm(word);
+      const ref = `${String(r[1] || "").trim()}/${String(r[2] || "").trim()}`.replace(/^\/$/, "");
+      if (!map.has(k)) map.set(k, new Set());
+      if (ref) map.get(k).add(ref);
+    }
+    return new Map([...map].map(([k, set]) => [k, [...set]]));
   }
 
-  function applyPriority(fojiaoSet) {
-    // Only keep 大三千 words once GRE-CN import is ready. If not ready yet, wait for its event.
+  function priorityTier(score) {
+    if (score >= 8) return "S";
+    if (score >= 5) return "A";
+    if (score >= 3) return "B";
+    return "C";
+  }
+
+  function applyPriority(fojiaoSet, huoRefsMap = new Map()) {
     const base = (DATA.words || []).filter(w => (w.sourceTags || []).includes("再要你命3000"));
     if (base.length < 500) return false;
 
     base.forEach((w, idx) => {
       const tags = new Set(w.sourceTags || []);
       const magoosh = tags.has("Magoosh");
-      const huo = tags.has("霍V6");
+      const refs = huoRefsMap.get(norm(w.word)) || (Array.isArray(w.examRefs) ? [...new Set(w.examRefs.filter(Boolean))] : []);
+      const huo = tags.has("霍V6") || refs.length > 0;
       const fojiao = fojiaoSet.has(norm(w.word));
-      const refs = Array.isArray(w.examRefs) ? [...new Set(w.examRefs.filter(Boolean))] : [];
       const repeatBonus = huo ? Math.min(2, Math.max(0, refs.length - 1)) : 0;
       const score = 1 + (magoosh ? 2 : 0) + (huo ? 3 : 0) + (fojiao ? 2 : 0) + repeatBonus;
       const tier = priorityTier(score);
+      if (huo) tags.add("霍V6");
       if (fojiao) tags.add("佛脚");
 
       w.sourceTags = [...tags].filter(x => x !== "starter");
+      w.examRefs = refs;
       w.priorityScore = score;
       w.priorityTier = tier;
       w.crossHitCount = Number(magoosh) + Number(huo) + Number(fojiao);
@@ -98,10 +114,7 @@
 
     const tiers = Object.fromEntries(["S","A","B","C"].map(t => [t, base.filter(w => w.priorityTier === t).length]));
     const meta = {
-      ...(DATA.greCnMeta || {}),
-      count: base.length,
-      mainDeck: "再要你命3000",
-      tiers,
+      ...(DATA.greCnMeta || {}), count: base.length, mainDeck: "再要你命3000", tiers,
       magooshHits: base.filter(w => w.prioritySignals?.magoosh).length,
       huoV6Hits: base.filter(w => w.prioritySignals?.huoV6).length,
       fojiaoHits: base.filter(w => w.prioritySignals?.fojiao).length,
@@ -111,9 +124,7 @@
     };
     DATA.greCnMeta = meta;
     window.dispatchEvent(new CustomEvent("gre-priority-ready", { detail: meta }));
-    renderMeta(meta);
-    renderPriorityLibrary();
-    annotateStudyCard();
+    renderMeta(meta); renderPriorityLibrary(); annotateStudyCard();
     return true;
   }
 
@@ -131,54 +142,27 @@
   function renderPriorityLibrary() {
     const view = document.getElementById("view-vocab");
     if (!view?.classList.contains("active") || !DATA.words.some(w => w.priorityTier)) return;
-    const search = document.getElementById("vocabSearch");
-    const filters = document.getElementById("vocabFilters");
-    const list = document.getElementById("vocabList");
+    const search = document.getElementById("vocabSearch"), filters = document.getElementById("vocabFilters"), list = document.getElementById("vocabList");
     if (!filters || !list) return;
-    const q = norm(search?.value || "");
-    const state = readStudyState();
-    const cards = state.vocab || {};
-    const tiers = ["S","A","B","C"];
+    const q = norm(search?.value || ""), state = readStudyState(), cards = state.vocab || {}, tiers = ["S","A","B","C"];
     const counts = Object.fromEntries(tiers.map(t => [t, DATA.words.filter(w => w.priorityTier === t).length]));
-    const words = DATA.words.filter(w =>
-      (tierFilter === "all" || w.priorityTier === tierFilter) &&
-      (!q || norm(`${w.word} ${w.cn} ${(w.syn || []).join(" ")} ${(w.sourceTags || []).join(" ")}`).includes(q))
-    );
-
+    const words = DATA.words.filter(w => (tierFilter === "all" || w.priorityTier === tierFilter) && (!q || norm(`${w.word} ${w.cn} ${(w.syn || []).join(" ")} ${(w.sourceTags || []).join(" ")}`).includes(q)));
     filters.innerHTML = ["all", ...tiers].map(t => `<button class="chip ${tierFilter === t ? "active" : ""}" data-priority-tier="${t}">${t === "all" ? `全部 ${DATA.words.length}` : `${t}级 ${counts[t]}`}</button>`).join("");
     filters.querySelectorAll("[data-priority-tier]").forEach(b => b.onclick = () => { tierFilter = b.dataset.priorityTier; renderPriorityLibrary(); });
-
     list.innerHTML = words.map(w => {
-      const c = cards[w.id] || {};
-      const sources = (w.sourceTags || []).filter(x => x !== "再要你命3000");
-      const sourceText = sources.length ? `大三千 · ${sources.join(" · ")}` : "仅大三千";
-      const refs = (w.examRefs || []).filter(Boolean).slice(0, 3).join(" · ");
-      return `<article class="word-row">
-        <span class="level">${esc(w.priorityTier || "C")}</span>
-        <strong>${esc(w.word)}</strong>
-        <div class="cn">${esc(w.cn)}</div>
-        <div class="syn">${(w.syn || []).map(esc).join(" · ")}</div>
-        <div class="syn" style="margin-top:5px"><strong>优先级 ${Number(w.priorityScore || 1)} 分</strong> · ${esc(sourceText)}${refs ? ` · 霍V6 ${esc(refs)}` : ""}</div>
-        <div class="syn" style="margin-top:5px">${c.reps ? `已复习 ${c.reps} 次 · 错 ${c.wrong || 0}` : "未学习"}</div>
-      </article>`;
+      const c = cards[w.id] || {}, sources = (w.sourceTags || []).filter(x => x !== "再要你命3000"), sourceText = sources.length ? `大三千 · ${sources.join(" · ")}` : "仅大三千", refs = (w.examRefs || []).filter(Boolean).slice(0, 3).join(" · ");
+      return `<article class="word-row"><span class="level">${esc(w.priorityTier || "C")}</span><strong>${esc(w.word)}</strong><div class="cn">${esc(w.cn)}</div><div class="syn">${(w.syn || []).map(esc).join(" · ")}</div><div class="syn" style="margin-top:5px"><strong>优先级 ${Number(w.priorityScore || 1)} 分</strong> · ${esc(sourceText)}${refs ? ` · 霍V6 ${esc(refs)}` : ""}</div><div class="syn" style="margin-top:5px">${c.reps ? `已复习 ${c.reps} 次 · 错 ${c.wrong || 0}` : "未学习"}</div></article>`;
     }).join("");
   }
 
   function annotateStudyCard() {
-    const card = document.querySelector("#studyCard .qcard[data-mode='vocab']");
-    if (!card) return;
-    const wordText = card.querySelector(".word")?.textContent?.trim();
-    if (!wordText) return;
-    const w = DATA.words.find(x => norm(x.word) === norm(wordText));
-    if (!w?.priorityTier) return;
+    const card = document.querySelector("#studyCard .qcard[data-mode='vocab']"); if (!card) return;
+    const wordText = card.querySelector(".word")?.textContent?.trim(); if (!wordText) return;
+    const w = DATA.words.find(x => norm(x.word) === norm(wordText)); if (!w?.priorityTier) return;
     const badge = card.querySelector(".badge");
-    if (badge && !badge.dataset.priorityDone) {
-      badge.dataset.priorityDone = "1";
-      badge.textContent = badge.textContent.replace(/\s*·\s*Level\s*\d+\s*$/i, "") + ` · ${w.priorityTier}级 ${w.priorityScore}分`;
-    }
+    if (badge && !badge.dataset.priorityDone) { badge.dataset.priorityDone = "1"; badge.textContent = badge.textContent.replace(/\s*·\s*Level\s*\d+\s*$/i, "") + ` · ${w.priorityTier}级 ${w.priorityScore}分`; }
     if (!card.querySelector(".priority-source-line")) {
-      const line = document.createElement("div");
-      line.className = "pronounce priority-source-line";
+      const line = document.createElement("div"); line.className = "pronounce priority-source-line";
       const extra = (w.sourceTags || []).filter(x => x !== "再要你命3000");
       line.textContent = `来源：大三千${extra.length ? " · " + extra.join(" · ") : ""}（交叉命中优先级，非官方词频）`;
       card.querySelector(".pronounce")?.insertAdjacentElement("afterend", line);
@@ -193,29 +177,23 @@
 
   const cached = readCache();
   const cachedSet = cached ? new Set(cached.fojiao) : null;
-  if (cachedSet) applyPriority(cachedSet);
+  const cachedHuo = cached ? new Map(Object.entries(cached.huoRefs || {})) : new Map();
+  if (cachedSet) applyPriority(cachedSet, cachedHuo);
+  window.addEventListener("gre-cn-data-ready", () => { if (cachedSet) applyPriority(cachedSet, cachedHuo); });
 
-  window.addEventListener("gre-cn-data-ready", () => {
-    if (cachedSet) applyPriority(cachedSet);
-  });
-
-  async function refreshFojiao() {
+  async function refreshSources() {
     try {
-      const r = await fetch(FOJIAO_URL, { cache: "no-store" });
-      if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
-      const set = getFojiaoSet(parseCSV(await r.text()));
-      localStorage.setItem(CACHE_KEY, JSON.stringify({ version: CACHE_VERSION, fojiao: [...set], updatedAt: Date.now() }));
-      const applied = applyPriority(set);
-      if (applied && !cached && sessionStorage.getItem(RELOAD_FLAG) !== "1") {
-        sessionStorage.setItem(RELOAD_FLAG, "1");
-        location.reload();
-      }
-    } catch (e) {
-      console.warn("[GRE priority] 佛脚词表同步失败；继续使用已有优先级", e);
-    }
+      const [fRes, hRes] = await Promise.all([fetch(FOJIAO_URL, { cache: "no-store" }), fetch(HUO_URL, { cache: "no-store" })]);
+      if (!fRes.ok) throw new Error(`佛脚 ${fRes.status}`); if (!hRes.ok) throw new Error(`霍V6 ${hRes.status}`);
+      const set = getFojiaoSet(parseCSV(await fRes.text()));
+      const huoMap = getHuoRefs(parseCSV(await hRes.text()));
+      const huoObj = Object.fromEntries(huoMap);
+      localStorage.setItem(CACHE_KEY, JSON.stringify({ version: CACHE_VERSION, fojiao: [...set], huoRefs: huoObj, updatedAt: Date.now() }));
+      const applied = applyPriority(set, huoMap);
+      if (applied && !cached && sessionStorage.getItem(RELOAD_FLAG) !== "1") { sessionStorage.setItem(RELOAD_FLAG, "1"); location.reload(); }
+    } catch (e) { console.warn("[GRE priority] 交叉词表同步失败；继续使用已有优先级", e); }
   }
 
-  bindUI();
-  refreshFojiao();
+  bindUI(); refreshSources();
   window.__GRE_PRIORITY__ = { applyPriority, renderPriorityLibrary, model: "D3K + Magoosh/HuoV6/Fojiao overlap" };
 })();
