@@ -13,7 +13,7 @@
   const RELOAD_FLAG = "gre-cn-import-reloaded-v1";
 
   const SOURCES = {
-    zy3000: "https://raw.githubusercontent.com/LER0ever/GRE-CN/master/L-GRE-%E8%AF%8D%E6%B1%87/L-GRE-%E5%86%8D%E8%A6%81%E4%BD%A0%E5%91%BD3000/L-GRE-%E5%86%8D%E8%A6%81%E4%BD%A03000%E9%A1%BA%E5%BA%8F%E7%89%88/L-GRE-%E5%86%8D%E8%A6%81%E4%BD%A03000.csv",
+    zy3000: "https://raw.githubusercontent.com/LER0ever/GRE-CN/master/L-GRE-%E8%AF%8D%E6%B1%87/L-GRE-%E5%86%8D%E8%A6%81%E4%BD%A0%E5%91%BD3000/L-GRE-%E5%86%8D%E8%A6%81%E4%BD%A0%E5%91%BD3000%E9%A1%BA%E5%BA%8F%E7%89%88/L-GRE-%E5%86%8D%E8%A6%81%E4%BD%A0%E5%91%BD3000.csv",
     magoosh: "https://raw.githubusercontent.com/LER0ever/GRE-CN/master/L-GRE-%E8%AF%8D%E6%B1%87/L-GRE-Magoosh/L-GRE-MagooshFlashcard.csv",
     huoV6: "https://raw.githubusercontent.com/LER0ever/GRE-CN/master/L-GRE-%E8%AF%8D%E6%B1%87/L-GRE-%E6%9C%BA%E7%BB%8F%E8%AF%8D%E6%B1%87/L-GRE-%E6%9C%BA%E7%BB%8F%E8%AF%8D%E6%B1%87-%E9%9C%8DV6/L-GRE-%E6%9C%BA%E7%BB%8F%E8%AF%8D%E6%B1%87-%E9%9C%8DV6.CSV",
     huoSynV6: "https://raw.githubusercontent.com/LER0ever/GRE-CN/master/L-GRE-%E8%AF%8D%E6%B1%87/L-GRE-%E6%9C%BA%E7%BB%8F%E8%AF%8D%E6%B1%87/L-GRE-%E6%9C%BA%E7%BB%8F%E8%AF%8D%E6%B1%87-%E9%9C%8DV6/L-GRE-%E5%90%8C%E4%B9%89%E8%AF%8D%E4%B9%B1%E5%BA%8F-%E9%9C%8DV6.csv"
@@ -55,7 +55,6 @@
     let s = String(value || "").replace(/^\uFEFF/, "").trim();
     if (!s) return "";
     s = s.replace(/\r/g, "").split("\n").map(x => x.trim()).filter(Boolean).slice(0, 3).join("；");
-    // Remove long English dictionary explanations that follow the Chinese gloss.
     s = s.replace(/\s{2,}[A-Za-z][\s\S]*$/, "").trim();
     if (s.length > 90) s = s.slice(0, 90).replace(/[，,;；:\s]+$/, "");
     return s;
@@ -128,7 +127,6 @@
     const starter = new Map((DATA.words || []).map(w => [norm(w.word), { ...w, sourceTags: ["starter"] }]));
     const base = new Map();
 
-    // 再要你命3000: word, Chinese gloss, English gloss/synonym field.
     for (const r of parseCSV(zyText)) {
       const word = String(r[0] || "").replace(/^\uFEFF/, "").trim();
       if (!word || /^(单词|word)$/i.test(word)) continue;
@@ -237,7 +235,6 @@
       .filter(w => w.word && w.cn)
       .sort((a, b) => (a.level || 3) - (b.level || 3) || a.word.localeCompare(b.word));
 
-    // Ensure stable unique ids even for unusual punctuation collisions.
     const idSeen = new Map();
     for (const w of words) {
       const baseId = w.id || `grecn-${norm(w.word).replace(/[^a-z0-9]+/g, "-")}`;
@@ -271,7 +268,6 @@
       applyWords(merged.words, merged.meta);
       showStatus(merged.meta);
 
-      // On first import, reload once so the main app initializes against the full cached deck.
       if (!cached && sessionStorage.getItem(RELOAD_FLAG) !== "1") {
         sessionStorage.setItem(RELOAD_FLAG, "1");
         location.reload();
@@ -282,7 +278,6 @@
     }
   }
 
-  // Cache gives instant/offline startup; network refresh keeps the data current when available.
   refresh();
 
   window.__GRE_CN_IMPORT__ = {
