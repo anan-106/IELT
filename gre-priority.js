@@ -157,7 +157,7 @@
 
   function annotateStudyCard() {
     const card = document.querySelector("#studyCard .qcard[data-mode='vocab']"); if (!card) return;
-    const wordText = card.querySelector(".word")?.textContent?.trim(); if (!wordText) return;
+    const wordText = card.dataset.word || card.querySelector(".word")?.textContent?.trim(); if (!wordText) return;
     const w = DATA.words.find(x => norm(x.word) === norm(wordText)); if (!w?.priorityTier) return;
     const badge = card.querySelector(".badge");
     if (badge && !badge.dataset.priorityDone) { badge.dataset.priorityDone = "1"; badge.textContent = badge.textContent.replace(/\s*·\s*Level\s*\d+\s*$/i, "") + ` · ${w.priorityTier}级 ${w.priorityScore}分`; }
