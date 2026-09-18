@@ -49,7 +49,7 @@
     </section>
 
     <section class="view" id="view-vocab">
-      <div class="section-head"><div><div class="kicker">VOCABULARY</div><h2>GRE 高频词汇</h2><p>大三千完整主词库 · Magoosh / 霍V6 / 佛脚交叉命中优先级 · 艾宾浩斯复习</p></div><div class="search" style="display:flex;gap:8px;flex-wrap:wrap"><select id="vocabScopeQuick" title="选择每日新词学习范围" style="min-width:150px"><option value="all">全部大三千</option><option value="SAB">S+A+B 高频</option><option value="SA">S+A 核心</option><option value="S">仅 S 冲刺</option></select><input id="vocabSearch" placeholder="搜索英文 / 中文 / 同义词 / 来源" /></div></div>
+      <div class="section-head"><div><div class="kicker">VOCABULARY</div><h2>GRE 高频词汇</h2><p>大三千完整主词库 · Magoosh / 霍V6 / 佛脚交叉命中优先级 · 艾宾浩斯复习</p></div><div class="search" style="display:flex;gap:8px;flex-wrap:wrap"><select id="vocabScopeQuick" title="选择每日新词学习范围" style="min-width:150px"><option value="all">全部大三千</option><option value="SAB">S+A+B 高频</option><option value="SA">S+A 核心</option><option value="S">仅 S 冲刺</option></select><select id="vocabQuizModeQuick" title="选择词汇答题方向" style="min-width:150px"><option value="mixed">双向混合</option><option value="en-cn">英文 → 中文</option><option value="cn-en">中文 → 英文</option></select><input id="vocabSearch" placeholder="搜索英文 / 中文 / 同义词 / 来源" /></div></div>
       <div id="vocabFilters" class="chips"></div>
       <div id="vocabList" class="list-grid"></div>
     </section>
@@ -95,6 +95,7 @@
         <label class="setting"><span><strong>目标天数</strong><small>未设置考试日期时使用；7–180天</small></span><input id="planDaysInput" type="number" min="7" max="180" /></label>
         <label class="setting"><span><strong>GRE 考试日期</strong><small>设置后以考试日自动计算剩余天数和阶段</small></span><input id="examDateInput" type="date" /></label>
         <label class="setting"><span><strong>词汇学习范围</strong><small>控制每天加入的新词；已经学过且到期的旧词仍会继续复习</small></span><select id="vocabScopeInput"><option value="all">全部大三千</option><option value="SAB">S+A+B 高频</option><option value="SA">S+A 核心</option><option value="S">仅 S 冲刺</option></select></label>
+        <label class="setting"><span><strong>词汇答题方向</strong><small>双向混合会随机出现“英文选中文”和“中文选英文”</small></span><select id="vocabQuizModeInput"><option value="mixed">双向混合</option><option value="en-cn">英文 → 中文</option><option value="cn-en">中文 → 英文</option></select></label>
         <label class="setting"><span><strong>每日 Verbal 题数</strong><small>计划会结合剩余天数与历史表现</small></span><input id="dailyVerbalInput" type="number" min="0" max="50" /></label>
         <label class="setting"><span><strong>每日 Quant 题数</strong><small>计划会结合剩余天数与历史表现</small></span><input id="dailyQuantInput" type="number" min="0" max="50" /></label>
         <label class="setting"><span><strong>自动英语发音</strong><small>新词出现时自动朗读</small></span><input id="autoSpeakInput" type="checkbox" /></label>
