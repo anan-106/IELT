@@ -136,7 +136,18 @@
     document.querySelectorAll("#studyCard .option").forEach(b=>b.onclick=()=>answerVocab(b));
     if(!reverse)speak(w.word);
   }
-    function answerVocab(btn){if(!vsession||vsession.answered)return;vsession.answered=true;const {item,w,q}=vsession.current;const picked=btn.dataset.v,ok=norm(picked)===norm(q.correct),c=card(w.id),wasNew=item.wasNew;c[ok?"correct":"wrong"]++;c.byDirection=c.byDirection||{"en-cn":{correct:0,wrong:0},"cn-en":{correct:0,wrong:0}};c.byDirection[q.direction]=c.byDirection[q.direction]||{correct:0,wrong:0};c.byDirection[q.direction][ok?"correct":"wrong"]++;if(!ok)c.lapses++;daily()[ok?"correct":"wrong"]++;document.querySelectorAll("#studyCard .option").forEach(b=>{b.disabled=true;if(norm(b.dataset.v)===norm(q.correct))b.classList.add("correct");if(b===btn&&!ok)b.classList.add("wrong");});let retry=false,passed=false;if(!ok){item.hadError=true;item.need=2;retry=true;state.wrong[`vocab:${w.id}`]={kind:"vocab",id:w.id,label:w.word,last:now(),count:(state.wrong[`vocab:${w.id}`]?.count||0)+1};}else if(item.need>0){item.need--;retry=item.need>0;passed=!retry;}else passed=true;if(passed){scheduleVocab(c,item.hadError,wasNew);if(wasNew)daily().vocab++;vsession.done++;}save();const rt=Math.round(performance.now()-vsession.current.shown);$("vFeedback").innerHTML=`<div class="feedback ${ok?"good":"bad"}"><strong>${ok?"正确":"错误"}</strong> · ${esc(w.word)} = ${esc(w.cn)}<br><span class="muted">近义：${w.syn.map(esc).join(" / ")} · ${rt} ms${retry?` · 后面还需答对 ${item.need} 次`:""}</span><div style="margin-top:10px"><button class="primary" id="vNext">下一题</button></div></div>`;speak(w.word,true);$("vNext").onclick=()=>{vsession.queue.shift();if(retry)requeueV(item);vsession.answered=false;renderVocabQuestion();};}
+    function answerVocab(btn){if(!vsession||vsession.answered)return;vsession.answered=true;const {item,w,q}=vsession.current;const picked=btn.dataset.v,ok=norm(picked)===norm(q.correct),c=card(w.id),wasNew=item.wasNew;c[ok?"correct":"wrong"]++;c.byDirection=c.byDirection||{"en-cn":{correct:0,wrong:0},"cn-en":{correct:0,wrong:0}};c.byDirection[q.direction]=c.byDirection[q.direction]||{correct:0,wrong:0};c.byDirection[q.direction][ok?"correct":"wrong"]++;if(!ok)c.lapses++;daily()[ok?"correct":"wrong"]++;document.querySelectorAll("#studyCard .option").forEach(b=>{
+  b.disabled=true;
+  if(norm(b.dataset.v)===norm(q.correct))b.classList.add("correct");
+  if(b===btn&&!ok)b.classList.add("wrong");
+  if(q.direction==="cn-en"&&!b.querySelector(".option-meaning")){
+    const optionWord=DATA.words.find(x=>norm(x.word)===norm(b.dataset.v));
+    const meaning=document.createElement("span");
+    meaning.className="option-meaning";
+    meaning.textContent=optionWord?.cn||"中文释义待补充";
+    b.appendChild(meaning);
+  }
+});let retry=false,passed=false;if(!ok){item.hadError=true;item.need=2;retry=true;state.wrong[`vocab:${w.id}`]={kind:"vocab",id:w.id,label:w.word,last:now(),count:(state.wrong[`vocab:${w.id}`]?.count||0)+1};}else if(item.need>0){item.need--;retry=item.need>0;passed=!retry;}else passed=true;if(passed){scheduleVocab(c,item.hadError,wasNew);if(wasNew)daily().vocab++;vsession.done++;}save();const rt=Math.round(performance.now()-vsession.current.shown);$("vFeedback").innerHTML=`<div class="feedback ${ok?"good":"bad"}"><strong>${ok?"正确":"错误"}</strong> · ${esc(w.word)} = ${esc(w.cn)}<br><span class="muted">近义：${w.syn.map(esc).join(" / ")} · ${rt} ms${retry?` · 后面还需答对 ${item.need} 次`:""}</span><div style="margin-top:10px"><button class="primary" id="vNext">下一题</button></div></div>`;speak(w.word,true);$("vNext").onclick=()=>{vsession.queue.shift();if(retry)requeueV(item);vsession.answered=false;renderVocabQuestion();};}
 
   // ---------- Generic practice ----------
   let practice=null;
