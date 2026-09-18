@@ -124,7 +124,7 @@
     vsession.current={item,w,q,shown:performance.now()};
     const reverse=q.direction==="cn-en";
     const directionLabel=reverse?"中文 → 英文":"英文 → 中文";
-    const helper=reverse?"根据中文含义选择正确英文；作答后自动朗读正确单词":(w.syn?.length?`近义：${w.syn.map(esc).join(" · ")}`:"选择正确中文释义");
+    const helper=reverse?"根据中文含义选择正确英文；作答后自动朗读正确单词":"根据英文选择最准确的中文释义";
     root.innerHTML=`<div class="qcard" data-mode="vocab" data-vocab-direction="${q.direction}" data-word="${esc(w.word)}">
       <div class="qhead"><span class="badge">${item.reason} · ${directionLabel} · Level ${w.level}</span><span class="muted">通过 ${vsession.done}/${vsession.total}${item.need?` · 还需答对${item.need}次`:""}</span></div>
       <div class="word">${esc(q.prompt)}</div>
