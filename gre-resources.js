@@ -1,4 +1,4 @@
-// Curated external resource library from RuiWang6188/GRE-All-In-One.
+// Curated external GRE resource library from public GitHub repositories.
 // We link to source materials rather than copying third-party PDFs into this repo.
 (() => {
   "use strict";
@@ -6,6 +6,7 @@
   const KEY = "gre-all-in-one-resource-progress-v1";
   const BASE = "https://github.com/RuiWang6188/GRE-All-In-One/blob/master/";
   const DIR = "https://github.com/RuiWang6188/GRE-All-In-One/tree/master/";
+  const GSY_BASE = "https://github.com/GSY2020/GRE/blob/main/";
 
   const resources = [
     {
@@ -69,18 +70,28 @@
       url: BASE + "Quantitative/ETS官方_gre_math_conventions.pdf"
     },
     {
+      id: "quant-200", cat: "Quant", phase: "强化", title: "巍哥GRE数学机经200题",
+      note: "你指定加入的数学机经200题；建议按套限时做，并把知识点不会、读题错误、计算错误分别记入错题本。",
+      url: GSY_BASE + "巍哥GRE数学机经200题.pdf"
+    },
+    {
       id: "quant-170", cat: "Quant", phase: "冲刺", title: "巍哥GRE数学170难题3.0",
-      note: "源仓库 README 建议基础不错时考前刷一遍并重点复盘错题。",
+      note: "保留作高难题补充；建议在200题基础上针对薄弱知识点使用。",
       url: BASE + "Quantitative/巍哥GRE数学170难题3.0.pdf"
     },
     {
-      id: "quant-full", cat: "Quant", phase: "强化", title: "巍哥GRE数学满分宝典",
-      note: "数学系统复习补充资料。",
-      url: BASE + "Quantitative/巍哥GRE数学满分宝典.pdf"
+      id: "quant-full", cat: "Quant", phase: "基础", title: "巍哥GRE数学满分宝典",
+      note: "你指定加入的系统复习资料；适合按 Arithmetic / Algebra / Geometry / Data Analysis 查漏补缺。",
+      url: GSY_BASE + "巍哥GRE数学满分宝典.pdf"
     },
     {
-      id: "quant-vocab", cat: "Quant", phase: "基础", title: "微臣GRE数学词汇2.0",
-      note: "适合英语数学术语不熟时补充。",
+      id: "quant-vocab", cat: "Quant", phase: "基础", title: "巍哥GRE数学词汇汇总",
+      note: "你指定加入的数学英文词汇资料；优先补齐题干中的数学术语和固定表达。",
+      url: GSY_BASE + "巍哥GRE数学词汇汇总.pdf"
+    },
+    {
+      id: "quant-vocab-weichen", cat: "Quant", phase: "补充", title: "微臣GRE数学词汇2.0",
+      note: "另一套数学术语补充资料，可与巍哥数学词汇交叉查漏。",
       url: BASE + "Quantitative/微臣GRE数学词汇2.0.pdf"
     },
     {
@@ -120,9 +131,9 @@
       const s = JSON.parse(localStorage.getItem("gre-prep-v1") || "{}") || {};
       planDays = Number(s.settings?.planDays || 30);
     } catch {}
-    if (planDays <= 21) return "冲刺型：大三千高优先级 + 每日复习 → 长难句/填空练习 → 数学170难题 → 考前救命800。";
-    if (planDays <= 45) return "均衡型：大三千主线 + 长难句 → TC/RC 强化 → ETS Math Review/170难题 → Issue 写作。";
-    return "长期型：大三千完整推进 + 长难句和阅读逻辑 → 系统 Quant 查漏 → 后期套题与救命800冲刺。";
+    if (planDays <= 21) return "冲刺型：大三千高优先级 + 每日复习 → 长难句/填空练习 → 巍哥数学机经200题（薄弱处补170难题）→ 考前救命800。";
+    if (planDays <= 45) return "均衡型：大三千主线 + 长难句 → TC/RC 强化 → ETS Math Review + 巍哥数学满分宝典/机经200题 → Issue 写作。";
+    return "长期型：大三千完整推进 + 长难句和阅读逻辑 → 数学满分宝典 + 数学词汇系统查漏 → 200题/170难题冲刺。";
   }
 
   function injectStyle() {
@@ -152,7 +163,7 @@
 
     root.innerHTML = `
       <div class="resource-summary">
-        <article class="metric"><span>资料入口</span><strong>${resources.length}</strong><small>来自 GRE-All-In-One</small></article>
+        <article class="metric"><span>资料入口</span><strong>${resources.length}</strong><small>来自多个公开 GRE GitHub</small></article>
         <article class="metric"><span>已完成</span><strong>${done}</strong><small>本地记录</small></article>
         <article class="metric"><span>主线</span><strong>大三千</strong><small>不改变当前主词库</small></article>
         <article class="metric"><span>版权处理</span><strong>仅链接</strong><small>不复制第三方PDF</small></article>
