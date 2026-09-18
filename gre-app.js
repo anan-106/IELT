@@ -96,7 +96,14 @@
     const fallback=DATA.words.filter(x=>x.id!==w.id);
     const source=shuffle([...sameTier,...fallback]);
     if(direction==="cn-en"){
-      const wrong=uniq(source.map(x=>x.word)).filter(x=>norm(x)!==norm(w.word)).slice(0,3);
+      const targetSyn=new Set((w.syn||[]).map(norm));
+      const wrong=uniq(source
+        .filter(x=>norm(x.cn)!==norm(w.cn))
+        .filter(x=>!targetSyn.has(norm(x.word)))
+        .filter(x=>!((x.syn||[]).some(s=>norm(s)===norm(w.word))))
+        .map(x=>x.word))
+        .filter(x=>norm(x)!==norm(w.word))
+        .slice(0,3);
       return{direction,prompt:w.cn,correct:w.word,options:shuffle([w.word,...wrong])};
     }
     const wrong=uniq(source.map(x=>x.cn)).filter(x=>norm(x)!==norm(w.cn)).slice(0,3);
