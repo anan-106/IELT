@@ -16,7 +16,7 @@
   function dayNum(key){const d=typeof key==="string"?new Date(`${key}T00:00:00`):new Date(key);d.setHours(0,0,0,0);return Math.floor(d.getTime()/86400000);}
   function startPlus(days){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+days);return d.getTime();}
   function fresh(){return {version:1,settings:{planDays:60,vocabScope:"all",dailyVerbal:5,dailyQuant:5,autoSpeak:true,speechRate:1},plan:{startDate:dateKey()},vocab:{},questions:{},daily:{},wrong:{},essay:{},streakSeed:0};}
-  function load(){try{return {...fresh(),...(JSON.parse(localStorage.getItem(KEY)||"{}")||{}),settings:{...fresh().settings,...((JSON.parse(localStorage.getItem(KEY)||"{}")||{}).settings||{})}}catch{return fresh();}}
+  function load(){try{const raw=JSON.parse(localStorage.getItem(KEY)||"{}")||{};return {...fresh(),...raw,settings:{...fresh().settings,...(raw.settings||{})}};}catch{return fresh();}}
   let state=load();
   function save(){localStorage.setItem(KEY,JSON.stringify(state));}
   function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove("show"),1800);}
