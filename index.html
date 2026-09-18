@@ -86,12 +86,14 @@
       <div class="section-head"><div><div class="kicker">ANALYTICS</div><h2>学习统计</h2><p>正确率、反应时间、题型表现和词汇记忆进度。</p></div></div>
       <div id="statsGrid" class="metric-grid"></div>
       <div class="two-col"><article class="panel"><h3>Verbal 题型</h3><div id="verbalStats"></div></article><article class="panel"><h3>Quant 题型</h3><div id="quantStats"></div></article></div>
+      <div class="two-col"><article class="panel"><h3>Quant 内容领域</h3><p class="muted">按 ETS Diagnostic Service 的 Arithmetic / Algebra / Geometry / Data Analysis 分类。</p><div id="quantAreaStats"></div></article><article class="panel"><h3>Quant 错误原因</h3><p class="muted">做错后标记主要原因，用来决定后续查漏重点。</p><div id="quantErrorStats"></div></article></div>
     </section>
 
     <section class="view" id="view-settings">
       <div class="section-head"><div><div class="kicker">SETTINGS</div><h2>设置</h2><p>计划和学习记录都保存在当前浏览器本地。</p></div></div>
       <div class="settings-grid">
-        <label class="setting"><span><strong>目标天数</strong><small>7–180天，自动重算每日任务</small></span><input id="planDaysInput" type="number" min="7" max="180" /></label>
+        <label class="setting"><span><strong>目标天数</strong><small>未设置考试日期时使用；7–180天</small></span><input id="planDaysInput" type="number" min="7" max="180" /></label>
+        <label class="setting"><span><strong>GRE 考试日期</strong><small>设置后以考试日自动计算剩余天数和阶段</small></span><input id="examDateInput" type="date" /></label>
         <label class="setting"><span><strong>词汇学习范围</strong><small>控制每天加入的新词；已经学过且到期的旧词仍会继续复习</small></span><select id="vocabScopeInput"><option value="all">全部大三千</option><option value="SAB">S+A+B 高频</option><option value="SA">S+A 核心</option><option value="S">仅 S 冲刺</option></select></label>
         <label class="setting"><span><strong>每日 Verbal 题数</strong><small>计划会结合剩余天数与历史表现</small></span><input id="dailyVerbalInput" type="number" min="0" max="50" /></label>
         <label class="setting"><span><strong>每日 Quant 题数</strong><small>计划会结合剩余天数与历史表现</small></span><input id="dailyQuantInput" type="number" min="0" max="50" /></label>
