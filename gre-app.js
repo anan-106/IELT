@@ -15,7 +15,7 @@
   function dateKey(ts=Date.now()){const d=new Date(ts);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;}
   function dayNum(key){const d=typeof key==="string"?new Date(`${key}T00:00:00`):new Date(key);d.setHours(0,0,0,0);return Math.floor(d.getTime()/86400000);}
   function startPlus(days){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+days);return d.getTime();}
-  function fresh(){return {version:1,settings:{planDays:60,dailyVerbal:5,dailyQuant:5,autoSpeak:true,speechRate:1},plan:{startDate:dateKey()},vocab:{},questions:{},daily:{},wrong:{},essay:{},streakSeed:0};}
+  function fresh(){return {version:1,settings:{planDays:60,vocabScope:"all",dailyVerbal:5,dailyQuant:5,autoSpeak:true,speechRate:1},plan:{startDate:dateKey()},vocab:{},questions:{},daily:{},wrong:{},essay:{},streakSeed:0};}
   function load(){try{return {...fresh(),...(JSON.parse(localStorage.getItem(KEY)||"{}")||{}),settings:{...fresh().settings,...((JSON.parse(localStorage.getItem(KEY)||"{}")||{}).settings||{})}}catch{return fresh();}}
   let state=load();
   function save(){localStorage.setItem(KEY,JSON.stringify(state));}
@@ -25,9 +25,19 @@
   function qstat(id){state.questions[id]=state.questions[id]||{attempts:0,correct:0,wrong:0,totalMs:0,last:0};return state.questions[id];}
   function daily(){const k=dateKey();state.daily[k]=state.daily[k]||{vocab:0,verbal:0,quant:0,correct:0,wrong:0};return state.daily[k];}
   function scheduleVocab(c,hadError,wasNew){let stage=(wasNew||hadError||c.stage<0)?0:Math.min(c.stage+1,INTERVALS.length-1);c.stage=stage;c.reps=(c.reps||0)+1;c.last=now();c.due=startPlus(INTERVALS[stage]);return INTERVALS[stage];}
+  function vocabScopeWords(){
+    const scope=String(state.settings.vocabScope||"all").toUpperCase();
+    if(scope==="ALL"||!DATA.words.some(w=>w.priorityTier))return DATA.words;
+    const allow=scope==="S"?new Set(["S"]):scope==="SA"?new Set(["S","A"]):new Set(["S","A","B"]);
+    return DATA.words.filter(w=>allow.has(String(w.priorityTier||"").toUpperCase()));
+  }
+  function vocabScopeLabel(){
+    const scope=String(state.settings.vocabScope||"all").toUpperCase();
+    return scope==="S"?"仅 S 冲刺":scope==="SA"?"S+A 核心":scope==="SAB"?"S+A+B 高频":"全部大三千";
+  }
   function dueVocab(){const t=now();return DATA.words.filter(w=>card(w.id).reps>0&&card(w.id).due<=t).sort((a,b)=>card(a.id).due-card(b.id).due);}
   function overdueVocab(){const s=new Date();s.setHours(0,0,0,0);return DATA.words.filter(w=>card(w.id).reps>0&&card(w.id).due<s.getTime());}
-  function unseen(){return DATA.words.filter(w=>!card(w.id).reps);}
+  function unseen(){return vocabScopeWords().filter(w=>!card(w.id).reps);}
 
   function planSnapshot(){
     const days=Math.max(7,Math.min(180,Number(state.settings.planDays)||60));
@@ -39,15 +49,16 @@
     const due=dueVocab().length;
     let newVocab=remaining?Math.ceil(remaining/remainingDays):0;
     if(overdue) newVocab=Math.max(0,newVocab-Math.min(Math.ceil(newVocab*.5),Math.ceil(overdue/4)));
-    const done=DATA.words.length-remaining;
-    const completion=DATA.words.length?Math.round(done/DATA.words.length*100):0;
-    return {days,start,elapsed,remainingDays,remaining,newVocab,overdue,due,done,completion,verbal:Number(state.settings.dailyVerbal)||0,quant:Number(state.settings.dailyQuant)||0};
+    const scopeTotal=vocabScopeWords().length;
+    const done=scopeTotal-remaining;
+    const completion=scopeTotal?Math.round(done/scopeTotal*100):0;
+    return {days,start,elapsed,remainingDays,remaining,newVocab,overdue,due,done,completion,scopeTotal,scopeLabel:vocabScopeLabel(),verbal:Number(state.settings.dailyVerbal)||0,quant:Number(state.settings.dailyQuant)||0};
   }
 
   function streak(){let n=0;const d=new Date();d.setHours(0,0,0,0);for(let i=0;i<999;i++){const x=state.daily[dateKey(d.getTime())];if(x&&(x.vocab+x.verbal+x.quant)>0)n++;else if(i>0)break;d.setDate(d.getDate()-1);}return n;}
 
   function renderPlan(){const p=planSnapshot();$("streakCount").textContent=streak();$("planPanel").innerHTML=`
-    <div class="section-head" style="margin:0 0 12px"><div><div class="kicker">${p.days}-DAY PLAN</div><h2 style="margin:3px 0">动态学习计划</h2></div><small class="muted">Day ${Math.min(p.elapsed+1,p.days)} / ${p.days} · 词汇完成 ${p.completion}%</small></div>
+    <div class="section-head" style="margin:0 0 12px"><div><div class="kicker">${p.days}-DAY PLAN</div><h2 style="margin:3px 0">动态学习计划</h2></div><small class="muted">Day ${Math.min(p.elapsed+1,p.days)} / ${p.days} · ${p.scopeLabel} ${p.done}/${p.scopeTotal} · 完成 ${p.completion}%</small></div>
     <div class="metric-grid">
       <article class="metric"><span>历史欠复习</span><strong>${p.overdue}</strong><small>优先完成</small></article>
       <article class="metric"><span>到期词汇复习</span><strong>${p.due}</strong><small>含逾期</small></article>
@@ -58,7 +69,7 @@
   }
   function renderTodayCards(p=planSnapshot()){$("todayCards").innerHTML=`
     <article class="metric"><span>必做复习</span><strong>${p.due}</strong><small>先清旧账</small></article>
-    <article class="metric"><span>新词</span><strong>${p.newVocab}</strong><small>按剩余天数动态调整</small></article>
+    <article class="metric"><span>新词</span><strong>${p.newVocab}</strong><small>${p.scopeLabel} · 按剩余天数动态调整</small></article>
     <article class="metric"><span>Verbal</span><strong>${p.verbal}</strong><small>TC / SE / RC</small></article>
     <article class="metric"><span>Quant</span><strong>${p.quant}</strong><small>QC / MCQ / Numeric</small></article>`;}
 
@@ -116,9 +127,10 @@
   function renderModules(){const vc=byType(DATA.verbal),qc=byType(DATA.quant);$("verbalModules").innerHTML=vc.map(x=>`<article class="module-card"><span>${esc(x.type)}</span><strong>${x.a?x.p+"%":"未练习"}</strong><small>${DATA.verbal.filter(q=>q.type===x.type).length} 道原创题</small></article>`).join("");$("quantModules").innerHTML=qc.map(x=>`<article class="module-card"><span>${esc(x.type)}</span><strong>${x.a?x.p+"%":"未练习"}</strong><small>${DATA.quant.filter(q=>q.type===x.type).length} 道原创题</small></article>`).join("");}
 
   // ---------- Settings / backup ----------
-  function renderSettings(){$("planDaysInput").value=state.settings.planDays;$("dailyVerbalInput").value=state.settings.dailyVerbal;$("dailyQuantInput").value=state.settings.dailyQuant;$("autoSpeakInput").checked=state.settings.autoSpeak;$("speechRateInput").value=state.settings.speechRate;$("speechRateText").textContent=`${Number(state.settings.speechRate).toFixed(2)}×`;}
+  function renderSettings(){$("planDaysInput").value=state.settings.planDays;if($("vocabScopeInput"))$("vocabScopeInput").value=state.settings.vocabScope||"all";if($("vocabScopeQuick"))$("vocabScopeQuick").value=state.settings.vocabScope||"all";$("dailyVerbalInput").value=state.settings.dailyVerbal;$("dailyQuantInput").value=state.settings.dailyQuant;$("autoSpeakInput").checked=state.settings.autoSpeak;$("speechRateInput").value=state.settings.speechRate;$("speechRateText").textContent=`${Number(state.settings.speechRate).toFixed(2)}×`;}
   $("speechRateInput").oninput=()=>$("speechRateText").textContent=`${Number($("speechRateInput").value).toFixed(2)}×`;
-  $("saveSettingsBtn").onclick=()=>{state.settings.planDays=Math.max(7,Math.min(180,Number($("planDaysInput").value)||60));state.settings.dailyVerbal=Math.max(0,Math.min(50,Number($("dailyVerbalInput").value)||0));state.settings.dailyQuant=Math.max(0,Math.min(50,Number($("dailyQuantInput").value)||0));state.settings.autoSpeak=$("autoSpeakInput").checked;state.settings.speechRate=Number($("speechRateInput").value)||1;save();renderPlan();toast("设置已保存");};
+  if($("vocabScopeQuick")){$("vocabScopeQuick").value=state.settings.vocabScope||"all";$("vocabScopeQuick").onchange=()=>{state.settings.vocabScope=$("vocabScopeQuick").value;save();if($("vocabScopeInput"))$("vocabScopeInput").value=state.settings.vocabScope;renderPlan();toast(`词汇范围：${vocabScopeLabel()}`);};}
+  $("saveSettingsBtn").onclick=()=>{state.settings.planDays=Math.max(7,Math.min(180,Number($("planDaysInput").value)||60));state.settings.vocabScope=$("vocabScopeInput")?.value||state.settings.vocabScope||"all";state.settings.dailyVerbal=Math.max(0,Math.min(50,Number($("dailyVerbalInput").value)||0));state.settings.dailyQuant=Math.max(0,Math.min(50,Number($("dailyQuantInput").value)||0));state.settings.autoSpeak=$("autoSpeakInput").checked;state.settings.speechRate=Number($("speechRateInput").value)||1;save();if($("vocabScopeQuick"))$("vocabScopeQuick").value=state.settings.vocabScope;renderPlan();toast("设置已保存");};
   $("restartPlanBtn").onclick=()=>{state.plan.startDate=dateKey();save();renderPlan();toast("计划已从今天重新开始");};
   $("exportBtn").onclick=()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`gre-prep-backup-${dateKey()}.json`;a.click();URL.revokeObjectURL(a.href);};
   $("importInput").onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{state={...fresh(),...JSON.parse(await f.text())};save();location.reload();}catch{toast("备份文件无效");}};
