@@ -15,7 +15,7 @@
   function dateKey(ts=Date.now()){const d=new Date(ts);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;}
   function dayNum(key){const d=typeof key==="string"?new Date(`${key}T00:00:00`):new Date(key);d.setHours(0,0,0,0);return Math.floor(d.getTime()/86400000);}
   function startPlus(days){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+days);return d.getTime();}
-  function fresh(){return {version:1,settings:{planDays:60,vocabScope:"all",dailyVerbal:5,dailyQuant:5,autoSpeak:true,speechRate:1},plan:{startDate:dateKey()},vocab:{},questions:{},daily:{},wrong:{},essay:{},streakSeed:0};}
+  function fresh(){return {version:2,settings:{planDays:60,vocabScope:"all",vocabQuizMode:"mixed",dailyVerbal:5,dailyQuant:5,autoSpeak:true,speechRate:1},plan:{startDate:dateKey()},vocab:{},questions:{},daily:{},wrong:{},essay:{},streakSeed:0};}
   function load(){try{const raw=JSON.parse(localStorage.getItem(KEY)||"{}")||{};return {...fresh(),...raw,settings:{...fresh().settings,...(raw.settings||{})}};}catch{return fresh();}}
   let state=load();
   function save(){localStorage.setItem(KEY,JSON.stringify(state));}
@@ -86,10 +86,50 @@
   let vsession=null;
   function makeVItem(w,reason){return{id:w.id,reason,wasNew:!card(w.id).reps,hadError:false,need:0};}
   function startVocabSession(){const p=planSnapshot();const due=dueVocab().map(w=>makeVItem(w,"到期复习"));const fresh=unseen().slice(0,p.newVocab).map(w=>makeVItem(w,"今日新词"));vsession={queue:[...due,...fresh],total:due.length+fresh.length,done:0,current:null,answered:false};switchView("today");renderVocabQuestion();}
-  function buildVocabQ(w){const pool=shuffle(DATA.words.filter(x=>x.id!==w.id)).slice(0,8);const wrong=uniq(pool.map(x=>x.cn)).filter(x=>x!==w.cn).slice(0,3);return{prompt:w.word,correct:w.cn,options:shuffle([w.cn,...wrong])};}
+  function vocabQuizDirection(){
+    const mode=String(state.settings.vocabQuizMode||"mixed");
+    return mode==="mixed"?(Math.random()<0.5?"en-cn":"cn-en"):mode;
+  }
+  function buildVocabQ(w){
+    const direction=vocabQuizDirection();
+    const sameTier=DATA.words.filter(x=>x.id!==w.id&&(!w.priorityTier||x.priorityTier===w.priorityTier));
+    const fallback=DATA.words.filter(x=>x.id!==w.id);
+    const source=shuffle([...sameTier,...fallback]);
+    if(direction==="cn-en"){
+      const wrong=uniq(source.map(x=>x.word)).filter(x=>norm(x)!==norm(w.word)).slice(0,3);
+      return{direction,prompt:w.cn,correct:w.word,options:shuffle([w.word,...wrong])};
+    }
+    const wrong=uniq(source.map(x=>x.cn)).filter(x=>norm(x)!==norm(w.cn)).slice(0,3);
+    return{direction,prompt:w.word,correct:w.cn,options:shuffle([w.cn,...wrong])};
+  }
   function requeueV(item){const gap=3;const pos=Math.min(gap,vsession.queue.length);vsession.queue.splice(pos,0,item);}
-  function renderVocabQuestion(){const root=$("studyCard");if(!vsession){root.innerHTML='<div class="empty"><div><h3>准备开始</h3><p>先复习到期词，再学习当天新词。</p></div></div>';return;}if(!vsession.queue.length){root.innerHTML=`<div class="empty"><div><h3>今日词汇完成 ✓</h3><p>完成 ${vsession.done}/${vsession.total} 个目标。接下来做 Verbal 和 Quant。</p><button class="primary" onclick="document.querySelector('[data-view=verbal]').click()">去做 Verbal</button></div></div>`;vsession=null;renderPlan();return;}const item=vsession.queue[0],w=DATA.words.find(x=>x.id===item.id),q=buildVocabQ(w);vsession.current={item,w,q,shown:performance.now()};root.innerHTML=`<div class="qcard" data-mode="vocab"><div class="qhead"><span class="badge">${item.reason} · Level ${w.level}</span><span class="muted">通过 ${vsession.done}/${vsession.total}${item.need?` · 还需答对${item.need}次`:""}</span></div><div class="word">${esc(w.word)}</div><div class="pronounce">${w.syn.map(esc).join(" · ")}</div><div class="options">${q.options.map((o,i)=>`<button class="option" data-v="${esc(o)}" data-key="${i+1}">${esc(o)}</button>`).join("")}</div><div class="kbdhint">1–4 选择 · Tab 重读 · Enter 下一题</div><div id="vFeedback"></div></div>`;document.querySelectorAll("#studyCard .option").forEach(b=>b.onclick=()=>answerVocab(b));speak(w.word);}
-  function answerVocab(btn){if(!vsession||vsession.answered)return;vsession.answered=true;const {item,w,q}=vsession.current;const picked=btn.dataset.v,ok=norm(picked)===norm(q.correct),c=card(w.id),wasNew=item.wasNew;c[ok?"correct":"wrong"]++;if(!ok)c.lapses++;daily()[ok?"correct":"wrong"]++;document.querySelectorAll("#studyCard .option").forEach(b=>{b.disabled=true;if(norm(b.dataset.v)===norm(q.correct))b.classList.add("correct");if(b===btn&&!ok)b.classList.add("wrong");});let retry=false,passed=false;if(!ok){item.hadError=true;item.need=2;retry=true;state.wrong[`vocab:${w.id}`]={kind:"vocab",id:w.id,label:w.word,last:now(),count:(state.wrong[`vocab:${w.id}`]?.count||0)+1};}else if(item.need>0){item.need--;retry=item.need>0;passed=!retry;}else passed=true;if(passed){scheduleVocab(c,item.hadError,wasNew);if(wasNew)daily().vocab++;vsession.done++;}save();const rt=Math.round(performance.now()-vsession.current.shown);$("vFeedback").innerHTML=`<div class="feedback ${ok?"good":"bad"}"><strong>${ok?"正确":"错误"}</strong> · ${esc(w.word)} = ${esc(w.cn)}<br><span class="muted">近义：${w.syn.map(esc).join(" / ")} · ${rt} ms${retry?` · 后面还需答对 ${item.need} 次`:""}</span><div style="margin-top:10px"><button class="primary" id="vNext">下一题</button></div></div>`;speak(w.word,true);$("vNext").onclick=()=>{vsession.queue.shift();if(retry)requeueV(item);vsession.answered=false;renderVocabQuestion();};}
+  function renderVocabQuestion(){
+    const root=$("studyCard");
+    if(!vsession){
+      root.innerHTML='<div class="empty"><div><h3>准备开始</h3><p>先复习到期词，再学习当天新词。</p></div></div>';
+      return;
+    }
+    if(!vsession.queue.length){
+      root.innerHTML=`<div class="empty"><div><h3>今日词汇完成 ✓</h3><p>完成 ${vsession.done}/${vsession.total} 个目标。接下来做 Verbal 和 Quant。</p><button class="primary" onclick="document.querySelector('[data-view=verbal]').click()">去做 Verbal</button></div></div>`;
+      vsession=null;renderPlan();return;
+    }
+    const item=vsession.queue[0],w=DATA.words.find(x=>x.id===item.id),q=buildVocabQ(w);
+    vsession.current={item,w,q,shown:performance.now()};
+    const reverse=q.direction==="cn-en";
+    const directionLabel=reverse?"中文 → 英文":"英文 → 中文";
+    const helper=reverse?"根据中文含义选择正确英文；作答后自动朗读正确单词":(w.syn?.length?`近义：${w.syn.map(esc).join(" · ")}`:"选择正确中文释义");
+    root.innerHTML=`<div class="qcard" data-mode="vocab" data-vocab-direction="${q.direction}" data-word="${esc(w.word)}">
+      <div class="qhead"><span class="badge">${item.reason} · ${directionLabel} · Level ${w.level}</span><span class="muted">通过 ${vsession.done}/${vsession.total}${item.need?` · 还需答对${item.need}次`:""}</span></div>
+      <div class="word">${esc(q.prompt)}</div>
+      <div class="pronounce">${helper}</div>
+      <div class="options">${q.options.map((o,i)=>`<button class="option" data-v="${esc(o)}" data-key="${i+1}">${esc(o)}</button>`).join("")}</div>
+      <div class="kbdhint">1–4 选择 · ${reverse?"答题后 Tab 重读英文":"Tab 重读"} · Enter 下一题</div>
+      <div id="vFeedback"></div>
+    </div>`;
+    document.querySelectorAll("#studyCard .option").forEach(b=>b.onclick=()=>answerVocab(b));
+    if(!reverse)speak(w.word);
+  }
+    function answerVocab(btn){if(!vsession||vsession.answered)return;vsession.answered=true;const {item,w,q}=vsession.current;const picked=btn.dataset.v,ok=norm(picked)===norm(q.correct),c=card(w.id),wasNew=item.wasNew;c[ok?"correct":"wrong"]++;c.byDirection=c.byDirection||{"en-cn":{correct:0,wrong:0},"cn-en":{correct:0,wrong:0}};c.byDirection[q.direction]=c.byDirection[q.direction]||{correct:0,wrong:0};c.byDirection[q.direction][ok?"correct":"wrong"]++;if(!ok)c.lapses++;daily()[ok?"correct":"wrong"]++;document.querySelectorAll("#studyCard .option").forEach(b=>{b.disabled=true;if(norm(b.dataset.v)===norm(q.correct))b.classList.add("correct");if(b===btn&&!ok)b.classList.add("wrong");});let retry=false,passed=false;if(!ok){item.hadError=true;item.need=2;retry=true;state.wrong[`vocab:${w.id}`]={kind:"vocab",id:w.id,label:w.word,last:now(),count:(state.wrong[`vocab:${w.id}`]?.count||0)+1};}else if(item.need>0){item.need--;retry=item.need>0;passed=!retry;}else passed=true;if(passed){scheduleVocab(c,item.hadError,wasNew);if(wasNew)daily().vocab++;vsession.done++;}save();const rt=Math.round(performance.now()-vsession.current.shown);$("vFeedback").innerHTML=`<div class="feedback ${ok?"good":"bad"}"><strong>${ok?"正确":"错误"}</strong> · ${esc(w.word)} = ${esc(w.cn)}<br><span class="muted">近义：${w.syn.map(esc).join(" / ")} · ${rt} ms${retry?` · 后面还需答对 ${item.need} 次`:""}</span><div style="margin-top:10px"><button class="primary" id="vNext">下一题</button></div></div>`;speak(w.word,true);$("vNext").onclick=()=>{vsession.queue.shift();if(retry)requeueV(item);vsession.answered=false;renderVocabQuestion();};}
 
   // ---------- Generic practice ----------
   let practice=null;
@@ -127,10 +167,11 @@
   function renderModules(){const vc=byType(DATA.verbal),qc=byType(DATA.quant);$("verbalModules").innerHTML=vc.map(x=>`<article class="module-card"><span>${esc(x.type)}</span><strong>${x.a?x.p+"%":"未练习"}</strong><small>${DATA.verbal.filter(q=>q.type===x.type).length} 道原创题</small></article>`).join("");$("quantModules").innerHTML=qc.map(x=>`<article class="module-card"><span>${esc(x.type)}</span><strong>${x.a?x.p+"%":"未练习"}</strong><small>${DATA.quant.filter(q=>q.type===x.type).length} 道原创题</small></article>`).join("");}
 
   // ---------- Settings / backup ----------
-  function renderSettings(){$("planDaysInput").value=state.settings.planDays;if($("vocabScopeInput"))$("vocabScopeInput").value=state.settings.vocabScope||"all";if($("vocabScopeQuick"))$("vocabScopeQuick").value=state.settings.vocabScope||"all";$("dailyVerbalInput").value=state.settings.dailyVerbal;$("dailyQuantInput").value=state.settings.dailyQuant;$("autoSpeakInput").checked=state.settings.autoSpeak;$("speechRateInput").value=state.settings.speechRate;$("speechRateText").textContent=`${Number(state.settings.speechRate).toFixed(2)}×`;}
+  function renderSettings(){$("planDaysInput").value=state.settings.planDays;if($("vocabScopeInput"))$("vocabScopeInput").value=state.settings.vocabScope||"all";if($("vocabScopeQuick"))$("vocabScopeQuick").value=state.settings.vocabScope||"all";if($("vocabQuizModeInput"))$("vocabQuizModeInput").value=state.settings.vocabQuizMode||"mixed";if($("vocabQuizModeQuick"))$("vocabQuizModeQuick").value=state.settings.vocabQuizMode||"mixed";$("dailyVerbalInput").value=state.settings.dailyVerbal;$("dailyQuantInput").value=state.settings.dailyQuant;$("autoSpeakInput").checked=state.settings.autoSpeak;$("speechRateInput").value=state.settings.speechRate;$("speechRateText").textContent=`${Number(state.settings.speechRate).toFixed(2)}×`;}
   $("speechRateInput").oninput=()=>$("speechRateText").textContent=`${Number($("speechRateInput").value).toFixed(2)}×`;
   if($("vocabScopeQuick")){$("vocabScopeQuick").value=state.settings.vocabScope||"all";$("vocabScopeQuick").onchange=()=>{state.settings.vocabScope=$("vocabScopeQuick").value;save();if($("vocabScopeInput"))$("vocabScopeInput").value=state.settings.vocabScope;renderPlan();toast(`词汇范围：${vocabScopeLabel()}`);};}
-  $("saveSettingsBtn").onclick=()=>{state.settings.planDays=Math.max(7,Math.min(180,Number($("planDaysInput").value)||60));state.settings.vocabScope=$("vocabScopeInput")?.value||state.settings.vocabScope||"all";state.settings.dailyVerbal=Math.max(0,Math.min(50,Number($("dailyVerbalInput").value)||0));state.settings.dailyQuant=Math.max(0,Math.min(50,Number($("dailyQuantInput").value)||0));state.settings.autoSpeak=$("autoSpeakInput").checked;state.settings.speechRate=Number($("speechRateInput").value)||1;save();if($("vocabScopeQuick"))$("vocabScopeQuick").value=state.settings.vocabScope;renderPlan();toast("设置已保存");};
+  if($("vocabQuizModeQuick")){$("vocabQuizModeQuick").value=state.settings.vocabQuizMode||"mixed";$("vocabQuizModeQuick").onchange=()=>{state.settings.vocabQuizMode=$("vocabQuizModeQuick").value;save();if($("vocabQuizModeInput"))$("vocabQuizModeInput").value=state.settings.vocabQuizMode;toast(`词汇题型：${state.settings.vocabQuizMode==="cn-en"?"中文 → 英文":state.settings.vocabQuizMode==="en-cn"?"英文 → 中文":"双向混合"}`);};}
+  $("saveSettingsBtn").onclick=()=>{state.settings.planDays=Math.max(7,Math.min(180,Number($("planDaysInput").value)||60));state.settings.vocabScope=$("vocabScopeInput")?.value||state.settings.vocabScope||"all";state.settings.vocabQuizMode=$("vocabQuizModeInput")?.value||state.settings.vocabQuizMode||"mixed";state.settings.dailyVerbal=Math.max(0,Math.min(50,Number($("dailyVerbalInput").value)||0));state.settings.dailyQuant=Math.max(0,Math.min(50,Number($("dailyQuantInput").value)||0));state.settings.autoSpeak=$("autoSpeakInput").checked;state.settings.speechRate=Number($("speechRateInput").value)||1;save();if($("vocabScopeQuick"))$("vocabScopeQuick").value=state.settings.vocabScope;if($("vocabQuizModeQuick"))$("vocabQuizModeQuick").value=state.settings.vocabQuizMode;renderPlan();toast("设置已保存");};
   $("restartPlanBtn").onclick=()=>{state.plan.startDate=dateKey();save();renderPlan();toast("计划已从今天重新开始");};
   $("exportBtn").onclick=()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`gre-prep-backup-${dateKey()}.json`;a.click();URL.revokeObjectURL(a.href);};
   $("importInput").onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{state={...fresh(),...JSON.parse(await f.text())};save();location.reload();}catch{toast("备份文件无效");}};
@@ -138,7 +179,7 @@
   $("healthBtn").onclick=()=>alert(`GRE 本地数据自检\n词汇：${DATA.words.length}\nVerbal 原创题：${DATA.verbal.length}\nQuant 原创题：${DATA.quant.length}\n写作题：${DATA.issues.length}\n存储：localStorage`);
 
   // ---------- Keyboard ----------
-  document.addEventListener("keydown",e=>{const tag=(e.target.tagName||"").toLowerCase();if(["input","textarea","select"].includes(tag))return;if(e.key==="Tab"&&!e.shiftKey){const text=document.querySelector("#studyCard .word")?.textContent?.trim();if(text){e.preventDefault();speak(text,true);}return;}if(/^[1-6]$/.test(e.key)){const active=document.querySelector(".view.active .study-card");const opts=[...(active?.querySelectorAll(".option:not(:disabled)")||[])];const b=opts[Number(e.key)-1];if(b){e.preventDefault();b.click();}}if(e.key==="Enter"){const next=document.querySelector(".view.active #vNext,.view.active #practiceNext");if(next){e.preventDefault();next.click();return;}if(practice&&!practice.answered&&practice.current&&isMulti(practice.current.q)){e.preventDefault();submitPractice();}}});
+  document.addEventListener("keydown",e=>{const tag=(e.target.tagName||"").toLowerCase();if(["input","textarea","select"].includes(tag))return;if(e.key==="Tab"&&!e.shiftKey){const cardEl=document.querySelector("#studyCard .qcard[data-mode='vocab']");if(cardEl){const direction=cardEl.dataset.vocabDirection||"en-cn";const answered=!!document.querySelector("#studyCard #vNext");if(direction==="cn-en"&&!answered){e.preventDefault();toast("中文→英文题需先作答，避免发音泄露答案");return;}const text=cardEl.dataset.word||document.querySelector("#studyCard .word")?.textContent?.trim();if(text){e.preventDefault();speak(text,true);}return;}const text=document.querySelector("#studyCard .word")?.textContent?.trim();if(text){e.preventDefault();speak(text,true);}return;}if(/^[1-6]$/.test(e.key)){const active=document.querySelector(".view.active .study-card");const opts=[...(active?.querySelectorAll(".option:not(:disabled)")||[])];const b=opts[Number(e.key)-1];if(b){e.preventDefault();b.click();}}if(e.key==="Enter"){const next=document.querySelector(".view.active #vNext,.view.active #practiceNext");if(next){e.preventDefault();next.click();return;}if(practice&&!practice.answered&&practice.current&&isMulti(practice.current.q)){e.preventDefault();submitPractice();}}});
 
   $("startTodayBtn").onclick=startVocabSession;$("startVerbalBtn").onclick=()=>startPractice("verbal");$("startQuantBtn").onclick=()=>startPractice("quant");
 
