@@ -163,7 +163,7 @@
   function direction(){const m=state.settings.direction;return m==="mixed"?(Math.random()<.5?"en-cn":"cn-en"):m;}
   function question(w,reinforceConfusions=false){
     const d=direction(),m=meaning(w),r=rec(w.id);
-    const remembered=reinforceConfusions?(Array.isArray(r.wrongOptions)?[...r.wrongOptions]:[]).sort((a,b)=>(Number(b.count)||0)-(Number(a.count)||0)).map(x=>x.option):[];
+    const remembered=reinforceConfusions?(Array.isArray(r.wrongOptions)?[...r.wrongOptions]:[]).filter(x=>x.direction===d).sort((a,b)=>(Number(b.count)||0)-(Number(a.count)||0)).map(x=>x.option):[];
     if(d==="cn-en"){
       const candidates=shuffle(words.filter(x=>x.id!==w.id&&norm(meaning(x))!==norm(m))).map(x=>x.word);
       const wrong=unique([...remembered,...candidates]).filter(x=>norm(x)!==norm(w.word)).slice(0,3);
@@ -198,8 +198,8 @@
       r.wrong++;r.lapses++;item.hadError=true;item.need=2;r.due=Date.now()+600000;
       r.wrongPending=true;r.lastWrongAt=Date.now();r.lastWrongOption=picked;r.lastWrongDirection=q.direction;
       r.wrongOptions=Array.isArray(r.wrongOptions)?r.wrongOptions:[];
-      const prior=r.wrongOptions.find(x=>norm(x.option)===norm(picked));
-      if(prior)prior.count=(Number(prior.count)||0)+1;else r.wrongOptions.push({option:picked,count:1});
+      const prior=r.wrongOptions.find(x=>x.direction===q.direction&&norm(x.option)===norm(picked));
+      if(prior)prior.count=(Number(prior.count)||0)+1;else r.wrongOptions.push({option:picked,count:1,direction:q.direction});
     }
     $("gf-session").querySelectorAll(".gf-option").forEach(b=>{b.disabled=true;if(norm(b.dataset.gfOption)===norm(q.correct))b.classList.add("correct");if(b===button&&!ok)b.classList.add("incorrect");});
     let retry=!ok,passed=false;
