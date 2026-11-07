@@ -130,7 +130,9 @@
     const visible=items.slice(0,20);
     listRoot.innerHTML=`<div class="gf-wrong-caption">按累计选错次数从高到低显示前 ${visible.length} 个；点击上方按钮可复习当前筛选下的全部 ${items.length} 个单词。</div><div class="gf-wrong-rows">${visible.map(w=>{
       const r=rec(w.id),top=topWrongOption(r),last=r.lastWrongOption||"旧记录未保存具体误选项";
-      return `<article class="gf-wrong-row"><div class="gf-wrong-word"><strong>${esc(w.word)}</strong><span>${esc(meaning(w))}</span><small>选错 ${Number(r.wrong||0)} 次 · ${isPending(r)?"待巩固":"已重新巩固"} · 最近误选：${esc(last)}${top?" · 最常误选："+esc(top.option)+"（"+Number(top.count||0)+"次）":""}</small></div><button class="ghost" data-gf-review-word="${esc(w.id)}">单独复习</button></article>`;
+      const lastDirection=r.lastWrongDirection==="cn-en"?"中文→英文":r.lastWrongDirection==="en-cn"?"英文→中文":"方向未记录";
+      const topDirection=top?.direction==="cn-en"?"中文→英文":top?.direction==="en-cn"?"英文→中文":"";
+      return `<article class="gf-wrong-row"><div class="gf-wrong-word"><strong>${esc(w.word)}</strong><span>${esc(meaning(w))}</span><small>选错 ${Number(r.wrong||0)} 次 · ${isPending(r)?"待巩固":"已重新巩固"} · 最近误选（${lastDirection}）：${esc(last)}${top?" · 最常误选（"+topDirection+"）："+esc(top.option)+"（"+Number(top.count||0)+"次）":""}</small></div><button class="ghost" data-gf-review-word="${esc(w.id)}">单独复习</button></article>`;
     }).join("")}</div>`;
     listRoot.querySelectorAll("[data-gf-review-word]").forEach(b=>b.onclick=()=>startWrongWord(b.dataset.gfReviewWord));
   }
@@ -185,7 +187,7 @@
     const reverse=q.direction==="cn-en";
     root.innerHTML=`
       <div class="gf-session-head"><div><span class="gf-pill">${esc(session.title)}</span><span class="gf-muted">本轮 ${session.done}/${session.total} · ${reverse?"中文 → 英文":"英文 → 中文"}</span></div><button class="ghost" id="gf-end">结束本轮</button></div>
-      <div class="gf-question"><div class="gf-source">${esc(sourceLabel(w))}</div><div class="gf-prompt">${esc(q.prompt)}</div><div class="gf-helper">${reverse?"根据中文核心义回忆英文单词":"选择最符合原笔记的中文释义"}</div>
+      <div class="gf-question"><div class="gf-source">${esc(sourceLabel(w))} · 累计选错 ${Number(existing.wrong||0)} 次${pending?" · 待巩固":""}</div><div class="gf-prompt">${esc(q.prompt)}</div><div class="gf-helper">${reverse?"根据中文核心义回忆英文单词":"选择最符合原笔记的中文释义"}</div>
       <div class="gf-options">${q.options.map((x,i)=>`<button class="gf-option" data-gf-option="${esc(x)}"><span>${i+1}</span>${esc(x)}</button>`).join("")}</div><div class="gf-shortcuts">按 1–4 选择 · Enter 下一题 · Tab 重读单词</div><div id="gf-feedback"></div></div>`;
     $("gf-end").onclick=()=>{session=null;renderOverview();renderChapters();};
     root.querySelectorAll("[data-gf-option]").forEach(b=>b.onclick=()=>answer(b));
@@ -200,6 +202,8 @@
       r.wrongOptions=Array.isArray(r.wrongOptions)?r.wrongOptions:[];
       const prior=r.wrongOptions.find(x=>x.direction===q.direction&&norm(x.option)===norm(picked));
       if(prior)prior.count=(Number(prior.count)||0)+1;else r.wrongOptions.push({option:picked,count:1,direction:q.direction});
+      r.wrongOptions.sort((a,b)=>(Number(b.count)||0)-(Number(a.count)||0));
+      if(r.wrongOptions.length>20)r.wrongOptions.length=20;
     }
     $("gf-session").querySelectorAll(".gf-option").forEach(b=>{b.disabled=true;if(norm(b.dataset.gfOption)===norm(q.correct))b.classList.add("correct");if(b===button&&!ok)b.classList.add("incorrect");});
     let retry=!ok,passed=false;
@@ -207,7 +211,8 @@
     if(passed){const stage=(item.wasNew||item.hadError||r.stage<0)?0:Math.min(r.stage+1,INTERVALS.length-1);r.stage=stage;r.due=addDays(INTERVALS[stage]);r.last=Date.now();if(item.hadError){r.wrongPending=false;r.clearedWrongAt=Date.now();}session.done++;}
     save();
     const elapsed=Math.round(performance.now()-shown);
-    $("gf-feedback").innerHTML=`<div class="gf-result ${ok?"good":"bad"}"><div class="gf-result-title">${ok?"回答正确":"回答错误"} · ${esc(w.word)}</div><div class="gf-result-meaning">${esc(meaning(w))}</div><div class="gf-note-list">${notesHTML(w)}</div><div class="gf-result-foot">${retry?"这道词还需要再答对 "+(item.need||2)+" 次；稍后会重新出现。":"下次复习："+dateLabel(r.due)+" · 用时 "+elapsed+" ms"}</div><button class="primary" id="gf-next">下一题</button></div>`;
+    const reviewState=Number(r.wrong||0)===0?"首次学习":isPending(r)?"待巩固":"已重新巩固";
+    $("gf-feedback").innerHTML=`<div class="gf-result ${ok?"good":"bad"}"><div class="gf-result-title">${ok?"回答正确":"回答错误"} · ${esc(w.word)}</div><div class="gf-result-meaning">${esc(meaning(w))}</div><div class="gf-note-list">${notesHTML(w)}</div><div class="gf-result-foot">累计选错 ${Number(r.wrong||0)} 次 · ${reviewState} · ${retry?"这道词还需要再答对 "+(item.need||2)+" 次；稍后会重新出现。":"下次复习："+dateLabel(r.due)+" · 用时 "+elapsed+" ms"}</div><button class="primary" id="gf-next">下一题</button></div>`;
     $("gf-next").onclick=()=>{session.queue.shift();if(retry){session.queue.splice(Math.min(3,session.queue.length),0,w);session.currentItem=item;}else session.currentItem=null;session.answered=false;speak(w.word,true);nextQuestion();};
     renderChapters();
   }
