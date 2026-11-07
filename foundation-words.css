@@ -74,3 +74,4 @@
   #view-foundation .gf-note-row { grid-template-columns:1fr; gap:3px; }
   #view-foundation .gf-word-row summary { grid-template-columns:1fr; gap:3px; }
 }
+#view-foundation .gf-import-hint { color:var(--muted); font-size:.78rem; margin:8px 0 12px; }
