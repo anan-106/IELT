@@ -1,6 +1,6 @@
 /* GRE Foundation Words — independent vocabulary module.
  * Data source: user-provided 地基词词表简版(全）.xlsx.
- * 1,150 unique headwords, 23 chapters × 50 words. Repeated headwords are merged;
+ * 1,150 unique headwords, 12 chapters (100 words each; last 50). Repeated headwords are merged;
  * original Section references and alternate notes are retained.
  */
 (() => {
@@ -8,6 +8,7 @@
   const KEY="gre-foundation-words-v1";
   const PARTS=["foundation-words-data-1.b64","foundation-words-data-2.b64","foundation-words-data-3.b64","foundation-words-data-4.b64"];
   const INTERVALS=[1,3,7,14,30];
+  const CHAPTER_SIZE=100;
   const $=id=>document.getElementById(id);
   const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const norm=v=>String(v??"").toLowerCase().replace(/[’‘]/g,"'").replace(/\s+/g," ").trim();
@@ -42,15 +43,28 @@
     const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
     const payload=JSON.parse(new TextDecoder("utf-8").decode(await new Response(stream).arrayBuffer()));
     if(!Array.isArray(payload.words)||payload.words.length!==payload.n)throw new Error("地基词数据校验失败。");
-    words=payload.words.map((a,i)=>({id:"foundation-"+String(i+1).padStart(4,"0"),word:a[0],sourceSections:a[1]||[],definition:a[2]||"",example:a[3]||"",memory:a[4]||"",derivatives:a[5]||"",synonyms:a[6]||"",antonyms:a[7]||"",rawNote:a[8]||"",alternateNotes:a[9]||[]}));
-    for(let i=0;i<words.length;i+=50)chapters.push({id:chapters.length+1,words:words.slice(i,i+50)});
+    words=payload.words.map((a,i)=>({id:"foundation-"+String(i+1).padStart(4,"0"),word:a[0],sourceSections:a[1]||[],definition:a[2]||"",example:a[3]||"",memory:a[4]||"",derivatives:a[5]||"",synonyms:a[6]||"",antonyms:a[7]||"",rawNote:a[8]||"",alternateNotes:a[9]||[],quizGloss:a[10]||""}));
+    if(words.some(w=>!/[㐀-鿿]/.test(meaning(w))||/【(?:例|记|同|反|衍|形)】/.test(meaning(w))))
+      throw new Error("地基词核心释义校验失败，请下载最新词库文件。");
+    for(let i=0;i<words.length;i+=CHAPTER_SIZE)chapters.push({id:chapters.length+1,words:words.slice(i,i+CHAPTER_SIZE)});
   }
 
+  // Four-choice answers MUST use only the core learner gloss, never the
+  // Sample definition (which can contain roots, antonyms, contrasts and notes).
   function meaning(w){
-    if(w.definition.trim())return w.definition.trim();
-    const raw=w.rawNote||"",i=raw.search(/【(?:例|记|衍|同|反|形|上义|义|词根)】/);
-    const lead=(i>=0?raw.slice(0,i):raw.split(/\n/)[0]).trim();
-    return lead||raw.trim()||"原词表未提供独立释义，请查看完整笔记。";
+    if(w.quizGloss&&/[\u3400-\u9fff]/.test(w.quizGloss))return w.quizGloss.trim();
+    const main=(w.rawNote||"").split("【",1)[0].replace(/\[[^\]]*\]/g,"").trim();
+    const sample=(w.definition||"").split("\n",1)[0].split(/反：|区：|词根：/)[0].trim();
+    return /[\u3400-\u9fff]/.test(main)?main:sample;
+  }
+  function glossTerms(text){
+    return String(text||"").replace(/（[^）]*）|\([^)]*\)|\[[^\]]*\]/g,"")
+      .split(/[，,；;、/]/).map(v=>v.replace(/[^\u3400-\u9fff]/g,"")).filter(v=>v.length>=2);
+  }
+  function glossDistinct(a,b){
+    if(norm(a)===norm(b))return false;
+    const first=glossTerms(a),second=glossTerms(b);
+    return first.every(x=>second.every(y=>!(x===y||x.includes(y)||y.includes(x))));
   }
   function sourceLabel(w){return (w.sourceSections||[]).map(n=>"原始 Section "+n).join(" / ");}
   function noteRows(w){
@@ -74,7 +88,7 @@
     const tab=document.createElement("button");tab.className="tab";tab.dataset.view="foundation";tab.textContent="地基词";vocabTab.after(tab);tab.onclick=switchTo;
     const view=document.createElement("section");view.className="view";view.id="view-foundation";
     view.innerHTML=`
-      <div class="gf-head"><div><div class="kicker">GRE FOUNDATION WORDS</div><h2>地基词 · 独立背词计划</h2><p>每 50 个单词编为一章，保留原始 Section、释义、例句、记忆、衍生词、同义词和反义词。</p></div><div class="gf-actions"><button class="primary" id="gf-review-wrong">错词专项复习（0）</button><button class="ghost" id="gf-review-due">复习到期词</button><button class="ghost" id="gf-start-new">学习未学词</button></div></div>
+      <div class="gf-head"><div><div class="kicker">GRE FOUNDATION WORDS</div><h2>地基词 · 独立背词计划</h2><p>每 100 个单词编为一章，保留原始 Section、释义、例句、记忆、衍生词、同义词和反义词。</p></div><div class="gf-actions"><button class="primary" id="gf-review-wrong">错词专项复习（0）</button><button class="ghost" id="gf-review-due">复习到期词</button><button class="ghost" id="gf-start-new">学习未学词</button></div></div>
       <div class="gf-metrics" id="gf-metrics"></div>
       <section class="gf-wrong-panel" id="gf-wrong-panel">
         <div class="gf-wrong-top"><div><h3>错词追踪</h3><p>按累计选错次数排序。完成连续两次正确后，单词会退出待巩固池，但历史错误不会清零。</p></div>
@@ -85,7 +99,7 @@
       </section>
       <div class="gf-toolbar"><label>答题方向<select id="gf-direction"><option value="mixed">双向混合</option><option value="en-cn">英文 → 中文</option><option value="cn-en">中文 → 英文</option></select></label><label class="gf-search">搜索单词 / 释义 / 笔记<input id="gf-search" type="search" placeholder="例如 capricious / 反复无常 / 词根"></label><button class="ghost" id="gf-export">导出学习记录</button></div>
       <div class="gf-session" id="gf-session"><div class="gf-empty"><strong>正在加载地基词…</strong><span>读取独立词库文件。</span></div></div>
-      <div class="gf-library"><div class="gf-section-title"><div><h3>章节目录</h3><p id="gf-chapter-count">每章 50 词</p></div><span id="gf-library-summary"></span></div><div class="gf-chapters" id="gf-chapters"></div></div>
+      <div class="gf-library"><div class="gf-section-title"><div><h3>章节目录</h3><p id="gf-chapter-count">每章 100 词</p></div><span id="gf-library-summary"></span></div><div class="gf-chapters" id="gf-chapters"></div></div>
       <div class="gf-search-results" id="gf-search-results" hidden></div><div class="gf-toast" id="gf-toast"></div>`;
     $("view-vocab")?.after(view);
     $("gf-direction").value=state.settings.direction;
@@ -103,14 +117,14 @@
     const wrongWords=words.filter(w=>Number(rec(w.id).wrong||0)>0).length;
     const wrongSelections=words.reduce((s,w)=>s+Number(rec(w.id).wrong||0),0);
     $("gf-metrics").innerHTML=`
-      <article><span>总词数</span><strong>${words.length.toLocaleString()}</strong><small>${chapters.length} 章 · 每章 50 词</small></article>
+      <article><span>总词数</span><strong>${words.length.toLocaleString()}</strong><small>${chapters.length} 章 · 每章 ${CHAPTER_SIZE} 词</small></article>
       <article><span>已学词汇</span><strong>${learned.toLocaleString()}</strong><small>完成 ${Math.round(learned/words.length*100)}%</small></article>
       <article><span>到期复习</span><strong>${dueCount.toLocaleString()}</strong><small>独立复习计划</small></article>
       <article><span>已巩固</span><strong>${mastered.toLocaleString()}</strong><small>完成多轮间隔复习</small></article>
       <article><span>累计选错</span><strong>${wrongSelections.toLocaleString()}</strong><small>${wrongWords.toLocaleString()} 个曾错单词</small></article>
       <article><span>累计正确率</span><strong>${attempts?Math.round(correct/attempts*100):0}%</strong><small>${attempts.toLocaleString()} 次作答</small></article>`;
     $("gf-library-summary").textContent=learned+"/"+words.length+" 已学 · "+dueCount+" 个到期 · "+wrongWords+" 个错词";
-    $("gf-chapter-count").textContent=chapters.length+" 章 · 每章 50 词（最后一章 "+chapters.at(-1).words.length+" 词）";
+    $("gf-chapter-count").textContent=chapters.length+" 章 · 每章 "+CHAPTER_SIZE+" 词（最后一章 "+chapters.at(-1).words.length+" 词）";
     renderWrongPanel();
   }
   function wrongItems(filter="pending"){
@@ -150,7 +164,7 @@
       const learned=c.words.filter(w=>rec(w.id).attempts>0).length,dueCount=due(c.words).length;
       const wrongCount=c.words.filter(w=>Number(rec(w.id).wrong||0)>0).length;
       const pendingCount=c.words.filter(w=>isPending(rec(w.id))).length;
-      const first=(c.id-1)*50+1,last=first+c.words.length-1,pct=Math.round(learned/c.words.length*100);
+      const first=(c.id-1)*CHAPTER_SIZE+1,last=first+c.words.length-1,pct=Math.round(learned/c.words.length*100);
       return `<article class="gf-chapter"><div class="gf-chapter-top"><strong>第 ${String(c.id).padStart(2,"0")} 章</strong><span>${c.words.length} 词</span></div><div class="gf-chapter-range">词条 ${first}–${last}</div><div class="gf-progress"><i style="width:${pct}%"></i></div><div class="gf-chapter-meta"><span>${learned}/${c.words.length} 已学</span><span>错词 ${wrongCount} · 待巩固 ${pendingCount}</span></div><button class="primary" data-gf-chapter="${c.id}">${unseen(c.words).length?"开始本章":dueCount?"复习本章":"再次练习"}</button></article>`;
     }).join("");
     $("gf-chapters").querySelectorAll("[data-gf-chapter]").forEach(b=>b.onclick=()=>startChapter(Number(b.dataset.gfChapter)));
@@ -173,15 +187,23 @@
   function direction(){const m=state.settings.direction;return m==="mixed"?(Math.random()<.5?"en-cn":"cn-en"):m;}
   function question(w,reinforceConfusions=false){
     const d=direction(),m=meaning(w),r=rec(w.id);
-    const remembered=reinforceConfusions?(Array.isArray(r.wrongOptions)?[...r.wrongOptions]:[]).filter(x=>x.direction===d).sort((a,b)=>(Number(b.count)||0)-(Number(a.count)||0)).map(x=>x.option):[];
-    if(d==="cn-en"){
-      const candidates=shuffle(words.filter(x=>x.id!==w.id&&norm(meaning(x))!==norm(m))).map(x=>x.word);
-      const wrong=unique([...remembered,...candidates]).filter(x=>norm(x)!==norm(w.word)).slice(0,3);
-      return {direction:d,prompt:m,correct:w.word,options:shuffle([w.word,...wrong])};
+    const eligible=words.filter(x=>x.id!==w.id&&glossDistinct(m,meaning(x)));
+    const optionValue=x=>d==="cn-en"?x.word:meaning(x);
+    const validPool=new Set(eligible.map(optionValue));
+    const remembered=reinforceConfusions?(Array.isArray(r.wrongOptions)?[...r.wrongOptions]:[])
+      .filter(x=>x.direction===d).sort((a,b)=>(Number(b.count)||0)-(Number(a.count)||0))
+      .map(x=>x.option).filter(x=>validPool.has(x)):[];
+    // Old memory can contain contaminated answers; only current verified
+    // vocabulary items are allowed back into the wrong-option review pool.
+    const correct=d==="cn-en"?w.word:m,options=[correct];
+    for(const candidate of [...remembered,...shuffle(eligible.map(optionValue))]){
+      if(options.length>=4)break;
+      if(options.some(existing=>norm(existing)===norm(candidate)))continue;
+      if(d==="en-cn"&&options.some(existing=>!glossDistinct(existing,candidate)))continue;
+      options.push(candidate);
     }
-    const candidates=shuffle(words.filter(x=>x.id!==w.id&&norm(meaning(x))!==norm(m))).map(meaning);
-    const wrong=unique([...remembered,...candidates]).filter(x=>norm(x)!==norm(m)).slice(0,3);
-    return {direction:d,prompt:w.word,correct:m,options:shuffle([m,...wrong])};
+    if(options.length!==4)throw new Error("此单词的有效干扰选项不足，请检查词库。");
+    return {direction:d,prompt:d==="cn-en"?m:w.word,correct,options:shuffle(options)};
   }
   function speak(word,force=false){if(!("speechSynthesis" in window)||(!state.settings.autoSpeak&&!force))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(word);u.lang="en-US";u.rate=Math.max(.8,Math.min(1.4,Number(state.settings.speechRate)||1));window.speechSynthesis.speak(u);}
   function nextQuestion(){
