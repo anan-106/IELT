@@ -27,8 +27,16 @@
   function notify(msg){const t=$("gf-toast");if(!t)return;t.textContent=msg;t.classList.add("show");clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove("show"),2200);}
 
   async function loadData(){
-    const parts=await Promise.all(PARTS.map(async p=>{const r=await fetch("./"+p,{cache:"no-store"});if(!r.ok)throw new Error("词库文件加载失败："+p+" ("+r.status+")");return r.text();}));
-    const binary=atob(parts.join("").replace(/\s/g,"")),bytes=new Uint8Array(binary.length);
+    // The complete compressed vocabulary is loaded as a normal script tag.
+    // This works under file:// as well as localhost/HTTPS and avoids CORS fetch failures.
+    let base64=window.__GRE_FOUNDATION_GZIP_BASE64__;
+    if(typeof base64!=="string"||!base64.length){
+      // Legacy compatibility for installations that still have the original four chunks.
+      if(location.protocol==="file:")throw new Error("缺少 foundation-words-data.js；请下载完整 gre-prep 压缩包。");
+      const parts=await Promise.all(PARTS.map(async p=>{const r=await fetch("./"+p,{cache:"no-store"});if(!r.ok)throw new Error("词库文件加载失败："+p+" ("+r.status+")");return r.text();}));
+      base64=parts.join("");
+    }
+    const binary=atob(base64.replace(/\s/g,"")),bytes=new Uint8Array(binary.length);
     for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
     if(!("DecompressionStream" in window))throw new Error("浏览器不支持 gzip 解压，请使用最新版 Chrome 或 Edge。");
     const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
@@ -233,7 +241,7 @@
   async function init(){
     mount();if(!$("view-foundation"))return;
     try{await loadData();renderOverview();renderChapters();$("gf-session").innerHTML='<div class="gf-empty"><strong>地基词已就绪</strong><span>选择章节开始学习，或复习所有到期词。</span></div>';}
-    catch(err){$("gf-session").innerHTML='<div class="gf-empty gf-error"><strong>地基词加载失败</strong><span>'+esc(err.message||err)+'</span><span>请确认 4 个 foundation-words-data-*.b64 文件与网页处于同一目录，并通过本地服务器或 HTTPS 打开。</span></div>';}
+    catch(err){$("gf-session").innerHTML='<div class="gf-empty gf-error"><strong>地基词加载失败</strong><span>'+esc(err.message||err)+'</span><span>请确认 foundation-words-data.js 和 foundation-words.js 都在解压后的项目根目录。建议用「启动GRE.bat」打开，避免浏览器本地存储限制。</span></div>';}
   }
   init();
 })();
