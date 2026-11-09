@@ -1,0 +1,101 @@
+/* GRE Equivalence & Look-Alike vocabulary labs. Isolated selectors; inherits GRE theme. */
+.lab-view{color:var(--text,#142039);}
+.lab-view .lab-head{margin:9px 0 8px;max-width:900px;}
+.lab-view .lab-head .kicker{font-size:.75rem;letter-spacing:.16em;font-weight:800;color:#365dc4;}
+.lab-view .lab-head h2{font-size:clamp(1.5rem,2.5vw,2.15rem);margin:7px 0 9px;line-height:1.2;}
+.lab-view .lab-head p{color:var(--muted,#718096);line-height:1.7;margin:0;}
+.lab-view .lab-source{border:1px solid var(--line,#e0e5ec);border-radius:11px;padding:12px 14px;margin:16px 0;background:var(--surface,#f6f8fc);color:var(--muted,#64748b);line-height:1.6;font-size:.83rem;}
+.lab-view .lab-stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:18px 0 20px;}
+.lab-view .lab-stats article{min-width:0;background:var(--panel,#fff);border:1px solid var(--line,#dce3ed);border-radius:14px;padding:13px;display:grid;gap:5px;}
+.lab-view .lab-stats span,.lab-view .lab-stats small{color:var(--muted,#64748b);font-size:.76rem;}
+.lab-view .lab-stats strong{font-size:1.55rem;line-height:1.2;font-variant-numeric:tabular-nums;}
+.lab-view .lab-stats small{font-size:.69rem;}
+.lab-view .lab-toolrow{display:flex;align-items:end;gap:9px;flex-wrap:wrap;margin:15px 0;}
+.lab-view .lab-toolrow label{display:grid;gap:5px;font-size:.76rem;color:var(--muted,#64748b);}
+.lab-view .lab-toolrow select,.lab-view .lab-toolrow input[type="search"]{font-family:inherit;background:var(--panel,#fff);color:var(--text,#142039);border:1px solid var(--line,#dce3ed);border-radius:10px;min-height:41px;padding:8px 10px;}
+.lab-view .lab-toolrow input[type="search"]{min-width:240px;flex:1;}
+.lab-view button{cursor:pointer;}
+.lab-view button:disabled{cursor:default;opacity:.65;}
+.lab-view .lab-import{display:flex;align-items:center;justify-content:center;padding:10px 13px;border:1px solid var(--line,#dce3ed);background:var(--panel,#fff);border-radius:10px;color:var(--text,#142039);cursor:pointer;font-weight:600;min-height:41px;box-sizing:border-box;}
+.lab-view .lab-import input{display:none;}
+.lab-view .lab-section-title{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px;margin:22px 0 11px;}
+.lab-view .lab-section-title h3{margin:0;font-size:1.05rem;}
+.lab-view .lab-section-title span{color:var(--muted,#64748b);font-size:.77rem;}
+.lab-view .lab-days{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;}
+.lab-view .lab-day{border:1px solid var(--line,#dce3ed);background:var(--panel,#fff);color:var(--text,#142039);border-radius:14px;padding:13px;display:grid;gap:5px;text-align:left;}
+.lab-view .lab-day:hover{border-color:#5371ce;box-shadow:0 4px 13px rgba(34,65,125,.06);}
+.lab-view .lab-day b{color:#365dc4;}
+.lab-view .lab-day strong{font-size:1.2rem;}
+.lab-view .lab-day span,.lab-view .lab-day small{font-size:.72rem;color:var(--muted,#64748b);}
+.lab-view .lab-list{display:grid;gap:8px;margin-bottom:32px;}
+.lab-view .lab-item{border:1px solid var(--line,#dce3ed);border-radius:12px;background:var(--panel,#fff);padding:11px 15px;}
+.lab-view .lab-item summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.lab-view .lab-item summary::-webkit-details-marker{display:none;}
+.lab-view .lab-item summary div{display:flex;gap:15px;align-items:center;min-width:0;}
+.lab-view .lab-item summary b{font-size:.98rem;overflow-wrap:anywhere;}
+.lab-view .lab-item summary span,.lab-view .lab-item summary small{color:var(--muted,#64748b);font-size:.78rem;}
+.lab-view .lab-explainer{display:grid;gap:10px;padding:12px 0 3px;line-height:1.6;font-size:.86rem;}
+.lab-view .lab-explainer button{width:max-content;}
+.lab-view .lab-alert{margin:2px 0;color:#9a572e;font-size:.8rem;}
+.lab-view .lab-empty{padding:25px 18px;display:grid;gap:9px;justify-items:center;text-align:center;color:var(--muted,#64748b);border:1px dashed var(--line,#dce3ed);border-radius:14px;background:var(--panel,#fff);}
+.lab-view .lab-empty strong{color:var(--text,#142039);font-size:1.08rem;}
+.lab-view .lab-session{scroll-margin-top:15px;}
+.lab-view .lab-question{background:var(--panel,#fff);border:1px solid var(--line,#dce3ed);border-radius:18px;padding:clamp(17px,3vw,28px);margin:20px 0;}
+.lab-view .lab-question-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted,#64748b);font-size:.77rem;}
+.lab-view .lab-pill{display:inline-flex;padding:6px 11px;background:var(--surface,#f1f4f9);color:#365dc4;border-radius:999px;font-weight:800;}
+.lab-view .lab-question-title{font-size:clamp(1.55rem,3.4vw,2.4rem);font-weight:780;margin:22px 0 9px;overflow-wrap:anywhere;line-height:1.2;}
+.lab-view .lab-question p{color:var(--muted,#64748b);line-height:1.65;}
+.lab-view .lab-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:16px 0;}
+.lab-view .lab-choice{text-align:left;display:flex;gap:10px;align-items:flex-start;min-width:0;border:1px solid var(--line,#dce3ed);padding:11px 13px;min-height:56px;border-radius:12px;color:var(--text,#142039);background:var(--panel,#fff);line-height:1.45;overflow-wrap:anywhere;}
+.lab-view .lab-choice:hover:not(:disabled){border-color:#5371ce;}
+.lab-view .lab-choice.selected{border-color:#3159d7;background:rgba(49,89,215,.07);}
+.lab-view .lab-choice.correct{border-color:#23845c;background:rgba(35,132,92,.1);}
+.lab-view .lab-choice.wrong{border-color:#c14c52;background:rgba(193,76,82,.12);}
+.lab-view .lab-choice-marker{display:grid;place-items:center;flex:0 0 25px;background:var(--surface,#edf2f7);border-radius:7px;height:25px;font-size:.78rem;font-weight:800;}
+.lab-view .lab-cta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px;}
+.lab-view .lab-cta small{color:var(--muted,#64748b);font-size:.76rem;}
+.lab-view .lab-result{margin-top:18px;padding:16px;border:1px solid var(--line,#dce3ed);border-radius:13px;}
+.lab-view .lab-result h3{margin:0 0 9px;}
+.lab-view .lab-result p{font-size:.86rem;margin:6px 0;}
+.lab-view .lab-result.good{border-color:rgba(35,132,92,.4);}
+.lab-view .lab-result.bad{border-color:rgba(193,76,82,.5);}
+.lab-view .lab-result button{margin-top:11px;}
+.lab-view .lab-group-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-bottom:32px;}
+.lab-view .lab-group{display:grid;gap:12px;border-radius:16px;border:1px solid var(--line,#dce3ed);background:var(--panel,#fff);padding:16px;min-width:0;}
+.lab-view .lab-group-head{display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.lab-view .lab-group-head span,.lab-view .lab-group-foot{font-size:.74rem;color:var(--muted,#64748b);}
+.lab-view .lab-group .primary{justify-self:start;}
+.lab-view .lab-pairs{display:grid;gap:4px;}
+.lab-view .lab-pair{display:grid;grid-template-columns:minmax(100px,1fr) 1.25fr;align-items:start;column-gap:12px;padding:8px 0;border-bottom:1px dashed var(--line,#e6eaf0);font-size:.82rem;overflow-wrap:anywhere;}
+.lab-view .lab-pair b{font-weight:750;}
+.lab-view .lab-pair b span{color:var(--muted,#64748b);}
+.lab-view .lab-pair b em{font-style:normal;color:#245cc2;text-decoration:underline;text-underline-offset:3px;}
+.lab-view .lab-pair > span{color:var(--muted,#64748b);}
+.lab-view .lab-pair i{font-size:.72rem;color:#a55d29;font-style:normal;}
+.lab-view .lab-pair small{font-size:.7rem;color:var(--muted,#64748b);grid-column:1/-1;}
+.lab-view .lab-study{background:var(--panel,#fff);border:1px solid var(--line,#dce3ed);border-radius:17px;padding:22px;margin:20px 0;}
+.lab-view .lab-study p{color:var(--muted,#64748b);line-height:1.6;}
+.lab-view .lab-study-pairs{margin:15px 0;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 20px;}
+.lab-view .lab-feedback-pairs{margin:10px 0;}
+.lab-view .lab-toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);background:#172033;color:#fff;padding:10px 16px;border-radius:10px;box-shadow:0 5px 24px rgba(0,0,0,.15);z-index:10001;max-width:90vw;}
+.lab-view .lab-toast[hidden]{display:none;}
+@media(max-width:1000px){.lab-view .lab-stats{grid-template-columns:repeat(3,minmax(0,1fr));}.lab-view .lab-days{grid-template-columns:repeat(3,minmax(0,1fr));}}
+@media(max-width:700px){.lab-view .lab-stats{grid-template-columns:repeat(2,minmax(0,1fr));}.lab-view .lab-days{grid-template-columns:repeat(2,minmax(0,1fr));}.lab-view .lab-group-grid,.lab-view .lab-choices,.lab-view .lab-study-pairs{grid-template-columns:1fr;}.lab-view .lab-item summary{align-items:start;flex-direction:column;}.lab-view .lab-toolrow input[type="search"]{min-width:170px;}.lab-view .lab-pair{grid-template-columns:1fr 1.3fr;}}
+
+/* User-configurable, independent learning horizon for both study modules */
+.lab-view .lab-plan{border:1px solid var(--line,#dce3ed);border-radius:16px;padding:17px 19px;margin:18px 0;background:var(--panel,#fff)}
+.lab-view .lab-plan-head{display:flex;gap:14px;justify-content:space-between;align-items:start;flex-wrap:wrap}
+.lab-view .lab-plan-head h3{margin:2px 0 5px;font-size:1.03rem}
+.lab-view .lab-plan-head p{color:var(--muted,#64748b);font-size:.81rem;line-height:1.6;margin:0;max-width:650px}
+.lab-view .lab-plan-controls{display:flex;align-items:end;gap:8px;flex-wrap:wrap}
+.lab-view .lab-plan-controls label{font-size:.75rem;color:var(--muted,#64748b);display:grid;gap:5px}
+.lab-view .lab-plan-controls input{min-height:39px;width:105px;border:1px solid var(--line,#dce3ed);border-radius:10px;padding:7px 11px;background:var(--panel,#fff);color:var(--text,#142039);font:inherit;box-sizing:border-box}
+.lab-view .lab-plan-controls button{min-height:39px}
+.lab-view .lab-plan-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:15px}
+.lab-view .lab-plan-metrics article{display:grid;gap:4px;padding:11px 12px;border-radius:12px;background:var(--surface,#f6f8fc);min-width:0}
+.lab-view .lab-plan-metrics span{font-size:.73rem;color:var(--muted,#64748b)}
+.lab-view .lab-plan-metrics strong{font-size:1.07rem;line-height:1.3;font-variant-numeric:tabular-nums}
+.lab-view .lab-plan-metrics small{font-size:.71rem;color:var(--muted,#64748b);line-height:1.45}
+.lab-view .lab-study-preview{margin:13px 0 17px}
+.lab-view .lab-study-preview h4{margin:5px 0 11px;font-size:.93rem}
+@media(max-width:750px){.lab-view .lab-plan-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.lab-view .lab-plan{padding:13px}}
