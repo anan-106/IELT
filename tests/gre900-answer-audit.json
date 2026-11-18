@@ -1,0 +1,1167 @@
+{
+  "independent_explanations": 900,
+  "automatically_graded": 892,
+  "source_ambiguities_excluded": 8,
+  "peer_audits": [
+    {
+      "auditDate": "2026-11-18",
+      "reviewer": "solutions_1_300",
+      "scope": "26道高风险题，先依据原PDF渲染独立推导，再对照其他代理解析；环境恢复后仅持久保存既有审核结果，未重复测试。",
+      "sampleCount": 26,
+      "matchedMathematicalAnswers": 26,
+      "incorrectPeerAnswersFound": 0,
+      "sourceIssuesConfirmed": 6,
+      "peerFilesModified": false,
+      "results": [
+        {
+          "globalIndex": 310,
+          "id": "gre900:original-16:110",
+          "sourcePages": [
+            78
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "A",
+            "B",
+            "C"
+          ],
+          "outcome": "confirmed",
+          "evidence": "极差8、15、30均可通过有效K列表和一个数加倍构造。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 313,
+          "id": "gre900:original-16:113",
+          "sourcePages": [
+            79
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "A"
+          ],
+          "outcome": "confirmed",
+          "evidence": "面积为2+π(2c²−d²)/8；只有A结论成立。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 322,
+          "id": "gre900:original-17:122",
+          "sourcePages": [
+            82,
+            83
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "B",
+            "G",
+            "H"
+          ],
+          "outcome": "confirmed",
+          "evidence": "9张成本11.25高于10张11；18、19张成本21、22.25高于20张20。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 323,
+          "id": "gre900:original-17:123",
+          "sourcePages": [
+            83
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "B"
+          ],
+          "outcome": "confirmed",
+          "evidence": "命中数减失手数从−2到4，每次改变±1，必经过0，即命中率50%。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 324,
+          "id": "gre900:original-17:124",
+          "sourcePages": [
+            83
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "C",
+            "D",
+            "E"
+          ],
+          "outcome": "confirmed",
+          "evidence": "六个离差位于−15至10且和为0，正偏差和最多30，绝对偏差和最大60；60、30、10可构造。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 330,
+          "id": "gre900:original-17:130",
+          "sourcePages": [
+            84,
+            85
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "B",
+            "F"
+          ],
+          "outcome": "confirmed",
+          "evidence": "偶数次幂使分式非负；≤0仅在分子为零即x=−5或4时成立。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 369,
+          "id": "gre900:original-19:29",
+          "sourcePages": [
+            98,
+            99
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "3/2"
+          ],
+          "outcome": "confirmed",
+          "evidence": "放大图表复核：增幅超过28%为4、5、11月；降幅超过10%为8、9月。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 460,
+          "id": "gre900:new-03:20",
+          "sourcePages": [
+            122
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "A",
+            "B",
+            "C"
+          ],
+          "outcome": "confirmed",
+          "evidence": "1/√x>1/24与x>0等价于0<x<576。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 476,
+          "id": "gre900:new-04:16",
+          "sourcePages": [
+            126
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "B",
+            "C",
+            "D",
+            "E",
+            "F"
+          ],
+          "outcome": "confirmed",
+          "evidence": "分母为|x−3|；分子x(x²−4)(x²−1)的零点是0、±1、±2。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 488,
+          "id": "gre900:new-05:8",
+          "sourcePages": [
+            129
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "B",
+            "C"
+          ],
+          "outcome": "confirmed",
+          "evidence": "a=−1取b=−1使严格不等式失效；a=0或3对全部负b成立。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 552,
+          "id": "gre900:new-08:12",
+          "sourcePages": [
+            146
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "A",
+            "B",
+            "C"
+          ],
+          "outcome": "confirmed",
+          "evidence": "|a|<|a−2|平方后等价于a<1。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 579,
+          "id": "gre900:new-09:19",
+          "sourcePages": [
+            153
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "200"
+          ],
+          "outcome": "confirmed",
+          "evidence": "对角线比3，面积比9，大正方形225减去小正方形25得200。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 613,
+          "id": "gre900:new-11:13",
+          "sourcePages": [
+            161
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "26/165"
+          ],
+          "outcome": "confirmed",
+          "evidence": "(40/100)(39/99)=26/165。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 631,
+          "id": "gre900:new-12:11",
+          "sourcePages": [
+            165
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "E",
+            "F"
+          ],
+          "outcome": "confirmed",
+          "evidence": "原式为2^(−x²)，整数x=0、±1给出1和1/2，其余值不在候选中。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 659,
+          "id": "gre900:new-13:19",
+          "sourcePages": [
+            170,
+            171
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "0.05*s+1000"
+          ],
+          "outcome": "confirmed",
+          "evidence": "3500+0.05(s−50000)=0.05s+1000。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 663,
+          "id": "gre900:new-14:3",
+          "sourcePages": [
+            172
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "B",
+            "C",
+            "D"
+          ],
+          "outcome": "confirmed_source_issue",
+          "evidence": "最大项11、20、32均能构造；8不够大，46超过可行上界44。",
+          "correctionRequired": false,
+          "sourceIssue": "missing_multi_select_instruction"
+        },
+        {
+          "globalIndex": 666,
+          "id": "gre900:new-14:6",
+          "sourcePages": [
+            172,
+            173
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "A",
+            "B"
+          ],
+          "outcome": "confirmed",
+          "evidence": "第三顶点为(2∓√3,2±2√3)，A或B各自唯一选择其中一个，C对两者都成立。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 686,
+          "id": "gre900:new-15:6",
+          "sourcePages": [
+            176,
+            177
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "F",
+            "G"
+          ],
+          "outcome": "confirmed_source_issue",
+          "evidence": "圆直径至少12√2≈16.97英寸，所以17、18均可。",
+          "correctionRequired": false,
+          "sourceIssue": "missing_multi_select_instruction"
+        },
+        {
+          "globalIndex": 688,
+          "id": "gre900:new-15:8",
+          "sourcePages": [
+            177
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "0.51"
+          ],
+          "outcome": "confirmed",
+          "evidence": "两条路径概率和为0.3×0.3+0.7×0.6=0.51。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 755,
+          "id": "gre900:new-18:15",
+          "sourcePages": [
+            193
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "C",
+            "D"
+          ],
+          "outcome": "confirmed_source_issue",
+          "evidence": "两题均否人数为20加交集人数，范围20至30，选项20、26均可。",
+          "correctionRequired": false,
+          "sourceIssue": "missing_multi_select_instruction"
+        },
+        {
+          "globalIndex": 772,
+          "id": "gre900:new-19:12",
+          "sourcePages": [
+            197
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "A",
+            "B",
+            "D"
+          ],
+          "outcome": "confirmed",
+          "evidence": "对角点距离必须为3√2，A、B、D平方距离均为18。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 776,
+          "id": "gre900:new-19:16",
+          "sourcePages": [
+            198
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "A",
+            "B",
+            "C",
+            "E",
+            "F"
+          ],
+          "outcome": "confirmed",
+          "evidence": "倍增不能增加因子5，因此首项不能含因子25。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 799,
+          "id": "gre900:new-20:19",
+          "sourcePages": [
+            203,
+            204
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "280"
+          ],
+          "outcome": "confirmed_source_issue",
+          "evidence": "四角和34，p+q=14，x+y=20，乘积280；包括“无法确定”在内的所有列选项均不正确。",
+          "correctionRequired": false,
+          "sourceIssue": "computed_answer_absent_from_source_options",
+          "computedAnswer": "280",
+          "expectedListedAnswer": []
+        },
+        {
+          "globalIndex": 804,
+          "id": "gre900:new-21:4",
+          "sourcePages": [
+            205
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "A",
+            "B"
+          ],
+          "outcome": "confirmed_source_issue",
+          "evidence": "160−x>60得到x<100，所以50、75均可，100不满足严格大于。",
+          "correctionRequired": false,
+          "sourceIssue": "missing_multi_select_instruction"
+        },
+        {
+          "globalIndex": 825,
+          "id": "gre900:new-22:5",
+          "sourcePages": [
+            210
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "2"
+          ],
+          "outcome": "confirmed",
+          "evidence": "rB=4rA，rC=rA+rB=5rA，rC=10，所以rA=2。",
+          "correctionRequired": false
+        },
+        {
+          "globalIndex": 830,
+          "id": "gre900:new-22:10",
+          "sourcePages": [
+            211,
+            212
+          ],
+          "sourceVisuallyInspected": true,
+          "expectedAnswer": [
+            "B",
+            "C"
+          ],
+          "outcome": "confirmed_source_issue",
+          "evidence": "d=N+39，54<d<61给出15<N<22，17与20均可。",
+          "correctionRequired": false,
+          "sourceIssue": "missing_multi_select_instruction"
+        }
+      ],
+      "graphChoiceHints": [
+        {
+          "globalIndex": 90,
+          "id": "gre900:original-05:30",
+          "hint": "图中五组选项按上排从左到右为A、B、C，下排从左到右为D、E。"
+        },
+        {
+          "globalIndex": 228,
+          "id": "gre900:original-12:28",
+          "hint": "图中五组选项按上排从左到右为A、B、C，下排从左到右为D、E。"
+        }
+      ],
+      "ownBankCorrections": [
+        {
+          "globalIndex": 299,
+          "id": "gre900:original-15:99",
+          "sourcePages": [
+            75
+          ],
+          "identifiedBy": "source_audit",
+          "sourceVisuallyInspected": true,
+          "issue": "此前解析将原题108秒误读为100秒，导致速度与罚款数值错误；答案字母E未受影响。",
+          "before": {
+            "seconds": 100,
+            "speedMph": 54,
+            "penaltyUsd": 190,
+            "answer": [
+              "E"
+            ]
+          },
+          "after": {
+            "seconds": 108,
+            "speedMph": 50,
+            "penaltyUsd": 150,
+            "answer": [
+              "E"
+            ]
+          },
+          "evidence": "原PDF第75页明确写exactly 108 seconds，选项E为$150。1.5÷(108/3600)=50，50+10×(50−40)=150。",
+          "correctedFile": "tmp/gre900/solutions-1-300.json",
+          "status": "corrected"
+        }
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "scope": "20 requested high-risk items from global1–300; one incidental adjacent-item explanation error recorded separately.",
+      "sourcePdf": "（课后刷题用这个）GRE最新数学机经900题(1).pdf",
+      "sourceSha256": "81789d49daf72ba23927158c94cc86293103fb9fad994b1afe700d7699e4eece",
+      "auditor": "source_audit",
+      "summary": {
+        "requested": 20,
+        "checked": 20,
+        "confirmedAnswerAndKind": 20,
+        "answerOrKindDiscrepancies": 0,
+        "additionalExplanationFindings": 1,
+        "additionalExplanationFindingsResolved": 1
+      },
+      "entries": [
+        {
+          "id": "gre900:original-10:125",
+          "globalIndex": 185,
+          "sourcePagesVisuallyInspected": [
+            45
+          ],
+          "independentKind": "numeric",
+          "independentAnswer": [
+            "76"
+          ],
+          "independentDerivation": "使最大数尽量大，令其余9数尽量小。每值最多出现2次，最小9数为1,1,2,2,3,3,4,4,5，和25。最大数101−25=76，且此组合确实可行。",
+          "bankKind": "numeric",
+          "bankAnswer": [
+            "76"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-10:134",
+          "globalIndex": 194,
+          "sourcePagesVisuallyInspected": [
+            47,
+            48
+          ],
+          "independentKind": "multi",
+          "independentAnswer": [
+            "A",
+            "B",
+            "D"
+          ],
+          "independentDerivation": "家庭总人数可为2、3、5、7；男孩必须是质数且多于至少1名女孩。男孩2、3、5分别可取总人数3、5、7；7名男孩无法留出女孩且总人数仍小于10的质数。故选2、3、5。",
+          "bankKind": "multi",
+          "bankAnswer": [
+            "A",
+            "B",
+            "D"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-10:135",
+          "globalIndex": 195,
+          "sourcePagesVisuallyInspected": [
+            48
+          ],
+          "independentKind": "single",
+          "independentAnswer": [
+            "A"
+          ],
+          "independentDerivation": "原图圆方程x²+y²=4，半径2；直线x+y=2通过(0,2)、(2,0)。阴影是四分之一圆减两直角边均为2的直角三角形，面积π−2，选A。",
+          "bankKind": "single",
+          "bankAnswer": [
+            "A"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-11:1",
+          "globalIndex": 201,
+          "sourcePagesVisuallyInspected": [
+            50
+          ],
+          "independentKind": "multi",
+          "independentAnswer": [
+            "A",
+            "B",
+            "D"
+          ],
+          "independentDerivation": "科学和英语书均为至少3的奇数，其和为至少6的偶数。数学书为12减此和，须为正偶数且至多6，所以2、4、6可行，分别可用科学/英语(3,7)、(3,5)、(3,3)实现。",
+          "bankKind": "multi",
+          "bankAnswer": [
+            "A",
+            "B",
+            "D"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-11:2",
+          "globalIndex": 202,
+          "sourcePagesVisuallyInspected": [
+            50
+          ],
+          "independentKind": "multi",
+          "independentAnswer": [
+            "B"
+          ],
+          "independentDerivation": "B给出45比均值少(1/3)×12=4，均值唯一为49。A与C都不足：21个49、两个19、两个79的均值49和标准差12；19个49加99,24,64,34,54,44的均值50、标准差12。两表中位数均49且超过半数落在37至61间，直接反驳A、C的充分性。",
+          "bankKind": "multi",
+          "bankAnswer": [
+            "B"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-11:4",
+          "globalIndex": 204,
+          "sourcePagesVisuallyInspected": [
+            51
+          ],
+          "independentKind": "single",
+          "independentAnswer": [
+            "B"
+          ],
+          "independentDerivation": "八个数的系数1,1,1,2,4,4,5,6均值为3，平方离差和为3×4+1+2×1+4+9=28。总体标准差为√(28/8)c=√3.5c≈1.8708c，最接近1.9c。原图分母明确为n。",
+          "bankKind": "single",
+          "bankAnswer": [
+            "B"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-11:9",
+          "globalIndex": 209,
+          "sourcePagesVisuallyInspected": [
+            52
+          ],
+          "independentKind": "multi",
+          "independentAnswer": [
+            "B"
+          ],
+          "independentDerivation": "25人的中位数为第13项；恰有12项大于80，因此如果有一项等于80，中位数必为80。A不足：12个79、一个80、12个81，与13个79、11个81、一个82，平均分都80但中位数分别80、79。C不足：12项75、1项76或80、12项81可给不同中位数。",
+          "bankKind": "multi",
+          "bankAnswer": [
+            "B"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-11:12",
+          "globalIndex": 212,
+          "sourcePagesVisuallyInspected": [
+            52,
+            53
+          ],
+          "independentKind": "multi",
+          "independentAnswer": [
+            "A",
+            "B",
+            "D"
+          ],
+          "independentDerivation": "原图为7^n与9^n的个位。n模4取1,2,3,0时，个位对分别为(7,9)、(9,1)、(3,9)、(1,1)，和为16、10、12、2。给定选项中的10、12、16可行。",
+          "bankKind": "multi",
+          "bankAnswer": [
+            "A",
+            "B",
+            "D"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-11:14",
+          "globalIndex": 214,
+          "sourcePagesVisuallyInspected": [
+            53
+          ],
+          "independentKind": "multi",
+          "independentAnswer": [
+            "C",
+            "D",
+            "E"
+          ],
+          "independentDerivation": "统计课72人、微积分60人，交集范围为72+60−120=12到60。只学统计者=72−交集，可取12到60内任意整数，故12、30、60可行。",
+          "bankKind": "multi",
+          "bankAnswer": [
+            "C",
+            "D",
+            "E"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-11:20",
+          "globalIndex": 220,
+          "sourcePagesVisuallyInspected": [
+            54
+          ],
+          "independentKind": "multi",
+          "independentAnswer": [
+            "C",
+            "D"
+          ],
+          "independentDerivation": "已知66,000与84,000，极差52,000。任一读数v必须满足v≥84,000−52,000=32,000且v≤66,000+52,000=118,000。60,000和90,000可行，其余越界；用极值32,000、84,000或38,000、90,000即可分别实现。",
+          "bankKind": "multi",
+          "bankAnswer": [
+            "C",
+            "D"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-12:25",
+          "globalIndex": 225,
+          "sourcePagesVisuallyInspected": [
+            55
+          ],
+          "independentKind": "multi",
+          "independentAnswer": [
+            "A",
+            "D"
+          ],
+          "independentDerivation": "最小值=最大值−极差=92.8−51.6=41.2；总和=120×72.5=8700。中间值可以在维持总和、最小最大值的前提下改变，因此中位数及标准差不能确定。源图D选项为总和。",
+          "bankKind": "multi",
+          "bankAnswer": [
+            "A",
+            "D"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-12:31",
+          "globalIndex": 231,
+          "sourcePagesVisuallyInspected": [
+            57
+          ],
+          "independentKind": "single",
+          "independentAnswer": [
+            "D"
+          ],
+          "independentDerivation": "原图大矩形宽10.6、高x，顶部凹口宽2.5、深1.4。周长2(10.6+x)+2×1.4=39.4，解得x=7.7。图上面积10.6×7.7−2.5×1.4=78.12cm²，实际面积乘1.5²=175.77m²，约176，选D。",
+          "bankKind": "single",
+          "bankAnswer": [
+            "D"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-12:32",
+          "globalIndex": 232,
+          "sourcePagesVisuallyInspected": [
+            57
+          ],
+          "independentKind": "multi",
+          "independentAnswer": [
+            "A",
+            "B",
+            "C"
+          ],
+          "independentDerivation": "原图5^a与3^b均为幂。1500=2²×3×5³，故a=3。33,333,333的数字和24可被3整除，但除以3后11,111,111数字和8不可再除以3，故b=1。ab=3、a>b、2a>5b均真。",
+          "bankKind": "multi",
+          "bankAnswer": [
+            "A",
+            "B",
+            "C"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-12:35",
+          "globalIndex": 235,
+          "sourcePagesVisuallyInspected": [
+            58
+          ],
+          "independentKind": "multi",
+          "independentAnswer": [
+            "A",
+            "B"
+          ],
+          "independentDerivation": "由c+d=100且cd<0，一数≤−1，另一数≥101，原1..99保持中间顺序。101项总和5050，均值50；第51项为50，中位数也是50。令负数−t，t≥1，极差=100+2t>100，且没有200的上界。",
+          "bankKind": "multi",
+          "bankAnswer": [
+            "A",
+            "B"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-13:44",
+          "globalIndex": 244,
+          "sourcePagesVisuallyInspected": [
+            61
+          ],
+          "independentKind": "multi",
+          "independentAnswer": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "F"
+          ],
+          "independentDerivation": "令胜、平、负场数w,t,l，w+t+l=4且总分3w+t。枚举非负整数组合得到可能总分0,1,2,3,4,5,6,7,8,9,10,12；11不可，因为3胜1平只有10分，而4胜12分。因此选0、1、5、6、12。",
+          "bankKind": "multi",
+          "bankAnswer": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "F"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-13:54",
+          "globalIndex": 254,
+          "sourcePagesVisuallyInspected": [
+            63
+          ],
+          "independentKind": "numeric",
+          "independentAnswer": [
+            "0.55"
+          ],
+          "independentDerivation": "原图精确条件P(W>1/2)=9/10，P(W>3/4)=7/20，所求P(1/2<W≤3/4)。两嵌套事件相减得9/10−7/20=11/20=0.55。此处文本提取丢失分数，已按图纠正读取。",
+          "bankKind": "numeric",
+          "bankAnswer": [
+            "0.55"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-14:65",
+          "globalIndex": 265,
+          "sourcePagesVisuallyInspected": [
+            67
+          ],
+          "independentKind": "single",
+          "independentAnswer": [
+            "E"
+          ],
+          "independentDerivation": "OA=OD=a，故弦AD=a√2。矩形另一边CD=a/2，所以矩形面积a²√2/2。矩形内未涂色圆弓形面积=四分之一圆πa²/4−直角三角形a²/2。阴影面积为a²(√2/2−π/4+1/2)，与E一致。",
+          "bankKind": "single",
+          "bankAnswer": [
+            "E"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-14:74",
+          "globalIndex": 274,
+          "sourcePagesVisuallyInspected": [
+            69
+          ],
+          "independentKind": "multi",
+          "independentAnswer": [
+            "A",
+            "B",
+            "C"
+          ],
+          "independentDerivation": "已知三点u=(2,−1)、v=(1,2)、w=(5,1)。分别将三点之一视为两邻边共同端点，第四点可为u+v−w=(−2,0)、u+w−v=(6,−2)、v+w−u=(4,4)，对应A、B、C全部。",
+          "bankKind": "multi",
+          "bankAnswer": [
+            "A",
+            "B",
+            "C"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-14:80",
+          "globalIndex": 280,
+          "sourcePagesVisuallyInspected": [
+            70
+          ],
+          "independentKind": "numeric",
+          "independentAnswer": [
+            "15625"
+          ],
+          "independentDerivation": "同时为整数平方与立方要求质因数指数都是6的倍数，所以n=k^6。原图上界是10^7；15^6=11,390,625已超界，因此1≤k≤14。k^6个位为5只可能k个位为5，范围中只有k=5，n=5^6=15625。",
+          "bankKind": "numeric",
+          "bankAnswer": [
+            "15625"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        },
+        {
+          "id": "gre900:original-15:97",
+          "globalIndex": 297,
+          "sourcePagesVisuallyInspected": [
+            74
+          ],
+          "independentKind": "single",
+          "independentAnswer": [
+            "C"
+          ],
+          "independentDerivation": "放大原图确认矩形宽2r、高4r，有4个90°白色扇形。圆弧合计2πr。矩形原周长12r，白色区域占去外边界共5r，并新增3条内部水平半径共3r，阴影直线边合计10r。因此总周长(10+2π)r，选C。",
+          "bankKind": "single",
+          "bankAnswer": [
+            "C"
+          ],
+          "answerAndKindMatch": true,
+          "verdict": "confirmed",
+          "method": "Visual inspection of rendered source PDF, independent mathematical derivation, then comparison with saved bank."
+        }
+      ],
+      "additionalFindings": [
+        {
+          "globalIndex": 299,
+          "id": "gre900:original-15:99",
+          "sourcePage": 75,
+          "finding": "答案字母E正确，但现存解析误将源题108秒写为100秒，导致速度与罚款数字均错误。",
+          "sourceValues": {
+            "distanceMiles": 1.5,
+            "seconds": 108,
+            "limitMph": 40,
+            "baseFine": 50,
+            "finePerExcessMph": 10,
+            "optionE": 150
+          },
+          "correctAnswer": [
+            "E"
+          ],
+          "correctExplanation": "车速为1.5÷(108/3600)=50英里/小时，超过40的限速10英里/小时。罚款50+10×10=150美元，选E。",
+          "observedBankExplanation": "先把108秒换算成小时：108/3600=0.03小时。车速为1.5÷0.03=50英里/小时，超过40的限速10英里/小时。罚款50+10×10=150美元，选E。",
+          "reportedTo": [
+            "/root",
+            "/root/solutions_1_300"
+          ],
+          "bankEditedByAuditor": false,
+          "originalBankExplanation": "车速为1.5÷(100/3600)=54英里/小时，超过40的限速14英里/小时。罚款50+10×14=190美元，选E。",
+          "currentBankExplanation": "先把108秒换算成小时：108/3600=0.03小时。车速为1.5÷0.03=50英里/小时，超过40的限速10英里/小时。罚款50+10×10=150美元，选E。",
+          "resolved": true,
+          "resolution": "题库作者按原PDF复核并修正了解析；审计者未修改题库。"
+        }
+      ],
+      "sourceIndexAudit": {
+        "knownManualDependenciesVerified": {
+          "400": [
+            108
+          ],
+          "411": [
+            111
+          ],
+          "412": [
+            111
+          ],
+          "413": [
+            111
+          ],
+          "540": [
+            142
+          ],
+          "575": [
+            151
+          ],
+          "576": [
+            151
+          ],
+          "596": [
+            156
+          ]
+        },
+        "checks": [
+          {
+            "file": "source-index.json",
+            "globalIndex": 400,
+            "requiredPriorPages": [
+              108
+            ],
+            "actualPages": [
+              108,
+              109
+            ],
+            "pass": true
+          },
+          {
+            "file": "source-index.json",
+            "globalIndex": 411,
+            "requiredPriorPages": [
+              111
+            ],
+            "actualPages": [
+              111,
+              112
+            ],
+            "pass": true
+          },
+          {
+            "file": "source-index.json",
+            "globalIndex": 412,
+            "requiredPriorPages": [
+              111
+            ],
+            "actualPages": [
+              111,
+              112
+            ],
+            "pass": true
+          },
+          {
+            "file": "source-index.json",
+            "globalIndex": 413,
+            "requiredPriorPages": [
+              111
+            ],
+            "actualPages": [
+              111,
+              112
+            ],
+            "pass": true
+          },
+          {
+            "file": "source-index.json",
+            "globalIndex": 540,
+            "requiredPriorPages": [
+              142
+            ],
+            "actualPages": [
+              142,
+              143
+            ],
+            "pass": true
+          },
+          {
+            "file": "source-index.json",
+            "globalIndex": 575,
+            "requiredPriorPages": [
+              151
+            ],
+            "actualPages": [
+              151,
+              152
+            ],
+            "pass": true
+          },
+          {
+            "file": "source-index.json",
+            "globalIndex": 576,
+            "requiredPriorPages": [
+              151
+            ],
+            "actualPages": [
+              151,
+              152
+            ],
+            "pass": true
+          },
+          {
+            "file": "source-index.json",
+            "globalIndex": 596,
+            "requiredPriorPages": [
+              156
+            ],
+            "actualPages": [
+              156,
+              157
+            ],
+            "pass": true
+          },
+          {
+            "file": "source-index.compact.json",
+            "globalIndex": 400,
+            "requiredPriorPages": [
+              108
+            ],
+            "actualPages": [
+              108,
+              109
+            ],
+            "pass": true
+          },
+          {
+            "file": "source-index.compact.json",
+            "globalIndex": 411,
+            "requiredPriorPages": [
+              111
+            ],
+            "actualPages": [
+              111,
+              112
+            ],
+            "pass": true
+          },
+          {
+            "file": "source-index.compact.json",
+            "globalIndex": 412,
+            "requiredPriorPages": [
+              111
+            ],
+            "actualPages": [
+              111,
+              112
+            ],
+            "pass": true
+          },
+          {
+            "file": "source-index.compact.json",
+            "globalIndex": 413,
+            "requiredPriorPages": [
+              111
+            ],
+            "actualPages": [
+              111,
+              112
+            ],
+            "pass": true
+          },
+          {
+            "file": "source-index.compact.json",
+            "globalIndex": 540,
+            "requiredPriorPages": [
+              142
+            ],
+            "actualPages": [
+              142,
+              143
+            ],
+            "pass": true
+          },
+          {
+            "file": "source-index.compact.json",
+            "globalIndex": 575,
+            "requiredPriorPages": [
+              151
+            ],
+            "actualPages": [
+              151,
+              152
+            ],
+            "pass": true
+          },
+          {
+            "file": "source-index.compact.json",
+            "globalIndex": 576,
+            "requiredPriorPages": [
+              151
+            ],
+            "actualPages": [
+              151,
+              152
+            ],
+            "pass": true
+          },
+          {
+            "file": "source-index.compact.json",
+            "globalIndex": 596,
+            "requiredPriorPages": [
+              156
+            ],
+            "actualPages": [
+              156,
+              157
+            ],
+            "pass": true
+          }
+        ],
+        "rebuildScriptContainsAllManualDependencies": true,
+        "scopeNote": "Confirms every prior-page dependency reported during the team audit. This is not a new visual re-audit of all 900 source-page mappings."
+      },
+      "limitations": [
+        "The source upload contains no official answer key; this is an independent mathematical peer audit.",
+        "This audit records findings only and does not modify another agent’s solution bank."
+      ]
+    }
+  ]
+}

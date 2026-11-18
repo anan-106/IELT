@@ -1,5 +1,11 @@
 # GRE Prep — 自适应 GRE General Test 备考工具
 
+## 900 题 · 章节刷题
+
+新增独立的 **900题刷题** 入口，使用《GRE 最新数学机经 900 题（难度分级版）》：45 个章节，按 Easy / Medium / Hard / 图表专项选择。整章作答或明确留空后统一交卷，再显示独立推导的答案、中文解析、正确率、知识点与题型归纳；支持自动保存、错题重练、错因笔记和备份。
+
+首次使用选择本次题源的 229 页 PDF。892 题自动判分，8 道原文疑问题单独展示且排除在正确率分母外。题源核验、具体疑题及使用方法见 [GRE_900_PRACTICE.md](GRE_900_PRACTICE.md)。
+
 这是从原 IELTS 项目学习引擎派生出的 **GRE 专用分支**。IELTS 主项目保留在 `main`，GRE 版本位于 `gre-prep`，两套数据互不影响。
 
 ## GRE 词汇系统
@@ -313,3 +319,4 @@ GRE_ALL_IN_ONE_SOURCES.md     # GRE-All-In-One 资料导航与版权边界
 - `RuiWang6188/GRE-All-In-One` 的第三方 PDF/Office 只做源链接，不复制正文；
 - 本项目没有嵌入 POWERPREP 或 ETS 官方试题；
 - “GRE”是 ETS 的注册商标，本项目与 ETS 无隶属或官方合作关系。
+
