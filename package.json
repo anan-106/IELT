@@ -1,0 +1,15 @@
+{
+  "name": "gre-prep",
+  "private": true,
+  "description": "Build and verify the GRE chapter practice question text; the delivered app is static and has no runtime package dependencies.",
+  "scripts": {
+    "build:gre900-text": "node scripts/build-gre900-text.cjs",
+    "check:gre900-text": "node scripts/build-gre900-text.cjs --check",
+    "test": "node --test tests/gre900.test.cjs tests/math.test.cjs tests/word-labs.test.cjs tests/gre900-text.test.cjs",
+    "test:gre900-ui": "node tests/gre900-dom.cjs"
+  },
+  "devDependencies": {
+    "jsdom": "26.1.0",
+    "katex": "0.19.1"
+  }
+}

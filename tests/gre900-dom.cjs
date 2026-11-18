@@ -1,27 +1,22 @@
-/* Run with jsdom and fake-indexeddb installed. No browser process is required. */
+/* Run with the declared jsdom development dependency installed. No browser process is required. */
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
-const {webcrypto}=require('node:crypto');
 const {JSDOM,VirtualConsole}=require('jsdom');
-const {indexedDB}=require('fake-indexeddb');
 const B=require('../gre-900-data.js');
 const C=require('../gre-900-core.js');
 const root=path.resolve(__dirname,'..');
-const pdfPath=process.env.GRE900_TEST_PDF;
-assert.ok(pdfPath,'Set GRE900_TEST_PDF to the uploaded source PDF');
-const bytes=fs.readFileSync(pdfPath);
 const errors=[];
 function setup(stored,legacy=false){
  const vc=new VirtualConsole();vc.on('jsdomError',e=>{if(!/navigation|HTMLCanvasElement/.test(e.message))errors.push(e.message)});
  const html=legacy?fs.readFileSync(path.join(root,'index.html'),'utf8'):'<!doctype html><html><body><nav class="tabs"><button class="tab" data-view="quant">Quant</button></nav><section id="view-quant" class="view"></section></body></html>';
  const dom=new JSDOM(html,{url:'http://gre900.test/',runScripts:'outside-only',pretendToBeVisual:true,virtualConsole:vc});
- const w=dom.window;w.indexedDB=indexedDB;w.structuredClone=structuredClone;
+ const w=dom.window;w.structuredClone=structuredClone;w.Blob=Blob;const downloads=[];
  let clock=1000,hidden=false;
  Object.defineProperty(w.performance,'now',{value:()=>clock});
  Object.defineProperty(w.document,'hidden',{get:()=>hidden});
- Object.defineProperty(w.crypto,'subtle',{value:webcrypto.subtle});
- w.URL.createObjectURL=()=> 'blob:http://gre900.test/test-pdf';w.URL.revokeObjectURL=()=>{};
+ w.URL.createObjectURL=blob=>{downloads.push(blob);return 'blob:http://gre900.test/export'};w.URL.revokeObjectURL=()=>{};
+ w.fetch=()=>{throw Error('Question practice must not fetch external content')};
  w.HTMLElement.prototype.scrollIntoView=()=>{};
  w.HTMLDialogElement.prototype.showModal=function(){this.open=true};
  w.HTMLDialogElement.prototype.close=function(){this.open=false;this.dispatchEvent(new w.Event('close'))};
@@ -32,13 +27,8 @@ function setup(stored,legacy=false){
   assert.equal(w.__GRE_DATA__.verbal.length,1,'legacy multi-select fixture exists');
   w.eval(fs.readFileSync(path.join(root,'gre-app.js'),'utf8'));
  }
- for(const name of ['gre-900-data.js','gre-900-core.js','gre-900.js'])w.eval(fs.readFileSync(path.join(root,name),'utf8'));
- return {dom,w,d:w.document,advance:ms=>clock+=ms,hide:value=>{hidden=value;w.document.dispatchEvent(new w.Event('visibilitychange'))}};
-}
-async function loadSource(t,buffer=bytes){
- const input=t.d.getElementById('g900-pdf');
- Object.defineProperty(input,'files',{configurable:true,value:[{arrayBuffer:async()=>buffer.buffer.slice(buffer.byteOffset,buffer.byteOffset+buffer.byteLength)}]});
- await input.onchange({target:input});
+ for(const name of ['gre-900-data.js','gre-900-text.js','gre-900-core.js','gre-900.js'])w.eval(fs.readFileSync(path.join(root,name),'utf8'));
+ return {dom,w,d:w.document,downloads,advance:ms=>clock+=ms,hide:value=>{hidden=value;w.document.dispatchEvent(new w.Event('visibilitychange'))}};
 }
 function inputAnswer(t,q,answer){
  const {d,w}=t;
@@ -53,18 +43,18 @@ async function main(){
  t.d.querySelector('[data-difficulty="easy"]').click();assert.equal(t.d.querySelectorAll('.g900-chapter').length,3);
  t.d.querySelector('[data-start="original-01"]').click();
  assert.equal(t.d.querySelectorAll('.g900-answer-map button').length,20);
- assert.equal(t.d.getElementById('g900-answer-fields').disabled,true);
+ assert.equal(t.d.getElementById('g900-answer-fields').disabled,false);
  t.d.getElementById('g900-submit').click();assert.equal(t.d.querySelectorAll('.g900-result').length,0);
  assert.match(t.d.getElementById('g900-alert').textContent,/20.*未完成/);
- await loadSource(t,Buffer.from('wrong pdf'));assert.equal(t.d.getElementById('g900-answer-fields').disabled,true);
- await loadSource(t);assert.equal(t.d.getElementById('g900-answer-fields').disabled,false);
+ assert.equal(t.d.getElementById('g900-pdf'),null,'no PDF upload needed');
+ assert.ok(t.d.querySelector('#g900-question-text math mfrac'),'question1 fraction is semantic MathML');
+ assert.equal(t.d.querySelectorAll('#view-gre900 canvas,#view-gre900 img,#view-gre900 iframe').length,0,'no screenshot display');
  inputAnswer(t,B.questions[0],['B']);t.d.getElementById('g900-next').click();
  assert.equal(t.d.querySelectorAll('.g900-solution').length,0);
  assert.equal(t.d.querySelector('.g900-attempt-header p').textContent.includes('第 2'),true);
  const saved=t.w.localStorage.getItem(C.KEY);t.dom.window.close();
  t=setup(saved);t.d.querySelector('[data-view="gre900"]').click();t.d.querySelector('[data-start="original-01"]').click();
  assert.equal(t.d.querySelector('.g900-attempt-header p').textContent.includes('第 2'),true);
- await loadSource(t);
  for(let i=1;i<20;i++){
   const q=B.questions[i];inputAnswer(t,q,q.answer);
   if(i<19)t.d.getElementById('g900-next').click();
@@ -85,7 +75,10 @@ async function main(){
  let s=state(t),attempt=s.sessions[s.activeId];
  assert.equal(attempt.status,'submitted');assert.equal(attempt.result.summary.correct,19);assert.equal(attempt.result.summary.scored,20);
  assert.equal(t.d.querySelectorAll('.g900-solution').length,20);
+ t.d.querySelector('[data-show-question]').click();assert.ok(t.d.querySelector('.g900-review-question math'),'report can display the text question');
  assert.match(t.d.querySelector('.g900-metrics').textContent,/95\.0%/);
+ t.d.getElementById('g900-report-download').click();
+ const report=await t.downloads.at(-1).text();assert.match(report,/<math/);assert.match(report,/原题 20/);assert.ok(!/<img|<canvas|<script/.test(report),'export keeps text and vectors');
  const reason=t.d.querySelector('[data-reason="gre900:original-01:1"]');reason.value='读题或翻译';reason.dispatchEvent(new t.w.Event('change',{bubbles:true}));
  const note=t.d.querySelector('[data-note="gre900:original-01:1"]');note.value='<script>test</script> Keep the exponent';note.dispatchEvent(new t.w.Event('input',{bubbles:true}));
  assert.equal(state(t).notes['gre900:original-01:1'].reason,'读题或翻译');
@@ -120,12 +113,12 @@ async function main(){
  event=new t.w.KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true});
  t.d.getElementById('g900-home').dispatchEvent(event);
  assert.equal(event.defaultPrevented,false);
- const canvas=t.d.createElement('canvas');let ownHandlerCalls=0;canvas.onkeydown=()=>ownHandlerCalls++;t.d.getElementById('g900-content').append(canvas);
- canvas.dispatchEvent(new t.w.KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));
+ const button=t.d.createElement('button');let ownHandlerCalls=0;button.onkeydown=()=>ownHandlerCalls++;t.d.getElementById('g900-content').append(button);
+ button.dispatchEvent(new t.w.KeyboardEvent('keydown',{key:'Enter',bubbles:true,cancelable:true}));
  assert.equal(ownHandlerCalls,1,'target keyboard handler still runs');
  assert.equal(t.w.localStorage.getItem('gre-prep-v1'),beforeLegacy,'hidden Verbal record untouched');
  assert.equal(errors.length,0,errors.join('\n'));
  t.dom.window.close();
- console.log(JSON.stringify({dom:'passed',checks:['45 chapters','source difficulty filter','PDF fingerprint rejection','deferred grading','restore active position','cancel/escape then edit before submission','20-item full submission','95% score','notes/reasons','resume exact review attempt','no background time','wrong-only retry','first attempt preserved','legacy Verbal keyboard isolation','no answer in expression input hint'],errors}));
+ console.log(JSON.stringify({dom:'passed',checks:['45 chapters','source difficulty filter','practice starts without a PDF','native MathML fractions','no screenshot media','deferred grading','restore active position','cancel/escape then edit before submission','20-item full submission','95% score','notes/reasons','resume exact review attempt','no background time','wrong-only retry','first attempt preserved','legacy Verbal keyboard isolation','no answer in expression input hint'],errors}));
 }
 main().catch(e=>{console.error(e);process.exit(1)});

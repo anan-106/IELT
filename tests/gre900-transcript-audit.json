@@ -1,0 +1,762 @@
+{
+  "version": "2026-11-18.text.1",
+  "sourceSha256": "81789d49daf72ba23927158c94cc86293103fb9fad994b1afe700d7699e4eece",
+  "transcriptCount": 900,
+  "sourceVisualReviewCount": 900,
+  "compiledFormulaCount": 1691,
+  "independentSvgCount": 169,
+  "questionsWithSvg": 135,
+  "questionsWithTables": 121,
+  "secondReviewQuestionCount": 46,
+  "selfReviews": [
+    {
+      "range": [
+        1,
+        300
+      ],
+      "count": 300,
+      "visualSourcePages": [
+        5,
+        75
+      ],
+      "coverage": "Every source page containing questions 1–300 visually inspected; formulas and diagrams transcribed from rendered original.",
+      "structuralChecks": {
+        "missingIndices": [],
+        "idMismatches": [],
+        "kindOptionMismatches": [],
+        "invalidSvg": [],
+        "invalidControlCharacters": [],
+        "embeddedImages": []
+      },
+      "formulaCheck": {
+        "engine": "KaTeX",
+        "count": 758,
+        "errors": []
+      },
+      "figures": {
+        "stemSvg": 40,
+        "choiceSvg": 10,
+        "htmlTables": 6,
+        "renderedSvgCount": 50,
+        "renderer": "Inkscape",
+        "contactSheetsInspected": 5
+      },
+      "qaCorrections": [
+        {
+          "globalIndex": 174,
+          "change": "Adjusted top-right corner x-coordinate so the drawn bottom-right angle is obtuse, matching the labeled 91 degrees."
+        },
+        {
+          "globalIndex": 228,
+          "change": "Removed underlying solid stroke from shaded region boundaries so strict inequalities visibly use dashed lines; separated negative axis labels."
+        }
+      ],
+      "sourceNotes": [
+        {
+          "globalIndex": 90,
+          "note": "Source graphs unlabeled; mapped reading order A–E. Redrawn graph options preserve qualitative vertex/intercept positions."
+        },
+        {
+          "globalIndex": 228,
+          "note": "Source graphs unlabeled; mapped reading order A–E."
+        },
+        {
+          "globalIndex": 296,
+          "note": "A and C both read 96√3 in the source; both preserved."
+        }
+      ]
+    },
+    {
+      "questions": 300,
+      "globalRange": [
+        301,
+        600
+      ],
+      "svgCount": 35,
+      "mathCount": 538,
+      "mathErrors": 0,
+      "schemaAndGlyphErrors": [],
+      "verification": "Source PDF pages 76–158 visually inspected; all 35 handwritten SVGs rasterized and inspected. Shared charts transcribed as tables; original unlabeled graph values marked approximate."
+    },
+    {
+      "globalIndexRange": [
+        601,
+        900
+      ],
+      "count": 300,
+      "sourceVisualCheckCount": 300,
+      "unchecked": [],
+      "schemaErrors": [],
+      "optionKeyMismatches": [],
+      "svgXmlValidated": 84,
+      "svgRendered": 84,
+      "svgContactSheetsReviewed": 4,
+      "sourceAmbiguousPreserved": [
+        663,
+        686,
+        708,
+        755,
+        799,
+        804,
+        830,
+        837
+      ],
+      "cleanup": [
+        "Obvious OCR If/spacing corrections",
+        "605 alt text clarified perpendicular to PR",
+        "720 sentence spacing corrected"
+      ],
+      "status": "complete"
+    }
+  ],
+  "crossReviews": [
+    {
+      "reviewer": "answer_source",
+      "scope": "Read-only cross-review of selected text-1-300.json items against original PDF; no answer re-solving or edits to that file.",
+      "reviewedCount": 12,
+      "findings": [],
+      "items": [
+        {
+          "globalIndex": 1,
+          "id": "gre900:original-01:1",
+          "sourcePages": [
+            5
+          ],
+          "status": "verified",
+          "note": "已对照PDF第5页；保留 x^{-2}=1/(y+1)、数量A为x²、数量B为y。"
+        },
+        {
+          "globalIndex": 26,
+          "id": "gre900:original-02:26",
+          "sourcePages": [
+            9
+          ],
+          "status": "verified",
+          "note": "已对照PDF第9页；保留x<0、y>0及两个负指数，未将x^{-1}或y^{-2}错写成减法。"
+        },
+        {
+          "globalIndex": 90,
+          "id": "gre900:original-05:30",
+          "sourcePages": [
+            24
+          ],
+          "status": "verified",
+          "note": "已对照PDF第24页及五幅重绘SVG；函数、0<b<2、选项阅读顺序、各抛物线开口、顶点相对坐标轴位置与y截距关系一致。原文没有给出选项曲线的精确方程，现有transcriptionNote对此说明充分。"
+        },
+        {
+          "globalIndex": 143,
+          "id": "gre900:original-08:83",
+          "sourcePages": [
+            36
+          ],
+          "status": "verified",
+          "note": "已对照PDF第36页及重绘图；直角在B，方形E/F/G/D的位置、所问三角形AFE及五个分数选项一致。正文DEPG→DEFG的原文笔误修正有明确注释。"
+        },
+        {
+          "globalIndex": 161,
+          "id": "gre900:original-09:101",
+          "sourcePages": [
+            40
+          ],
+          "status": "verified",
+          "note": "已对照PDF第40页及重绘图；外部菱形截距±4、±8及内部正方形ABCD、外内之间的阴影完整保留。"
+        },
+        {
+          "globalIndex": 175,
+          "id": "gre900:original-09:115",
+          "sourcePages": [
+            43
+          ],
+          "status": "verified",
+          "note": "已对照PDF第43页及重绘图；四个外半圆以边长4的正方形四边为直径，各与大圆相切；阴影范围与五个含π选项一致。"
+        },
+        {
+          "globalIndex": 195,
+          "id": "gre900:original-10:135",
+          "sourcePages": [
+            48
+          ],
+          "status": "verified",
+          "note": "已对照PDF第48页及重绘图；上半圆x²+y²=4、直线x+y=2、第一象限圆弓形阴影及五个选项一致。"
+        },
+        {
+          "globalIndex": 217,
+          "id": "gre900:original-11:17",
+          "sourcePages": [
+            53,
+            54
+          ],
+          "status": "verified",
+          "note": "已对照PDF第53–54页；两乘积分别为4^{100}5^{99}及4^{100}5^{101}，均问十位数字，现有数量A/B补标说明准确。"
+        },
+        {
+          "globalIndex": 228,
+          "id": "gre900:original-12:28",
+          "sourcePages": [
+            56
+          ],
+          "status": "verified",
+          "note": "已对照PDF第56页及五幅当前SVG；主图象限编号、变换(a+1,b+1)、不含坐标轴的条件、五个区域相对±1边界的位置和选项顺序均保留。SVG边界使用虚线，符合不含边界的说明。"
+        },
+        {
+          "globalIndex": 233,
+          "id": "gre900:original-12:33",
+          "sourcePages": [
+            58
+          ],
+          "status": "verified",
+          "note": "已对照PDF第58页；均值140、标准差12、两个概率区间125<X<131与152<X<158准确；原图确实仅显示0.0、0.1、0.3、0.3、0.1、0.0，转录如实保留且明确注释。"
+        },
+        {
+          "globalIndex": 253,
+          "id": "gre900:original-13:53",
+          "sourcePages": [
+            63
+          ],
+          "status": "verified",
+          "note": "已对照PDF第63页；A为两个平方根之和的平方，B为两个立方根之和的立方；999999及1000001均准确。"
+        },
+        {
+          "globalIndex": 299,
+          "id": "gre900:original-15:99",
+          "sourcePages": [
+            75
+          ],
+          "status": "verified",
+          "note": "已对照PDF第75页；1.5英里、限速40、108秒、基础罚款50加每超速1mph罚10、五个金额选项均一致。"
+        }
+      ]
+    },
+    {
+      "scope": "Read-only cross-audit of source transcription, formulas, options, independent figures and table data; no answer derivation and no peer-file modifications.",
+      "fileReviewed": "tmp/gre900/text-301-600.json",
+      "snapshotSha256": "c10c45039423877cdbfbbe07585ae972463bdd34999ed8f7249cac210234f829",
+      "sourceVisualChecks": 17,
+      "blockingIssues": [],
+      "minorIssues": [
+        {
+          "globalIndex": 367,
+          "field": "transcriptionNote",
+          "issue": "Incorrect claim that the source sixth-month label says Jan. The source says Jun.",
+          "recommendation": "Delete the claim of an original Jan misprint, retaining approximate-data disclosure.",
+          "evidence": "tmp/gre900/cross-mid-figures/367-month-label.png",
+          "authorNotified": true,
+          "status": "resolved_by_root",
+          "resolution": "Removed the incorrect Jan-misprint claim from questions 367–369; approximate-data disclosure retained. Root visually confirmed original Jun label."
+        }
+      ],
+      "results": [
+        {
+          "globalIndex": 341,
+          "id": "gre900:original-18:1",
+          "sourcePages": [
+            88
+          ],
+          "status": "passed",
+          "observations": "PDF88: 1970 age percentages, the two age-series labels, population units, question wording and all five choices agree. Original unlabelled data points are explicitly approximate in the transcript.",
+          "blocking": false
+        },
+        {
+          "globalIndex": 367,
+          "id": "gre900:original-19:27",
+          "sourcePages": [
+            98
+          ],
+          "status": "minor_note_correction",
+          "observations": "PDF98: Year/series order, monthly readings, first/second-half ranges requested, and choices agree at the resolution of the source. Approximate readings are disclosed. Minor note issue: the sixth month is printed Jun, not Jan; remove the claim of an original Jan typo. Close-up saved as cross-mid-figures/367-month-label.png.",
+          "blocking": false
+        },
+        {
+          "globalIndex": 370,
+          "id": "gre900:original-19:30",
+          "sourcePages": [
+            99
+          ],
+          "status": "passed",
+          "observations": "PDF99: Arrival/departure series retained in the correct columns, passenger units and Sunday/Friday comparison retained, fraction choices complete. Graph values remain explicitly approximate.",
+          "blocking": false
+        },
+        {
+          "globalIndex": 395,
+          "id": "gre900:original-20:55",
+          "sourcePages": [
+            106,
+            107
+          ],
+          "status": "passed",
+          "observations": "PDF106–107: Serving size28g,2.5 servings/bag, all nutrition and calorie cells preserved. Question and choices agree; original E=725 is faithfully retained and disclosed.",
+          "blocking": false
+        },
+        {
+          "globalIndex": 400,
+          "id": "gre900:original-20:60",
+          "sourcePages": [
+            108,
+            109
+          ],
+          "status": "passed",
+          "observations": "PDF108–109: Shared preceding-page chart is fully included as score/frequency table1:2,2:12,3:6,4:17,5:8. Both QC quantities agree.",
+          "blocking": false
+        },
+        {
+          "globalIndex": 411,
+          "id": "gre900:new-01:11",
+          "sourcePages": [
+            111,
+            112
+          ],
+          "status": "passed",
+          "observations": "PDF111–112: Entire500-vehicle table including5types,6colors, row/column totals agrees. Silver-under20% question and five choices agree.",
+          "blocking": false
+        },
+        {
+          "globalIndex": 412,
+          "id": "gre900:new-01:12",
+          "sourcePages": [
+            111,
+            112
+          ],
+          "status": "passed",
+          "observations": "PDF111–112: Entire shared inventory table retained. Green/brown percent-excess wording and all five percentages agree.",
+          "blocking": false
+        },
+        {
+          "globalIndex": 413,
+          "id": "gre900:new-01:13",
+          "sourcePages": [
+            111,
+            112
+          ],
+          "status": "passed",
+          "observations": "PDF111–112: Entire shared inventory table retained. Per-type/per-color average and nearest-whole-number rounding agree; choices complete.",
+          "blocking": false
+        },
+        {
+          "globalIndex": 426,
+          "id": "gre900:new-02:6",
+          "sourcePages": [
+            115
+          ],
+          "status": "passed",
+          "observations": "PDF115: All decade-to-decade increases/decreases in the source graph are retained. Population values are marked approximate; question and options agree.",
+          "blocking": false
+        },
+        {
+          "globalIndex": 442,
+          "id": "gre900:new-03:2",
+          "sourcePages": [
+            118
+          ],
+          "status": "passed",
+          "observations": "PDF118: All9countries, printed populations, supply units in thousands of cubic meters, approximate bars,20% decrease condition, target1997 and all choices agree.",
+          "blocking": false
+        },
+        {
+          "globalIndex": 492,
+          "id": "gre900:new-05:12",
+          "sourcePages": [
+            130
+          ],
+          "status": "passed",
+          "observations": "PDF130: High-resolution source crop confirms left upper boundary ends at(0,2), lower-left triangle at(0,-2), right trapezoid vertices(0,4),(4,1),(4,-1),(0,-1), white cutout triangle(-1,0),(1,2),(2,0). Authored SVG and alt text match these boundaries and all labels.",
+          "blocking": false
+        },
+        {
+          "globalIndex": 495,
+          "id": "gre900:new-05:15",
+          "sourcePages": [
+            131
+          ],
+          "status": "passed",
+          "observations": "PDF131: Four midpoint-to-opposite-vertex segments and enclosed shaded quadrilateral match original. All five fraction/radical choices are transcribed correctly.",
+          "blocking": false
+        },
+        {
+          "globalIndex": 532,
+          "id": "gre900:new-07:12",
+          "sourcePages": [
+            140,
+            141
+          ],
+          "status": "passed",
+          "observations": "PDF140–141: Equation2y−2=x/2−3 agrees. All5graph options preserve slope sign and intercept position; mapping top3/bottom2 A–E is correct. SVG endpoints independently inspected against source graphs.",
+          "blocking": false
+        },
+        {
+          "globalIndex": 540,
+          "id": "gre900:new-07:20",
+          "sourcePages": [
+            142,
+            143
+          ],
+          "status": "passed",
+          "observations": "PDF142–143: All9state populations and percentage-growth values match; Connecticut/New Hampshire follow-up conditions5.0%/6.7%,1990–2010 interval and choices agree.",
+          "blocking": false
+        },
+        {
+          "globalIndex": 575,
+          "id": "gre900:new-09:15",
+          "sourcePages": [
+            151,
+            152
+          ],
+          "status": "passed",
+          "observations": "PDF151–152: Shared2003–2005 organic-grain bars and printed2005percentage table retained; corn100k→130k change and successive half-increases condition preserved. Approximate bar readings disclosed; all choices agree.",
+          "blocking": false
+        },
+        {
+          "globalIndex": 576,
+          "id": "gre900:new-09:16",
+          "sourcePages": [
+            151,
+            152
+          ],
+          "status": "passed",
+          "observations": "PDF151–152: Same shared tables retained; equal-total-barley-acres2004/2005 condition and requested organic fraction preserve meaning.2004/2005bar heights align within original resolution; choices agree.",
+          "blocking": false
+        },
+        {
+          "globalIndex": 596,
+          "id": "gre900:new-10:16",
+          "sourcePages": [
+            156,
+            157
+          ],
+          "status": "passed",
+          "observations": "PDF156–157: All14printed job-posting values and thousands unit agree. Exception for Java2018, equal-range condition, and numeric response question agree.",
+          "blocking": false
+        }
+      ],
+      "conclusion": "No blocking transcription issue. One minor source-note correction reported to the author and root."
+    },
+    {
+      "auditor": "solutions_1_300",
+      "auditedFile": "tmp/gre900/text-601-900.json",
+      "fileSha256": "a4b56e3f2d298337d54dd869012a47c5a3277072dd4f4a408b75a9b576fefdc3",
+      "timestampUtc": "2026-11-18T09:29:36.933538+00:00",
+      "requestedIndices": [
+        605,
+        649,
+        652,
+        659,
+        662,
+        679,
+        708,
+        710,
+        725,
+        734,
+        799,
+        837,
+        843,
+        855,
+        861,
+        866,
+        897
+      ],
+      "checkedCount": 17,
+      "sourceMethod": "Independently compared rendered original PDF pages. Redrawn SVGs for geometry, boxplots, parabolas and circle/line choices were also rendered and visually compared. All audited entries had _visuallyChecked=true.",
+      "summary": {
+        "confirmedWithoutCorrection": 16,
+        "concreteErrorsFound": 1,
+        "answerDerivationsRechecked": false
+      },
+      "findings": [
+        {
+          "globalIndex": 605,
+          "field": "figureAlt",
+          "severity": "condition_description_error",
+          "observed": "A perpendicular from S to PQ bounds the shaded triangle at P.",
+          "sourceEvidence": "PDF physical page 159: right-angle square is at S between the base PR and the segment from S to side PQ. The SVG likewise draws that segment vertical and PR horizontal.",
+          "requiredCorrection": "Isosceles triangle PQR with S on PR. A segment through S perpendicular to PR meets PQ and bounds the shaded triangle at P.",
+          "svgCorrectionNeeded": false,
+          "currentFigureAlt": "Isosceles triangle PQR with S on PR. A segment from S to side PQ is perpendicular to PR; together with PS and part of PQ it bounds the shaded triangle at P.",
+          "reportedToRoot": true,
+          "status": "resolved_by_author"
+        }
+      ],
+      "records": [
+        {
+          "globalIndex": 605,
+          "id": "gre900:new-11:5",
+          "sourcePages": [
+            159,
+            160
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed_after_author_correction",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "QC 数量 PR/3 与 PS、PQ=QR、1/3 面积条件、图中阴影/底边直角均与原 PDF 一致；原文 POR/Q 的不一致已保留注记。仅 figureAlt 将垂直对象写错。"
+        },
+        {
+          "globalIndex": 649,
+          "id": "gre900:new-13:9",
+          "sourcePages": [
+            168
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "逐一核对数轴 11 个等距刻度，n、n+2、−n+2 分别位于第 2、4、10 个刻度；QC 数量无误。"
+        },
+        {
+          "globalIndex": 652,
+          "id": "gre900:new-13:12",
+          "sourcePages": [
+            169
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "五个柱状分布的频数逐个核对：A=[5,0,0,0,5]，B=[2,2,2,2,2]，C=[1,3,2,3,1]，D=[1,2,4,2,1]，E=[2,3,0,3,2]；选项顺序和附表无误。"
+        },
+        {
+          "globalIndex": 659,
+          "id": "gre900:new-13:19",
+          "sourcePages": [
+            170,
+            171
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "3500 美元底薪、超过 50000 美元部分 5% 佣金、s>50000、按 s 表示收入的表达式题条件均保留。"
+        },
+        {
+          "globalIndex": 662,
+          "id": "gre900:new-14:2",
+          "sourcePages": [
+            172
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "等边等角六边形、圆内接、周长 12、求同圆内接等边三角形周长，条件完整。"
+        },
+        {
+          "globalIndex": 679,
+          "id": "gre900:new-14:19",
+          "sourcePages": [
+            175
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "两处直角 ADC 与 ABD、AB=4、图中 CAD=60°、B 在 AC 上及 BD 垂直 AC 均保留，SVG 渲染与文字一致。"
+        },
+        {
+          "globalIndex": 708,
+          "id": "gre900:new-16:8",
+          "sourcePages": [
+            181,
+            182
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "鞋数 1/3、2 倍、少于 30 以及八个数值 29/24/18/15/12/10/9/6 均正确；原文重复 B 标签已注记并按位置映射。"
+        },
+        {
+          "globalIndex": 710,
+          "id": "gre900:new-16:10",
+          "sourcePages": [
+            182
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "4x 围栏、所有四组尺寸及无法判断选项均正确，原文 F–J 选项字母保留。"
+        },
+        {
+          "globalIndex": 725,
+          "id": "gre900:new-17:5",
+          "sourcePages": [
+            187
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "OA=5 km、OB 斜率 3/4、AB 垂直 OB、五项数值 2/2.5/3/3.5/4 均正确；原文重复 B 标签已注记。"
+        },
+        {
+          "globalIndex": 734,
+          "id": "gre900:new-17:14",
+          "sourcePages": [
+            189
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "频数表 6:0.1/7:0.2/8:0.1/9:0.2/10:0.4 正确；五个箱线图的须端、箱体边界与可见中位线按原图保留。B、D 中位线不单独可见的源图外观已有说明。"
+        },
+        {
+          "globalIndex": 799,
+          "id": "gre900:new-20:19",
+          "sourcePages": [
+            203,
+            204
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "4×4 表格四角为 6、3、11、14，中央 p/x/y/q 的位置正确；乘积 (p+q)(x+y)、原文 A/B/C/D/F 数值及标签均忠实保留。题目/选项矛盾属于原文，不是转录错误。"
+        },
+        {
+          "globalIndex": 837,
+          "id": "gre900:new-22:17",
+          "sourcePages": [
+            213
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "14000、0.1 年精度、Q1=23.5、中位数25.6、IQR 8–9、30.0 岁阈值及全部五项数值均与原文一致。"
+        },
+        {
+          "globalIndex": 843,
+          "id": "gre900:new-23:3",
+          "sourcePages": [
+            214,
+            215
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "两个等圆各与矩形三边相切、P/Q 分别位于另一圆上、图中 RSTW 顺序和五个含 c/π 的平方选项系数均正确。"
+        },
+        {
+          "globalIndex": 855,
+          "id": "gre900:new-23:15",
+          "sourcePages": [
+            217,
+            218
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "题干 y=−x²+2x−1 正确；五图顶点依次为上开口 (0,0)/(2,0)、下开口 (−1,0)/(0,0)/(1,0)，与原图相符。"
+        },
+        {
+          "globalIndex": 861,
+          "id": "gre900:new-24:1",
+          "sourcePages": [
+            219,
+            220
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "20%/25%/x% 条件正确；五个表达式 1−(55−x)/100、1−(45+x)/100、(45−x)/100、(55−x)/100、(55+x)/100 顺序和符号均正确。"
+        },
+        {
+          "globalIndex": 866,
+          "id": "gre900:new-24:6",
+          "sourcePages": [
+            220
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "圆 x²+y²=4 与直线 y−x+2=0 正确；五图顺序及与坐标轴/圆的交点和最后一图的相切位置与放大原图一致。"
+        },
+        {
+          "globalIndex": 897,
+          "id": "gre900:new-25:17",
+          "sourcePages": [
+            228
+          ],
+          "authorVisuallyChecked": true,
+          "status": "confirmed",
+          "scope": [
+            "English stem and numerical conditions",
+            "formulas and option order",
+            "source figures and redraw when present"
+          ],
+          "result": "k>n 的不同数字条件正确，五项循环节 kn/nk/knk/knn/nkn 的上划线范围已对照高倍原图核实。"
+        }
+      ]
+    }
+  ],
+  "integrationCorrections": [
+    {
+      "globalIndex": 725,
+      "change": "Restored first distractor as positional A; original printed the first two options as B. Correct answer E and existing scores unchanged."
+    },
+    {
+      "globalIndex": 816,
+      "change": "Restored omitted A option, 3^100+2^100. Correct answer D and existing scores unchanged."
+    }
+  ],
+  "validation": {
+    "regressionChecksPassed": 41,
+    "regressionChecksFailed": 0,
+    "domInteractions": "passed",
+    "pdfRequired": false,
+    "rasterQuestionAssets": 0,
+    "realBrowserVisualAcceptance": "not performed; Chromium unavailable in execution environment"
+  },
+  "editableTranscriptsSha256": "744cf63c3b7007927c273e099cb5d987bbcfde55b346da88d2d1a2b5311ce6f8"
+}
