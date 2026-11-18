@@ -5,7 +5,7 @@ const {JSDOM}=require('jsdom');
 const B=require('../gre-900-data.js');
 const T=require('../gre-900-text.js');
 const S=require('../data/gre900-transcripts.json');
-const {compileMarkup}=require('../scripts/build-gre900-text.cjs');
+const {compileMarkup,compileEntry}=require('../scripts/build-gre900-text.cjs');
 const get=i=>T.questions.find(q=>q.globalIndex===i);
 test('900 text questions preserve IDs, source fingerprint, complete options and both comparison quantities',()=>{
  assert.equal(T.questions.length,900);assert.equal(new Set(T.questions.map(q=>q.id)).size,900);
@@ -25,6 +25,27 @@ test('question markup contains selectable text, native mathematics and vectors, 
   const ids=[...f.querySelectorAll('[id]')].map(el=>el.id);assert.equal(ids.length,new Set(ids).size,t.id+' duplicate vector IDs');
   for(const e of f.querySelectorAll('*'))for(const a of e.attributes){assert.ok(!/^on/i.test(a.name),t.id);if(a.name==='href')assert.ok(a.value.startsWith('#'),t.id)}
  }
+});
+test('all 900 answering texts and source disclosures are English; original review notes remain separate',()=>{
+ assert.equal(T.answeringLanguage,'en');assert.equal(T.version,S.version);
+ let notes=0;
+ for(const t of T.questions){
+  const raw=S.questions.find(q=>q.id===t.id);
+  for(const field of ['stem','quantityA','quantityB','figure','figureAlt','transcriptionNoteEn']){
+   if(t[field])assert.doesNotMatch(t[field],/\p{Script=Han}/u,`${t.id}.${field}`);
+  }
+  for(const [letter,html] of Object.entries(t.choices))assert.doesNotMatch(html,/\p{Script=Han}/u,`${t.id}.choices.${letter}`);
+  if(raw.transcriptionNote){
+   notes++;assert.ok(t.transcriptionNoteEn.trim(),t.id+' English disclosure');
+   assert.equal(t.transcriptionNote,raw.transcriptionNote,t.id+' original review note');
+   assert.equal(t.transcriptionNoteEn,raw.transcriptionNoteEn,t.id+' English disclosure unchanged');
+  }
+ }
+ assert.equal(notes,65);
+ const raw=S.questions[0],q=B.questions[0];
+ assert.throws(()=>compileEntry({...raw,stem:'<p>中文题目</p>'},q),/answering content must be in English/);
+ assert.throws(()=>compileEntry({...raw,stem:'<p>&#20013;&#25991;</p>'},q),/answering content must be in English/);
+ assert.throws(()=>compileEntry({...raw,transcriptionNote:'中文说明'},q),/English transcription note is required/);
 });
 test('fraction/exponent transcriptions and original unusual choice letters are retained',()=>{
  const f=JSDOM.fragment(get(1).stem);assert.ok(f.querySelector('mfrac'));assert.ok(f.querySelector('msup'));assert.match(f.textContent,/−2|\^-?\{?-2/);

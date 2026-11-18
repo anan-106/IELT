@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-18.text.1",
+  "version": "2026-11-18.text.2",
   "sourceSha256": "81789d49daf72ba23927158c94cc86293103fb9fad994b1afe700d7699e4eece",
   "sourceTitle": "张巍 GRE 最新数学机经 900 题（难度分级版）",
   "format": "html-with-tex-and-independent-svg",
@@ -401,7 +401,8 @@
       "choices": {},
       "quantityA": "\\(2^x\\)",
       "quantityB": "\\(2^{-x}\\)",
-      "transcriptionNote": "原文将第二栏也标为Quantity A；按数量比较题结构更正为Quantity B。"
+      "transcriptionNote": "原文将第二栏也标为Quantity A；按数量比较题结构更正为Quantity B。",
+      "transcriptionNoteEn": "The source also labels the second column Quantity A. It is relabeled Quantity B to follow the quantitative comparison format."
     },
     {
       "globalIndex": 44,
@@ -482,7 +483,8 @@
         "D": "$3.25",
         "E": "$3.50"
       },
-      "transcriptionNote": "原文A项写作$2,50，按金额小数格式转写为$2.50。"
+      "transcriptionNote": "原文A项写作$2,50，按金额小数格式转写为$2.50。",
+      "transcriptionNoteEn": "Choice A is printed as $2,50 in the source and is transcribed as $2.50 using decimal currency notation."
     },
     {
       "globalIndex": 52,
@@ -861,7 +863,8 @@
         "D": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 300\" role=\"img\" style=\"max-width:100%;height:auto\"><g fill=\"none\" stroke=\"#233947\" stroke-width=\"2\" stroke-linejoin=\"round\"><g stroke=\"#b9c6cc\" stroke-width=\"0.8\"><line x1=\"44\" y1=\"20\" x2=\"44\" y2=\"275\"/><line x1=\"68\" y1=\"20\" x2=\"68\" y2=\"275\"/><line x1=\"92\" y1=\"20\" x2=\"92\" y2=\"275\"/><line x1=\"116\" y1=\"20\" x2=\"116\" y2=\"275\"/><line x1=\"140\" y1=\"20\" x2=\"140\" y2=\"275\"/><line x1=\"164\" y1=\"20\" x2=\"164\" y2=\"275\"/><line x1=\"188\" y1=\"20\" x2=\"188\" y2=\"275\"/><line x1=\"212\" y1=\"20\" x2=\"212\" y2=\"275\"/><line x1=\"236\" y1=\"20\" x2=\"236\" y2=\"275\"/><line x1=\"25\" y1=\"283\" x2=\"255\" y2=\"283\"/><line x1=\"25\" y1=\"259\" x2=\"255\" y2=\"259\"/><line x1=\"25\" y1=\"235\" x2=\"255\" y2=\"235\"/><line x1=\"25\" y1=\"211\" x2=\"255\" y2=\"211\"/><line x1=\"25\" y1=\"187\" x2=\"255\" y2=\"187\"/><line x1=\"25\" y1=\"163\" x2=\"255\" y2=\"163\"/><line x1=\"25\" y1=\"139\" x2=\"255\" y2=\"139\"/><line x1=\"25\" y1=\"115\" x2=\"255\" y2=\"115\"/><line x1=\"25\" y1=\"91\" x2=\"255\" y2=\"91\"/><line x1=\"25\" y1=\"67\" x2=\"255\" y2=\"67\"/><line x1=\"25\" y1=\"43\" x2=\"255\" y2=\"43\"/></g><line x1=\"20\" y1=\"235\" x2=\"265\" y2=\"235\"/><path d=\"M257,231 l8,4 l-8,4\" fill=\"none\"/><line x1=\"140\" y1=\"280\" x2=\"140\" y2=\"15\"/><path d=\"M136,23 l4,-8 l4,8\" fill=\"none\"/><text x=\"270\" y=\"227\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">x</text><text x=\"152\" y=\"19\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">y</text><text x=\"68\" y=\"254\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">−3</text><text x=\"212\" y=\"254\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">3</text><text x=\"153\" y=\"168\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">3</text><polyline points=\"52.64,32.79 53.12,35.5 53.6,38.2 54.08,40.88 54.56,43.54 55.04,46.18 55.52,48.8 56.0,51.4 56.48,53.98 56.96,56.55 57.44,59.09 57.92,61.61 58.4,64.12 58.88,66.61 59.36,69.07 59.84,71.52 60.32,73.95 60.8,76.36 61.28,78.75 61.76,81.12 62.24,83.47 62.72,85.81 63.2,88.12 63.68,90.41 64.16,92.69 64.64,94.95 65.12,97.18 65.6,99.4 66.08,101.6 66.56,103.78 67.04,105.94 67.52,108.08 68.0,110.2 68.48,112.3 68.96,114.39 69.44,116.45 69.92,118.49 70.4,120.52 70.88,122.53 71.36,124.51 71.84,126.48 72.32,128.43 72.8,130.36 73.28,132.27 73.76,134.16 74.24,136.03 74.72,137.89 75.2,139.72 75.68,141.53 76.16,143.33 76.64,145.11 77.12,146.86 77.6,148.6 78.08,150.32 78.56,152.02 79.04,153.7 79.52,155.36 80.0,157.0 80.48,158.62 80.96,160.23 81.44,161.81 81.92,163.37 82.4,164.92 82.88,166.45 83.36,167.95 83.84,169.44 84.32,170.91 84.8,172.36 85.28,173.79 85.76,175.2 86.24,176.59 86.72,177.97 87.2,179.32 87.68,180.65 88.16,181.97 88.64,183.27 89.12,184.54 89.6,185.8 90.08,187.04 90.56,188.26 91.04,189.46 91.52,190.64 92.0,191.8 92.48,192.94 92.96,194.07 93.44,195.17 93.92,196.25 94.4,197.32 94.88,198.37 95.36,199.39 95.84,200.4 96.32,201.39 96.8,202.36 97.28,203.31 97.76,204.24 98.24,205.15 98.72,206.05 99.2,206.92 99.68,207.77 100.16,208.61 100.64,209.43 101.12,210.22 101.6,211.0 102.08,211.76 102.56,212.5 103.04,213.22 103.52,213.92 104.0,214.6 104.48,215.26 104.96,215.91 105.44,216.53 105.92,217.13 106.4,217.72 106.88,218.29 107.36,218.83 107.84,219.36 108.32,219.87 108.8,220.36 109.28,220.83 109.76,221.28 110.24,221.71 110.72,222.13 111.2,222.52 111.68,222.89 112.16,223.25 112.64,223.59 113.12,223.9 113.6,224.2 114.08,224.48 114.56,224.74 115.04,224.98 115.52,225.2 116.0,225.4 116.48,225.58 116.96,225.75 117.44,225.89 117.92,226.01 118.4,226.12 118.88,226.21 119.36,226.27 119.84,226.32 120.32,226.35 120.8,226.36 121.28,226.35 121.76,226.32 122.24,226.27 122.72,226.21 123.2,226.12 123.68,226.01 124.16,225.89 124.64,225.75 125.12,225.58 125.6,225.4 126.08,225.2 126.56,224.98 127.04,224.74 127.52,224.48 128.0,224.2 128.48,223.9 128.96,223.59 129.44,223.25 129.92,222.89 130.4,222.52 130.88,222.13 131.36,221.71 131.84,221.28 132.32,220.83 132.8,220.36 133.28,219.87 133.76,219.36 134.24,218.83 134.72,218.29 135.2,217.72 135.68,217.13 136.16,216.53 136.64,215.91 137.12,215.26 137.6,214.6 138.08,213.92 138.56,213.22 139.04,212.5 139.52,211.76 140.0,211.0 140.48,210.22 140.96,209.43 141.44,208.61 141.92,207.77 142.4,206.92 142.88,206.05 143.36,205.15 143.84,204.24 144.32,203.31 144.8,202.36 145.28,201.39 145.76,200.4 146.24,199.39 146.72,198.37 147.2,197.32 147.68,196.25 148.16,195.17 148.64,194.07 149.12,192.94 149.6,191.8 150.08,190.64 150.56,189.46 151.04,188.26 151.52,187.04 152.0,185.8 152.48,184.54 152.96,183.27 153.44,181.97 153.92,180.65 154.4,179.32 154.88,177.97 155.36,176.59 155.84,175.2 156.32,173.79 156.8,172.36 157.28,170.91 157.76,169.44 158.24,167.95 158.72,166.45 159.2,164.92 159.68,163.37 160.16,161.81 160.64,160.23 161.12,158.62 161.6,157.0 162.08,155.36 162.56,153.7 163.04,152.02 163.52,150.32 164.0,148.6 164.48,146.86 164.96,145.11 165.44,143.33 165.92,141.53 166.4,139.72 166.88,137.89 167.36,136.03 167.84,134.16 168.32,132.27 168.8,130.36 169.28,128.43 169.76,126.48 170.24,124.51 170.72,122.53 171.2,120.52 171.68,118.49 172.16,116.45 172.64,114.39 173.12,112.3 173.6,110.2 174.08,108.08 174.56,105.94 175.04,103.78 175.52,101.6 176.0,99.4 176.48,97.18 176.96,94.95 177.44,92.69 177.92,90.41 178.4,88.12 178.88,85.81 179.36,83.47 179.84,81.12 180.32,78.75 180.8,76.36 181.28,73.95 181.76,71.52 182.24,69.07 182.72,66.61 183.2,64.12 183.68,61.61 184.16,59.09 184.64,56.55 185.12,53.98 185.6,51.4 186.08,48.8 186.56,46.18 187.04,43.54 187.52,40.88 188.0,38.2 188.48,35.5 188.96,32.79\" stroke-width=\"2.8\"/></g></svg>",
         "E": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 300\" role=\"img\" style=\"max-width:100%;height:auto\"><g fill=\"none\" stroke=\"#233947\" stroke-width=\"2\" stroke-linejoin=\"round\"><g stroke=\"#b9c6cc\" stroke-width=\"0.8\"><line x1=\"44\" y1=\"20\" x2=\"44\" y2=\"275\"/><line x1=\"68\" y1=\"20\" x2=\"68\" y2=\"275\"/><line x1=\"92\" y1=\"20\" x2=\"92\" y2=\"275\"/><line x1=\"116\" y1=\"20\" x2=\"116\" y2=\"275\"/><line x1=\"140\" y1=\"20\" x2=\"140\" y2=\"275\"/><line x1=\"164\" y1=\"20\" x2=\"164\" y2=\"275\"/><line x1=\"188\" y1=\"20\" x2=\"188\" y2=\"275\"/><line x1=\"212\" y1=\"20\" x2=\"212\" y2=\"275\"/><line x1=\"236\" y1=\"20\" x2=\"236\" y2=\"275\"/><line x1=\"25\" y1=\"283\" x2=\"255\" y2=\"283\"/><line x1=\"25\" y1=\"259\" x2=\"255\" y2=\"259\"/><line x1=\"25\" y1=\"235\" x2=\"255\" y2=\"235\"/><line x1=\"25\" y1=\"211\" x2=\"255\" y2=\"211\"/><line x1=\"25\" y1=\"187\" x2=\"255\" y2=\"187\"/><line x1=\"25\" y1=\"163\" x2=\"255\" y2=\"163\"/><line x1=\"25\" y1=\"139\" x2=\"255\" y2=\"139\"/><line x1=\"25\" y1=\"115\" x2=\"255\" y2=\"115\"/><line x1=\"25\" y1=\"91\" x2=\"255\" y2=\"91\"/><line x1=\"25\" y1=\"67\" x2=\"255\" y2=\"67\"/><line x1=\"25\" y1=\"43\" x2=\"255\" y2=\"43\"/></g><line x1=\"20\" y1=\"235\" x2=\"265\" y2=\"235\"/><path d=\"M257,231 l8,4 l-8,4\" fill=\"none\"/><line x1=\"140\" y1=\"280\" x2=\"140\" y2=\"15\"/><path d=\"M136,23 l4,-8 l4,8\" fill=\"none\"/><text x=\"270\" y=\"227\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">x</text><text x=\"152\" y=\"19\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">y</text><text x=\"68\" y=\"254\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">−3</text><text x=\"212\" y=\"254\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">3</text><text x=\"153\" y=\"168\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">3</text><polyline points=\"62.24,31.06 62.72,34.16 63.2,37.24 63.68,40.3 64.16,43.35 64.64,46.37 65.12,49.37 65.6,52.36 66.08,55.33 66.56,58.27 67.04,61.2 67.52,64.11 68.0,67.0 68.48,69.87 68.96,72.72 69.44,75.55 69.92,78.37 70.4,81.16 70.88,83.93 71.36,86.69 71.84,89.43 72.32,92.14 72.8,94.84 73.28,97.52 73.76,100.18 74.24,102.82 74.72,105.44 75.2,108.04 75.68,110.62 76.16,113.19 76.64,115.73 77.12,118.25 77.6,120.76 78.08,123.25 78.56,125.71 79.04,128.16 79.52,130.59 80.0,133.0 80.48,135.39 80.96,137.76 81.44,140.11 81.92,142.45 82.4,144.76 82.88,147.05 83.36,149.33 83.84,151.59 84.32,153.82 84.8,156.04 85.28,158.24 85.76,160.42 86.24,162.58 86.72,164.72 87.2,166.84 87.68,168.94 88.16,171.03 88.64,173.09 89.12,175.13 89.6,177.16 90.08,179.17 90.56,181.15 91.04,183.12 91.52,185.07 92.0,187.0 92.48,188.91 92.96,190.8 93.44,192.67 93.92,194.53 94.4,196.36 94.88,198.17 95.36,199.97 95.84,201.75 96.32,203.5 96.8,205.24 97.28,206.96 97.76,208.66 98.24,210.34 98.72,212.0 99.2,213.64 99.68,215.26 100.16,216.87 100.64,218.45 101.12,220.01 101.6,221.56 102.08,223.09 102.56,224.59 103.04,226.08 103.52,227.55 104.0,229.0 104.48,230.43 104.96,231.84 105.44,233.23 105.92,234.61 106.4,235.96 106.88,237.29 107.36,238.61 107.84,239.91 108.32,241.18 108.8,242.44 109.28,243.68 109.76,244.9 110.24,246.1 110.72,247.28 111.2,248.44 111.68,249.58 112.16,250.71 112.64,251.81 113.12,252.89 113.6,253.96 114.08,255.01 114.56,256.03 115.04,257.04 115.52,258.03 116.0,259.0 116.48,259.95 116.96,260.88 117.44,261.79 117.92,262.69 118.4,263.56 118.88,264.41 119.36,265.25 119.84,266.07 120.32,266.86 120.8,267.64 121.28,268.4 121.76,269.14 122.24,269.86 122.72,270.56 123.2,271.24 123.68,271.9 124.16,272.55 124.64,273.17 125.12,273.77 125.6,274.36 126.08,274.93 126.56,275.47 127.04,276.0 127.52,276.51 128.0,277.0 128.48,277.47 128.96,277.92 129.44,278.35 129.92,278.77 130.4,279.16 130.88,279.53 131.36,279.89 131.84,280.23 132.32,280.54 132.8,280.84 133.28,281.12 133.76,281.38 134.24,281.62 134.72,281.84 135.2,282.04 135.68,282.22 136.16,282.39 136.64,282.53 137.12,282.65 137.6,282.76 138.08,282.85 138.56,282.91 139.04,282.96 139.52,282.99 140.0,283.0 140.48,282.99 140.96,282.96 141.44,282.91 141.92,282.85 142.4,282.76 142.88,282.65 143.36,282.53 143.84,282.39 144.32,282.22 144.8,282.04 145.28,281.84 145.76,281.62 146.24,281.38 146.72,281.12 147.2,280.84 147.68,280.54 148.16,280.23 148.64,279.89 149.12,279.53 149.6,279.16 150.08,278.77 150.56,278.35 151.04,277.92 151.52,277.47 152.0,277.0 152.48,276.51 152.96,276.0 153.44,275.47 153.92,274.93 154.4,274.36 154.88,273.77 155.36,273.17 155.84,272.55 156.32,271.9 156.8,271.24 157.28,270.56 157.76,269.86 158.24,269.14 158.72,268.4 159.2,267.64 159.68,266.86 160.16,266.07 160.64,265.25 161.12,264.41 161.6,263.56 162.08,262.69 162.56,261.79 163.04,260.88 163.52,259.95 164.0,259.0 164.48,258.03 164.96,257.04 165.44,256.03 165.92,255.01 166.4,253.96 166.88,252.89 167.36,251.81 167.84,250.71 168.32,249.58 168.8,248.44 169.28,247.28 169.76,246.1 170.24,244.9 170.72,243.68 171.2,242.44 171.68,241.18 172.16,239.91 172.64,238.61 173.12,237.29 173.6,235.96 174.08,234.61 174.56,233.23 175.04,231.84 175.52,230.43 176.0,229.0 176.48,227.55 176.96,226.08 177.44,224.59 177.92,223.09 178.4,221.56 178.88,220.01 179.36,218.45 179.84,216.87 180.32,215.26 180.8,213.64 181.28,212.0 181.76,210.34 182.24,208.66 182.72,206.96 183.2,205.24 183.68,203.5 184.16,201.75 184.64,199.97 185.12,198.17 185.6,196.36 186.08,194.53 186.56,192.67 187.04,190.8 187.52,188.91 188.0,187.0 188.48,185.07 188.96,183.12 189.44,181.15 189.92,179.17 190.4,177.16 190.88,175.13 191.36,173.09 191.84,171.03 192.32,168.94 192.8,166.84 193.28,164.72 193.76,162.58 194.24,160.42 194.72,158.24 195.2,156.04 195.68,153.82 196.16,151.59 196.64,149.33 197.12,147.05 197.6,144.76 198.08,142.45 198.56,140.11 199.04,137.76 199.52,135.39 200.0,133.0 200.48,130.59 200.96,128.16 201.44,125.71 201.92,123.25 202.4,120.76 202.88,118.25 203.36,115.73 203.84,113.19 204.32,110.62 204.8,108.04 205.28,105.44 205.76,102.82 206.24,100.18 206.72,97.52 207.2,94.84 207.68,92.14 208.16,89.43 208.64,86.69 209.12,83.93 209.6,81.16 210.08,78.37 210.56,75.55 211.04,72.72 211.52,69.87 212.0,67.0 212.48,64.11 212.96,61.2 213.44,58.27 213.92,55.33 214.4,52.36 214.88,49.37 215.36,46.37 215.84,43.35 216.32,40.3 216.8,37.24 217.28,34.16 217.76,31.06\" stroke-width=\"2.8\"/></g></svg>"
       },
-      "transcriptionNote": "原文图形选项无字母；按原页上排从左到右A、B、C，下排从左到右D、E编号。重绘保留各图开口、顶点相对于坐标轴的位置与截距关系；原文未给选项曲线方程。"
+      "transcriptionNote": "原文图形选项无字母；按原页上排从左到右A、B、C，下排从左到右D、E编号。重绘保留各图开口、顶点相对于坐标轴的位置与截距关系；原文未给选项曲线方程。",
+      "transcriptionNoteEn": "The source does not label the graph choices with letters. They are labeled A, B, C from left to right in the top row, then D, E from left to right in the bottom row. The redrawn graphs preserve the direction of opening, vertex positions relative to the axes, and intercept relationships. The source does not provide equations for the choice curves."
     },
     {
       "globalIndex": 91,
@@ -1400,7 +1403,8 @@
       },
       "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 420 260\" role=\"img\" style=\"max-width:100%;height:auto\"><g fill=\"none\" stroke=\"#233947\" stroke-width=\"2\" stroke-linejoin=\"round\"><polygon points=\"40,210 210,40 380,210\" fill=\"none\"/><polygon points=\"153.33,210 153.33,96.67 266.67,96.67 266.67,210\" fill=\"none\"/><path d=\"M201,49 l9,9 l9,-9\" fill=\"none\"/><text x=\"27\" y=\"226\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">A</text><text x=\"210\" y=\"25\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">B</text><text x=\"396\" y=\"224\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">C</text><text x=\"272\" y=\"230\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">D</text><text x=\"153\" y=\"230\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">E</text><text x=\"142\" y=\"91\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">F</text><text x=\"279\" y=\"91\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">G</text></g></svg>",
       "figureAlt": "Isosceles right triangle ABC has its right angle at B. A square has E and D on AC, F on AB, and G on BC; EF and DG are perpendicular to AC.",
-      "transcriptionNote": "原题正文正方形名称印作DEPG，图中和所问三角形使用F；按图中顶点统一转写为DEFG。"
+      "transcriptionNote": "原题正文正方形名称印作DEPG，图中和所问三角形使用F；按图中顶点统一转写为DEFG。",
+      "transcriptionNoteEn": "The source names the square DEPG in the text, but the diagram and the triangle in the question use F. The square is transcribed as DEFG to match the labeled vertices."
     },
     {
       "globalIndex": 144,
@@ -2151,7 +2155,8 @@
       "choices": {},
       "quantityA": "The tens digit of the product \\((4^{100})(5^{99})\\)",
       "quantityB": "The tens digit of the product \\((4^{100})(5^{101})\\)",
-      "transcriptionNote": "原题省略Quantity A/B标签；按上、下两行分别转写为Quantity A和Quantity B。"
+      "transcriptionNote": "原题省略Quantity A/B标签；按上、下两行分别转写为Quantity A和Quantity B。",
+      "transcriptionNoteEn": "The source omits the Quantity A and Quantity B labels. The upper and lower lines are transcribed as Quantity A and Quantity B, respectively."
     },
     {
       "globalIndex": 218,
@@ -2266,7 +2271,8 @@
       },
       "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 280 260\" role=\"img\" style=\"max-width:100%;height:auto\"><g fill=\"none\" stroke=\"#233947\" stroke-width=\"2\" stroke-linejoin=\"round\"><line x1=\"40\" y1=\"130\" x2=\"240\" y2=\"130\"/><path d=\"M232,126 l8,4 l-8,4\" fill=\"none\"/><line x1=\"130\" y1=\"230\" x2=\"130\" y2=\"20\"/><path d=\"M126,28 l4,-8 l4,8\" fill=\"none\"/><text x=\"253\" y=\"136\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">x</text><text x=\"142\" y=\"22\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">y</text><text x=\"185\" y=\"80\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">I</text><text x=\"75\" y=\"80\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">II</text><text x=\"75\" y=\"185\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">III</text><text x=\"185\" y=\"185\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">IV</text></g></svg>",
       "figureAlt": "The xy-plane with quadrants I, II, III, and IV labeled in the usual counterclockwise order from the upper right.",
-      "transcriptionNote": "原文图形选项无字母；按上排从左到右A、B、C，下排从左到右D、E编号。虚线边界不包括在阴影集合内。"
+      "transcriptionNote": "原文图形选项无字母；按上排从左到右A、B、C，下排从左到右D、E编号。虚线边界不包括在阴影集合内。",
+      "transcriptionNoteEn": "The source does not label the graph choices with letters. They are labeled A, B, C from left to right in the top row, then D, E from left to right in the bottom row. Dashed boundaries are not included in the shaded sets."
     },
     {
       "globalIndex": 229,
@@ -2319,7 +2325,8 @@
       "quantityB": "\\(P(152&lt;X&lt;158)\\)",
       "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 520 260\" role=\"img\" style=\"max-width:100%;height:auto\"><g fill=\"none\" stroke=\"#233947\" stroke-width=\"2\" stroke-linejoin=\"round\"><line x1=\"30\" y1=\"210\" x2=\"490\" y2=\"210\"/><polyline points=\"30.00,209.07 32.00,208.99 34.00,208.89 36.00,208.79 38.00,208.69 40.00,208.57 42.00,208.44 44.00,208.30 46.00,208.16 48.00,208.00 50.00,207.83 52.00,207.65 54.00,207.45 56.00,207.24 58.00,207.01 60.00,206.77 62.00,206.51 64.00,206.24 66.00,205.94 68.00,205.63 70.00,205.29 72.00,204.93 74.00,204.55 76.00,204.15 78.00,203.72 80.00,203.26 82.00,202.78 84.00,202.27 86.00,201.73 88.00,201.15 90.00,200.55 92.00,199.91 94.00,199.23 96.00,198.52 98.00,197.78 100.00,196.99 102.00,196.16 104.00,195.30 106.00,194.39 108.00,193.44 110.00,192.44 112.00,191.40 114.00,190.31 116.00,189.17 118.00,187.98 120.00,186.75 122.00,185.46 124.00,184.13 126.00,182.74 128.00,181.30 130.00,179.80 132.00,178.26 134.00,176.66 136.00,175.00 138.00,173.30 140.00,171.54 142.00,169.72 144.00,167.86 146.00,165.94 148.00,163.97 150.00,161.95 152.00,159.88 154.00,157.76 156.00,155.59 158.00,153.37 160.00,151.12 162.00,148.82 164.00,146.47 166.00,144.09 168.00,141.68 170.00,139.23 172.00,136.75 174.00,134.24 176.00,131.70 178.00,129.15 180.00,126.57 182.00,123.98 184.00,121.38 186.00,118.77 188.00,116.15 190.00,113.54 192.00,110.92 194.00,108.32 196.00,105.73 198.00,103.16 200.00,100.60 202.00,98.07 204.00,95.58 206.00,93.11 208.00,90.69 210.00,88.31 212.00,85.98 214.00,83.70 216.00,81.48 218.00,79.33 220.00,77.24 222.00,75.22 224.00,73.27 226.00,71.41 228.00,69.63 230.00,67.93 232.00,66.33 234.00,64.82 236.00,63.40 238.00,62.09 240.00,60.89 242.00,59.79 244.00,58.79 246.00,57.91 248.00,57.15 250.00,56.49 252.00,55.96 254.00,55.54 256.00,55.24 258.00,55.06 260.00,55.00 262.00,55.06 264.00,55.24 266.00,55.54 268.00,55.96 270.00,56.49 272.00,57.15 274.00,57.91 276.00,58.79 278.00,59.79 280.00,60.89 282.00,62.09 284.00,63.40 286.00,64.82 288.00,66.33 290.00,67.93 292.00,69.63 294.00,71.41 296.00,73.27 298.00,75.22 300.00,77.24 302.00,79.33 304.00,81.48 306.00,83.70 308.00,85.98 310.00,88.31 312.00,90.69 314.00,93.11 316.00,95.58 318.00,98.07 320.00,100.60 322.00,103.16 324.00,105.73 326.00,108.32 328.00,110.92 330.00,113.54 332.00,116.15 334.00,118.77 336.00,121.38 338.00,123.98 340.00,126.57 342.00,129.15 344.00,131.70 346.00,134.24 348.00,136.75 350.00,139.23 352.00,141.68 354.00,144.09 356.00,146.47 358.00,148.82 360.00,151.12 362.00,153.37 364.00,155.59 366.00,157.76 368.00,159.88 370.00,161.95 372.00,163.97 374.00,165.94 376.00,167.86 378.00,169.72 380.00,171.54 382.00,173.30 384.00,175.00 386.00,176.66 388.00,178.26 390.00,179.80 392.00,181.30 394.00,182.74 396.00,184.13 398.00,185.46 400.00,186.75 402.00,187.98 404.00,189.17 406.00,190.31 408.00,191.40 410.00,192.44 412.00,193.44 414.00,194.39 416.00,195.30 418.00,196.16 420.00,196.99 422.00,197.78 424.00,198.52 426.00,199.23 428.00,199.91 430.00,200.55 432.00,201.15 434.00,201.73 436.00,202.27 438.00,202.78 440.00,203.26 442.00,203.72 444.00,204.15 446.00,204.55 448.00,204.93 450.00,205.29 452.00,205.63 454.00,205.94 456.00,206.24 458.00,206.51 460.00,206.77 462.00,207.01 464.00,207.24 466.00,207.45 468.00,207.65 470.00,207.83 472.00,208.00 474.00,208.16 476.00,208.30 478.00,208.44 480.00,208.57 482.00,208.69 484.00,208.79 486.00,208.89 488.00,208.99 490.00,209.07\"/><line x1=\"116.25\" y1=\"210\" x2=\"116.25\" y2=\"189.02303109832502\"/><text x=\"116.25\" y=\"235\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">−2</text><line x1=\"188.125\" y1=\"210\" x2=\"188.125\" y2=\"115.98774774454182\"/><text x=\"188.125\" y=\"235\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">−1</text><line x1=\"260.0\" y1=\"210\" x2=\"260.0\" y2=\"55.0\"/><text x=\"260.0\" y=\"235\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">0</text><line x1=\"331.875\" y1=\"210\" x2=\"331.875\" y2=\"115.98774774454182\"/><text x=\"331.875\" y=\"235\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">1</text><line x1=\"403.75\" y1=\"210\" x2=\"403.75\" y2=\"189.02303109832502\"/><text x=\"403.75\" y=\"235\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">2</text><text x=\"61\" y=\"179\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">0.0</text><text x=\"150\" y=\"185\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">0.1</text><text x=\"221\" y=\"139\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">0.3</text><text x=\"299\" y=\"139\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">0.3</text><text x=\"370\" y=\"185\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">0.1</text><text x=\"461\" y=\"179\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">0.0</text></g></svg>",
       "figureAlt": "Symmetric bell curve with vertical dividers at −2, −1, 0, 1, 2. The source labels the six interval probabilities, from left to right, as 0.0, 0.1, 0.3, 0.3, 0.1, 0.0.",
-      "transcriptionNote": "原图的概率标签只显示一位小数，按原图可见内容保留。"
+      "transcriptionNote": "原图的概率标签只显示一位小数，按原图可见内容保留。",
+      "transcriptionNoteEn": "The probability labels in the source diagram show only one decimal place. They are retained as displayed."
     },
     {
       "globalIndex": 234,
@@ -2965,7 +2972,8 @@
       },
       "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 420 260\" role=\"img\" style=\"max-width:100%;height:auto\"><g fill=\"none\" stroke=\"#233947\" stroke-width=\"2\" stroke-linejoin=\"round\"><circle cx=\"210\" cy=\"120\" r=\"95\" fill=\"none\"/><polygon points=\"127.73,167.5 210,25 292.27,167.5\" fill=\"none\"/><line x1=\"210\" y1=\"120\" x2=\"210\" y2=\"167.5\"/><circle cx=\"210\" cy=\"120\" r=\"2.5\" fill=\"#233947\"/><path d=\"M210,156 L221.5,156 L221.5,167.5\" fill=\"none\"/><text x=\"115\" y=\"183\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">A</text><text x=\"210\" y=\"17\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">B</text><text x=\"305\" y=\"183\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">C</text><text x=\"210\" y=\"110\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">O</text><text x=\"210\" y=\"188\" fill=\"#172c36\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"17\" text-anchor=\"middle\">X</text></g></svg>",
       "figureAlt": "Equilateral triangle ABC is inscribed in circle O. B is at the top, AC is a horizontal lower chord, and perpendicular OX meets AC at X.",
-      "transcriptionNote": "原题选项 A 与 C 均印为 96√3，转录保留原选项。"
+      "transcriptionNote": "原题选项 A 与 C 均印为 96√3，转录保留原选项。",
+      "transcriptionNoteEn": "Choices A and C are both printed as 96√3 in the source. Both choices are retained as printed."
     },
     {
       "globalIndex": 297,
@@ -3483,7 +3491,8 @@
         "D": "82%",
         "E": "98%"
       },
-      "transcriptionNote": "原图为柱形图与折线图，未在每个点标数值；数据按图中刻度近似转录。"
+      "transcriptionNote": "原图为柱形图与折线图，未在每个点标数值；数据按图中刻度近似转录。",
+      "transcriptionNoteEn": "The source uses a bar chart and a line graph without a numerical label at every data point. The values are approximate readings from the graph scales."
     },
     {
       "globalIndex": 342,
@@ -3496,7 +3505,8 @@
         "D": "1980",
         "E": "1990"
       },
-      "transcriptionNote": "原图为柱形图与折线图，未在每个点标数值；数据按图中刻度近似转录。"
+      "transcriptionNote": "原图为柱形图与折线图，未在每个点标数值；数据按图中刻度近似转录。",
+      "transcriptionNoteEn": "The source uses a bar chart and a line graph without a numerical label at every data point. The values are approximate readings from the graph scales."
     },
     {
       "globalIndex": 343,
@@ -3509,7 +3519,8 @@
         "D": "It decreased by less than 50 percent but more than 5 percent.",
         "E": "It decreased by more than 50 percent."
       },
-      "transcriptionNote": "原图为柱形图与折线图，未在每个点标数值；数据按图中刻度近似转录。"
+      "transcriptionNote": "原图为柱形图与折线图，未在每个点标数值；数据按图中刻度近似转录。",
+      "transcriptionNoteEn": "The source uses a bar chart and a line graph without a numerical label at every data point. The values are approximate readings from the graph scales."
     },
     {
       "globalIndex": 344,
@@ -3788,7 +3799,8 @@
         "D": "28",
         "E": "38"
       },
-      "transcriptionNote": "原图柱顶未标数值；按纵轴刻度近似转录。"
+      "transcriptionNote": "原图柱顶未标数值；按纵轴刻度近似转录。",
+      "transcriptionNoteEn": "The source does not label the bar heights numerically. The values are approximate readings from the vertical-axis scale."
     },
     {
       "globalIndex": 368,
@@ -3801,14 +3813,16 @@
         "D": "600",
         "E": "730"
       },
-      "transcriptionNote": "原图柱顶未标数值；按纵轴刻度近似转录。"
+      "transcriptionNote": "原图柱顶未标数值；按纵轴刻度近似转录。",
+      "transcriptionNoteEn": "The source does not label the bar heights numerically. The values are approximate readings from the vertical-axis scale."
     },
     {
       "globalIndex": 369,
       "id": "gre900:original-19:29",
       "stem": "<table><caption>Average Daily Electric Use by Household X for 2015 and 2016 by Month (approximate graph readings)</caption><thead><tr><th>Month</th><th>2015 (kilowatt-hours)</th><th>2016 (kilowatt-hours)</th></tr></thead><tbody><tr><td>January</td><td>34</td><td>38</td></tr><tr><td>February</td><td>32</td><td>38</td></tr><tr><td>March</td><td>26</td><td>32</td></tr><tr><td>April</td><td>26</td><td>36</td></tr><tr><td>May</td><td>24</td><td>32</td></tr><tr><td>June</td><td>34</td><td>40</td></tr><tr><td>July</td><td>50</td><td>50</td></tr><tr><td>August</td><td>60</td><td>46</td></tr><tr><td>September</td><td>62</td><td>52</td></tr><tr><td>October</td><td>32</td><td>38</td></tr><tr><td>November</td><td>24</td><td>32</td></tr><tr><td>December</td><td>26</td><td>26</td></tr></tbody></table><p>* Average means arithmetic mean.</p><p>What is the ratio of the number of months for which the percent increase from 2015 to 2016 in the average daily electric use was greater than 28 percent to the number of months for which the percent decrease from 2015 to 2016 in the average daily electric use was greater than 10 percent? Give your answer as a fraction.</p>",
       "choices": {},
-      "transcriptionNote": "原图柱顶未标数值；按纵轴刻度近似转录。"
+      "transcriptionNote": "原图柱顶未标数值；按纵轴刻度近似转录。",
+      "transcriptionNoteEn": "The source does not label the bar heights numerically. The values are approximate readings from the vertical-axis scale."
     },
     {
       "globalIndex": 370,
@@ -3821,7 +3835,8 @@
         "D": "\\(\\frac56\\)",
         "E": "\\(\\frac67\\)"
       },
-      "transcriptionNote": "折线图未标具体点值；这里按图中刻度近似转录。"
+      "transcriptionNote": "折线图未标具体点值；这里按图中刻度近似转录。",
+      "transcriptionNoteEn": "The source line graph does not label the individual data values. The values shown here are approximate readings from the graph scale."
     },
     {
       "globalIndex": 371,
@@ -3834,7 +3849,8 @@
         "D": "37,500",
         "E": "40,000"
       },
-      "transcriptionNote": "折线图未标具体点值；这里按图中刻度近似转录。"
+      "transcriptionNote": "折线图未标具体点值；这里按图中刻度近似转录。",
+      "transcriptionNoteEn": "The source line graph does not label the individual data values. The values shown here are approximate readings from the graph scale."
     },
     {
       "globalIndex": 372,
@@ -3847,7 +3863,8 @@
         "D": "Three",
         "E": "Four"
       },
-      "transcriptionNote": "折线图未标具体点值；这里按图中刻度近似转录。"
+      "transcriptionNote": "折线图未标具体点值；这里按图中刻度近似转录。",
+      "transcriptionNoteEn": "The source line graph does not label the individual data values. The values shown here are approximate readings from the graph scale."
     },
     {
       "globalIndex": 373,
@@ -4122,7 +4139,8 @@
         "D": "63%",
         "E": "725"
       },
-      "transcriptionNote": "原文件选项E印为“725”，照录；未擅自改成百分数。"
+      "transcriptionNote": "原文件选项E印为“725”，照录；未擅自改成百分数。",
+      "transcriptionNoteEn": "Choice E is printed as “725” in the source. It is retained as printed and has not been changed to a percentage."
     },
     {
       "globalIndex": 396,
@@ -4429,7 +4447,8 @@
         "D": "Three",
         "E": "Four"
       },
-      "transcriptionNote": "原折线图没有逐点数值标注，人口数量按刻度近似转录。"
+      "transcriptionNote": "原折线图没有逐点数值标注，人口数量按刻度近似转录。",
+      "transcriptionNoteEn": "The source line graph does not label each data point numerically. The population values are approximate readings from the graph scale."
     },
     {
       "globalIndex": 427,
@@ -4442,7 +4461,8 @@
         "D": "1940-1970",
         "E": "1950-1980"
       },
-      "transcriptionNote": "原折线图没有逐点数值标注，人口数量按刻度近似转录。"
+      "transcriptionNote": "原折线图没有逐点数值标注，人口数量按刻度近似转录。",
+      "transcriptionNoteEn": "The source line graph does not label each data point numerically. The population values are approximate readings from the graph scale."
     },
     {
       "globalIndex": 428,
@@ -4455,7 +4475,8 @@
         "D": "The average is greater than the median by an amount greater than 5,000.",
         "E": "The average is greater than the median by an amount less than 5,000."
       },
-      "transcriptionNote": "原折线图没有逐点数值标注，人口数量按刻度近似转录。"
+      "transcriptionNote": "原折线图没有逐点数值标注，人口数量按刻度近似转录。",
+      "transcriptionNoteEn": "The source line graph does not label each data point numerically. The population values are approximate readings from the graph scale."
     },
     {
       "globalIndex": 429,
@@ -4594,7 +4615,8 @@
         "D": "9,400",
         "E": "9,900"
       },
-      "transcriptionNote": "人均淡水供应柱图按刻度近似转录；人口为原图标明的数值。"
+      "transcriptionNote": "人均淡水供应柱图按刻度近似转录；人口为原图标明的数值。",
+      "transcriptionNoteEn": "The freshwater supply per person is transcribed approximately from the bar-chart scale. The population figures are the values printed in the source."
     },
     {
       "globalIndex": 443,
@@ -4607,7 +4629,8 @@
         "D": "180,000",
         "E": "140,000"
       },
-      "transcriptionNote": "人均淡水供应柱图按刻度近似转录；人口为原图标明的数值。"
+      "transcriptionNote": "人均淡水供应柱图按刻度近似转录；人口为原图标明的数值。",
+      "transcriptionNoteEn": "The freshwater supply per person is transcribed approximately from the bar-chart scale. The population figures are the values printed in the source."
     },
     {
       "globalIndex": 444,
@@ -4620,7 +4643,8 @@
         "D": "Tunisia, Japan",
         "E": "Algeria, China"
       },
-      "transcriptionNote": "人均淡水供应柱图按刻度近似转录；人口为原图标明的数值。"
+      "transcriptionNote": "人均淡水供应柱图按刻度近似转录；人口为原图标明的数值。",
+      "transcriptionNoteEn": "The freshwater supply per person is transcribed approximately from the bar-chart scale. The population figures are the values printed in the source."
     },
     {
       "globalIndex": 445,
@@ -4976,7 +5000,8 @@
       "choices": {},
       "quantityA": "The fraction of the books sold last year that were new",
       "quantityB": "\\(\\frac12\\)",
-      "transcriptionNote": "The source prints 0 ≤ i ≤ n in the definition; for the n listed values, the conventional index range is 1 ≤ i ≤ n."
+      "transcriptionNote": "The source prints 0 ≤ i ≤ n in the definition; for the n listed values, the conventional index range is 1 ≤ i ≤ n.",
+      "transcriptionNoteEn": "The source prints 0 ≤ i ≤ n in the definition; for the n listed values, the conventional index range is 1 ≤ i ≤ n."
     },
     {
       "globalIndex": 482,
@@ -5104,7 +5129,8 @@
       "choices": {},
       "quantityA": "The number of elements in the set \\(R\\cap T\\)",
       "quantityB": "The number of elements in the set \\(S\\cap T\\)",
-      "transcriptionNote": "The source repeats the heading Quantity A; the second quantity is labeled Quantity B here."
+      "transcriptionNote": "The source repeats the heading Quantity A; the second quantity is labeled Quantity B here.",
+      "transcriptionNoteEn": "The source repeats the heading Quantity A; the second quantity is labeled Quantity B here."
     },
     {
       "globalIndex": 494,
@@ -5195,7 +5221,8 @@
         "D": "\\(\\frac{4\\sqrt5}3\\)",
         "E": "\\(4\\sqrt5\\)"
       },
-      "transcriptionNote": "The source prints 0 ≤ i ≤ n in the definition; for the n listed values, the conventional index range is 1 ≤ i ≤ n."
+      "transcriptionNote": "The source prints 0 ≤ i ≤ n in the definition; for the n listed values, the conventional index range is 1 ≤ i ≤ n.",
+      "transcriptionNoteEn": "The source prints 0 ≤ i ≤ n in the definition; for the n listed values, the conventional index range is 1 ≤ i ≤ n."
     },
     {
       "globalIndex": 501,
@@ -5494,7 +5521,8 @@
         "B": "The median of the net annual incomes for the 7 years occurred in 2004.",
         "C": "The average (arithmetic mean) change in the net annual income from 2000 to 2006 is an increase of 50.25 million per year."
       },
-      "transcriptionNote": "Choice C is transcribed as printed: “50.25 million per year.”"
+      "transcriptionNote": "Choice C is transcribed as printed: “50.25 million per year.”",
+      "transcriptionNoteEn": "Choice C is transcribed as printed: “50.25 million per year.”"
     },
     {
       "globalIndex": 531,
@@ -5521,7 +5549,8 @@
         "D": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 230 235\" role=\"img\" aria-label=\"Question diagram\"><g fill=\"none\" stroke=\"#172f44\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><line x1=\"15\" y1=\"110\" x2=\"210\" y2=\"110\" /><line x1=\"110\" y1=\"220\" x2=\"110\" y2=\"12\" /><text x=\"206\" y=\"103\" fill=\"#172f44\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"14\" text-anchor=\"middle\">x</text><text x=\"123\" y=\"16\" fill=\"#172f44\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"14\" text-anchor=\"middle\">y</text><text x=\"100\" y=\"126\" fill=\"#172f44\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"14\" text-anchor=\"middle\">O</text><line x1=\"26\" y1=\"107\" x2=\"26\" y2=\"113\" /><line x1=\"107\" y1=\"194\" x2=\"113\" y2=\"194\" /><line x1=\"47\" y1=\"107\" x2=\"47\" y2=\"113\" /><line x1=\"107\" y1=\"173\" x2=\"113\" y2=\"173\" /><line x1=\"68\" y1=\"107\" x2=\"68\" y2=\"113\" /><line x1=\"107\" y1=\"152\" x2=\"113\" y2=\"152\" /><line x1=\"89\" y1=\"107\" x2=\"89\" y2=\"113\" /><line x1=\"107\" y1=\"131\" x2=\"113\" y2=\"131\" /><line x1=\"131\" y1=\"107\" x2=\"131\" y2=\"113\" /><line x1=\"107\" y1=\"89\" x2=\"113\" y2=\"89\" /><line x1=\"152\" y1=\"107\" x2=\"152\" y2=\"113\" /><line x1=\"107\" y1=\"68\" x2=\"113\" y2=\"68\" /><line x1=\"173\" y1=\"107\" x2=\"173\" y2=\"113\" /><line x1=\"107\" y1=\"47\" x2=\"113\" y2=\"47\" /><line x1=\"194\" y1=\"107\" x2=\"194\" y2=\"113\" /><line x1=\"107\" y1=\"26\" x2=\"113\" y2=\"26\" /><text x=\"47\" y=\"128\" fill=\"#172f44\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"13\" text-anchor=\"middle\">−3</text><text x=\"173\" y=\"128\" fill=\"#172f44\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"13\" text-anchor=\"middle\">3</text><text x=\"96\" y=\"178\" fill=\"#172f44\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"13\" text-anchor=\"middle\">−3</text><text x=\"96\" y=\"52\" fill=\"#172f44\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"13\" text-anchor=\"middle\">3</text><line x1=\"19.700000000000003\" y1=\"143.075\" x2=\"200.3\" y2=\"97.925\" stroke-width=\"3\"/></g></svg>",
         "E": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 230 235\" role=\"img\" aria-label=\"Question diagram\"><g fill=\"none\" stroke=\"#172f44\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><line x1=\"15\" y1=\"110\" x2=\"210\" y2=\"110\" /><line x1=\"110\" y1=\"220\" x2=\"110\" y2=\"12\" /><text x=\"206\" y=\"103\" fill=\"#172f44\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"14\" text-anchor=\"middle\">x</text><text x=\"123\" y=\"16\" fill=\"#172f44\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"14\" text-anchor=\"middle\">y</text><text x=\"100\" y=\"126\" fill=\"#172f44\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"14\" text-anchor=\"middle\">O</text><line x1=\"26\" y1=\"107\" x2=\"26\" y2=\"113\" /><line x1=\"107\" y1=\"194\" x2=\"113\" y2=\"194\" /><line x1=\"47\" y1=\"107\" x2=\"47\" y2=\"113\" /><line x1=\"107\" y1=\"173\" x2=\"113\" y2=\"173\" /><line x1=\"68\" y1=\"107\" x2=\"68\" y2=\"113\" /><line x1=\"107\" y1=\"152\" x2=\"113\" y2=\"152\" /><line x1=\"89\" y1=\"107\" x2=\"89\" y2=\"113\" /><line x1=\"107\" y1=\"131\" x2=\"113\" y2=\"131\" /><line x1=\"131\" y1=\"107\" x2=\"131\" y2=\"113\" /><line x1=\"107\" y1=\"89\" x2=\"113\" y2=\"89\" /><line x1=\"152\" y1=\"107\" x2=\"152\" y2=\"113\" /><line x1=\"107\" y1=\"68\" x2=\"113\" y2=\"68\" /><line x1=\"173\" y1=\"107\" x2=\"173\" y2=\"113\" /><line x1=\"107\" y1=\"47\" x2=\"113\" y2=\"47\" /><line x1=\"194\" y1=\"107\" x2=\"194\" y2=\"113\" /><line x1=\"107\" y1=\"26\" x2=\"113\" y2=\"26\" /><text x=\"47\" y=\"128\" fill=\"#172f44\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"13\" text-anchor=\"middle\">−3</text><text x=\"173\" y=\"128\" fill=\"#172f44\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"13\" text-anchor=\"middle\">3</text><text x=\"96\" y=\"178\" fill=\"#172f44\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"13\" text-anchor=\"middle\">−3</text><text x=\"96\" y=\"52\" fill=\"#172f44\" stroke=\"none\" font-family=\"Georgia,serif\" font-size=\"13\" text-anchor=\"middle\">3</text><line x1=\"19.700000000000003\" y1=\"76.92500000000001\" x2=\"200.3\" y2=\"122.075\" stroke-width=\"3\"/></g></svg>"
       },
-      "transcriptionNote": "The five unlettered graphical choices in the source are assigned A–E in reading order: top row left to right, then bottom row left to right."
+      "transcriptionNote": "The five unlettered graphical choices in the source are assigned A–E in reading order: top row left to right, then bottom row left to right.",
+      "transcriptionNoteEn": "The five unlettered graphical choices in the source are assigned A–E in reading order: top row left to right, then bottom row left to right."
     },
     {
       "globalIndex": 533,
@@ -5754,7 +5783,8 @@
         "D": "0.012",
         "E": "0.030"
       },
-      "transcriptionNote": "The enrollment counts are read from the source bar graph; the total enrollment and pie-chart percentages are explicitly labeled."
+      "transcriptionNote": "The enrollment counts are read from the source bar graph; the total enrollment and pie-chart percentages are explicitly labeled.",
+      "transcriptionNoteEn": "The enrollment counts are read from the source bar graph; the total enrollment and pie-chart percentages are explicitly labeled."
     },
     {
       "globalIndex": 555,
@@ -5767,14 +5797,16 @@
         "D": "25%",
         "E": "40%"
       },
-      "transcriptionNote": "The enrollment counts are read from the source bar graph; the total enrollment and pie-chart percentages are explicitly labeled."
+      "transcriptionNote": "The enrollment counts are read from the source bar graph; the total enrollment and pie-chart percentages are explicitly labeled.",
+      "transcriptionNoteEn": "The enrollment counts are read from the source bar graph; the total enrollment and pie-chart percentages are explicitly labeled."
     },
     {
       "globalIndex": 556,
       "id": "gre900:new-08:16",
       "stem": "<p>Selected Enrollment Data for College X. Total number of students: 29,000.</p><table><caption>Total Enrollment by Class (approximate values read from the bar graph)</caption><thead><tr><th>Class</th><th>Resident students</th><th>Nonresident students</th><th>Total students</th></tr></thead><tbody><tr><td>Freshman</td><td>3,000</td><td>3,000</td><td>6,000</td></tr><tr><td>Sophomore</td><td>3,500</td><td>3,000</td><td>6,500</td></tr><tr><td>Junior</td><td>4,000</td><td>3,000</td><td>7,000</td></tr><tr><td>Senior</td><td>5,500</td><td>4,000</td><td>9,500</td></tr></tbody></table><table><caption>Nonresident Seniors by School</caption><thead><tr><th>School</th><th>Percent of nonresident seniors</th></tr></thead><tbody><tr><td>Music</td><td>4%</td></tr><tr><td>Other</td><td>7%</td></tr><tr><td>Business</td><td>8%</td></tr><tr><td>Engineering</td><td>29%</td></tr><tr><td>Kinesiology</td><td>3%</td></tr><tr><td>Literature</td><td>49%</td></tr></tbody></table><p>If two students are to be randomly selected, one at a time and with replacement, from the nonresident seniors, what is the probability that neither of them will be a student who is in the school of music?</p>",
       "choices": {},
-      "transcriptionNote": "The enrollment counts are read from the source bar graph; the total enrollment and pie-chart percentages are explicitly labeled."
+      "transcriptionNote": "The enrollment counts are read from the source bar graph; the total enrollment and pie-chart percentages are explicitly labeled.",
+      "transcriptionNoteEn": "The enrollment counts are read from the source bar graph; the total enrollment and pie-chart percentages are explicitly labeled."
     },
     {
       "globalIndex": 557,
@@ -5945,7 +5977,8 @@
         "D": "3 to 2",
         "E": "2 to 1"
       },
-      "transcriptionNote": "Bar-chart acreages are approximate readings; the 2005 percentages in the second table are printed in the source."
+      "transcriptionNote": "Bar-chart acreages are approximate readings; the 2005 percentages in the second table are printed in the source.",
+      "transcriptionNoteEn": "Bar-chart acreages are approximate readings; the 2005 percentages in the second table are printed in the source."
     },
     {
       "globalIndex": 575,
@@ -5958,7 +5991,8 @@
         "D": "150,000",
         "E": "170,000"
       },
-      "transcriptionNote": "Bar-chart acreages are approximate readings; the 2005 percentages in the second table are printed in the source."
+      "transcriptionNote": "Bar-chart acreages are approximate readings; the 2005 percentages in the second table are printed in the source.",
+      "transcriptionNoteEn": "Bar-chart acreages are approximate readings; the 2005 percentages in the second table are printed in the source."
     },
     {
       "globalIndex": 576,
@@ -5971,7 +6005,8 @@
         "D": "1.1%",
         "E": "1.3%"
       },
-      "transcriptionNote": "Bar-chart acreages are approximate readings; the 2005 percentages in the second table are printed in the source."
+      "transcriptionNote": "Bar-chart acreages are approximate readings; the 2005 percentages in the second table are printed in the source.",
+      "transcriptionNoteEn": "Bar-chart acreages are approximate readings; the 2005 percentages in the second table are printed in the source."
     },
     {
       "globalIndex": 577,
@@ -6256,7 +6291,8 @@
       "quantityB": "<p>\\(PS\\)</p>",
       "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 240\" role=\"img\"><g fill=\"none\" stroke=\"#25364b\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><polygon points=\"50,200 200,50 350,200\" fill=\"none\"/><polygon points=\"50,200 150,100 150,200\" fill=\"#cbd5e1\"/><line x1=\"200\" y1=\"50\" x2=\"200\" y2=\"200\" stroke=\"#64748b\"/><polyline points=\"150,188 162,188 162,200\" fill=\"none\"/><text x=\"40\" y=\"216\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">P</text><text x=\"200\" y=\"38\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">Q</text><text x=\"359\" y=\"216\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">R</text><text x=\"150\" y=\"221\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">S</text></g></svg>",
       "figureAlt": "Isosceles triangle PQR with S on PR. A segment from S to side PQ is perpendicular to PR; together with PS and part of PQ it bounds the shaded triangle at P.",
-      "transcriptionNote": "原文面积条件写作POR，但图中顶点标为Q；保留原文字母并按原图重绘。"
+      "transcriptionNote": "原文面积条件写作POR，但图中顶点标为Q；保留原文字母并按原图重绘。",
+      "transcriptionNoteEn": "The source area condition refers to POR, but the diagram labels the vertex Q. The original letters in the text are retained, and the figure is redrawn to match the source diagram."
     },
     {
       "globalIndex": 606,
@@ -6375,7 +6411,8 @@
         "D": "<p>\\((0.99^8)P\\)</p>",
         "E": "<p>\\(P\\)</p>"
       },
-      "transcriptionNote": "原文选项C、D的小写p按题干定义的变量P统一。"
+      "transcriptionNote": "原文选项C、D的小写p按题干定义的变量P统一。",
+      "transcriptionNoteEn": "The lowercase p in source choices C and D is standardized to uppercase P, the variable defined in the question."
     },
     {
       "globalIndex": 620,
@@ -6503,7 +6540,8 @@
       "quantityB": "<p>\\(QT\\)</p>",
       "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 110\" role=\"img\"><g fill=\"none\" stroke=\"#25364b\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><line x1=\"20\" y1=\"60\" x2=\"380\" y2=\"60\"/><circle cx=\"65\" cy=\"60\" r=\"3\" fill=\"#25364b\"/><text x=\"65\" y=\"51\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">P</text><circle cx=\"265\" cy=\"60\" r=\"3\" fill=\"#25364b\"/><text x=\"265\" y=\"51\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">R</text><circle cx=\"355\" cy=\"60\" r=\"3\" fill=\"#25364b\"/><text x=\"355\" y=\"51\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">T</text></g></svg>",
       "figureAlt": "Number line showing P, R, and T in that order; Q and S are intentionally omitted.",
-      "transcriptionNote": "原文两量均只标Quantity；按先后顺序列为Quantity A和B。"
+      "transcriptionNote": "原文两量均只标Quantity；按先后顺序列为Quantity A和B。",
+      "transcriptionNoteEn": "The source labels both quantities only as “Quantity.” They are listed as Quantity A and Quantity B in their original order."
     },
     {
       "globalIndex": 631,
@@ -6737,7 +6775,8 @@
         "D": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 240\" role=\"img\"><g fill=\"none\" stroke=\"#25364b\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><line x1=\"45\" y1=\"180\" x2=\"350\" y2=\"180\"/><line x1=\"45\" y1=\"180\" x2=\"45\" y2=\"30\"/><line x1=\"40\" y1=\"180\" x2=\"45\" y2=\"180\"/><text x=\"32\" y=\"185\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">0</text><line x1=\"40\" y1=\"155\" x2=\"45\" y2=\"155\"/><text x=\"32\" y=\"160\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">1</text><line x1=\"40\" y1=\"130\" x2=\"45\" y2=\"130\"/><text x=\"32\" y=\"135\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">2</text><line x1=\"40\" y1=\"105\" x2=\"45\" y2=\"105\"/><text x=\"32\" y=\"110\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">3</text><line x1=\"40\" y1=\"80\" x2=\"45\" y2=\"80\"/><text x=\"32\" y=\"85\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">4</text><line x1=\"40\" y1=\"55\" x2=\"45\" y2=\"55\"/><text x=\"32\" y=\"60\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">5</text><rect x=\"65\" y=\"155\" width=\"40\" height=\"25\" fill=\"#dbe4ee\"/><text x=\"85\" y=\"201\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">10</text><rect x=\"119\" y=\"130\" width=\"40\" height=\"50\" fill=\"#dbe4ee\"/><text x=\"139\" y=\"201\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">11</text><rect x=\"173\" y=\"80\" width=\"40\" height=\"100\" fill=\"#dbe4ee\"/><text x=\"193\" y=\"201\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">12</text><rect x=\"227\" y=\"130\" width=\"40\" height=\"50\" fill=\"#dbe4ee\"/><text x=\"247\" y=\"201\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">13</text><rect x=\"281\" y=\"155\" width=\"40\" height=\"25\" fill=\"#dbe4ee\"/><text x=\"301\" y=\"201\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">14</text><text x=\"200\" y=\"225\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">Value</text><text x=\"47\" y=\"20\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"start\" font-family=\"Arial, sans-serif\" font-size=\"13\">Frequency</text></g></svg><table><thead><tr><th>Value</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th></tr></thead><tbody><tr><td>Frequency</td><td>1</td><td>2</td><td>4</td><td>2</td><td>1</td></tr></tbody></table>",
         "E": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 240\" role=\"img\"><g fill=\"none\" stroke=\"#25364b\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><line x1=\"45\" y1=\"180\" x2=\"350\" y2=\"180\"/><line x1=\"45\" y1=\"180\" x2=\"45\" y2=\"30\"/><line x1=\"40\" y1=\"180\" x2=\"45\" y2=\"180\"/><text x=\"32\" y=\"185\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">0</text><line x1=\"40\" y1=\"155\" x2=\"45\" y2=\"155\"/><text x=\"32\" y=\"160\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">1</text><line x1=\"40\" y1=\"130\" x2=\"45\" y2=\"130\"/><text x=\"32\" y=\"135\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">2</text><line x1=\"40\" y1=\"105\" x2=\"45\" y2=\"105\"/><text x=\"32\" y=\"110\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">3</text><line x1=\"40\" y1=\"80\" x2=\"45\" y2=\"80\"/><text x=\"32\" y=\"85\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">4</text><line x1=\"40\" y1=\"55\" x2=\"45\" y2=\"55\"/><text x=\"32\" y=\"60\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">5</text><rect x=\"65\" y=\"130\" width=\"40\" height=\"50\" fill=\"#dbe4ee\"/><text x=\"85\" y=\"201\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">10</text><rect x=\"119\" y=\"105\" width=\"40\" height=\"75\" fill=\"#dbe4ee\"/><text x=\"139\" y=\"201\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">11</text><text x=\"193\" y=\"201\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">12</text><rect x=\"227\" y=\"105\" width=\"40\" height=\"75\" fill=\"#dbe4ee\"/><text x=\"247\" y=\"201\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">13</text><rect x=\"281\" y=\"130\" width=\"40\" height=\"50\" fill=\"#dbe4ee\"/><text x=\"301\" y=\"201\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">14</text><text x=\"200\" y=\"225\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">Value</text><text x=\"47\" y=\"20\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"start\" font-family=\"Arial, sans-serif\" font-size=\"13\">Frequency</text></g></svg><table><thead><tr><th>Value</th><th>10</th><th>11</th><th>12</th><th>13</th><th>14</th></tr></thead><tbody><tr><td>Frequency</td><td>2</td><td>3</td><td>0</td><td>3</td><td>2</td></tr></tbody></table>"
       },
-      "transcriptionNote": "原图未印选项字母：上排从左至右对应A、B、C，下排从左至右对应D、E。重绘分布图，并附同一组频数数据。"
+      "transcriptionNote": "原图未印选项字母：上排从左至右对应A、B、C，下排从左至右对应D、E。重绘分布图，并附同一组频数数据。",
+      "transcriptionNoteEn": "The source does not print choice letters. The top row, from left to right, corresponds to A, B, C; the bottom row, from left to right, corresponds to D, E. The distributions are redrawn and accompanied by the same frequency data."
     },
     {
       "globalIndex": 653,
@@ -6834,7 +6873,8 @@
         "D": "<p>32</p>",
         "E": "<p>46</p>"
       },
-      "transcriptionNote": "原文存在题型或选项问题；保留原文，不作自动判分，交卷后显示核验说明。"
+      "transcriptionNote": "原文存在题型或选项问题；保留原文，不作自动判分，交卷后显示核验说明。",
+      "transcriptionNoteEn": "The source has an issue with the question format or answer choices. The original wording is retained, this question is not automatically scored, and a verification note is shown after submission."
     },
     {
       "globalIndex": 664,
@@ -7075,7 +7115,8 @@
         "F": "<p>17</p>",
         "G": "<p>18</p>"
       },
-      "transcriptionNote": "原文存在题型或选项问题；保留原文，不作自动判分，交卷后显示核验说明。"
+      "transcriptionNote": "原文存在题型或选项问题；保留原文，不作自动判分，交卷后显示核验说明。",
+      "transcriptionNoteEn": "The source has an issue with the question format or answer choices. The original wording is retained, this question is not automatically scored, and a verification note is shown after submission."
     },
     {
       "globalIndex": 687,
@@ -7210,7 +7251,8 @@
       "choices": {},
       "quantityA": "<p>The sum of all numbers in S</p>",
       "quantityB": "<p>\\(2/3\\)</p>",
-      "transcriptionNote": "原文在题干中将集合名写为n、Quantity A中写为S；此处将集合名统一为S，保留整数变量n。"
+      "transcriptionNote": "原文在题干中将集合名写为n、Quantity A中写为S；此处将集合名统一为S，保留整数变量n。",
+      "transcriptionNoteEn": "The source names the set n in the question and S in Quantity A. The set name is standardized to S, while n is retained as the integer variable."
     },
     {
       "globalIndex": 700,
@@ -7316,7 +7358,8 @@
         "G": "<p>9</p>",
         "H": "<p>6</p>"
       },
-      "transcriptionNote": "原文前两项都标为B。为保留8个独立选项，第一项29临时按位置称A，第二项24仍为B；原题仍标为疑题，不自动计分。"
+      "transcriptionNote": "原文前两项都标为B。为保留8个独立选项，第一项29临时按位置称A，第二项24仍为B；原题仍标为疑题，不自动计分。",
+      "transcriptionNoteEn": "The source labels both of the first two choices B. To retain eight separate choices, the first choice, 29, is temporarily labeled A by position, and the second choice, 24, remains B. The question remains flagged as ambiguous and is not automatically scored."
     },
     {
       "globalIndex": 709,
@@ -7341,7 +7384,8 @@
         "I": "<p>\\(0.4x\\) by \\(1.6x\\)</p>",
         "J": "<p>It cannot be determined from the information given.</p>"
       },
-      "transcriptionNote": "保留原文选项字母F–J。"
+      "transcriptionNote": "保留原文选项字母F–J。",
+      "transcriptionNoteEn": "The source choice letters F–J are retained."
     },
     {
       "globalIndex": 711,
@@ -7395,7 +7439,8 @@
         "E": "<p>11/20</p>",
         "F": "<p>3/5</p>"
       },
-      "transcriptionNote": "原文把本章第15题重复印为14；这里按顺序编号为15。"
+      "transcriptionNote": "原文把本章第15题重复印为14；这里按顺序编号为15。",
+      "transcriptionNoteEn": "The source repeats the number 14 for the fifteenth question in this section. It is numbered 15 here to follow the question sequence."
     },
     {
       "globalIndex": 716,
@@ -7464,7 +7509,8 @@
         "D": "<p>24</p>",
         "E": "<p>36</p>"
       },
-      "transcriptionNote": "原文第一次时间的后缀印为“em”；按同题随后两处明确标注的 PM 统一录为 PM。"
+      "transcriptionNote": "原文第一次时间的后缀印为“em”；按同题随后两处明确标注的 PM 统一录为 PM。",
+      "transcriptionNoteEn": "The suffix on the first time in the source is printed as “em.” It is transcribed as PM to match the two later times explicitly marked PM in the same question."
     },
     {
       "globalIndex": 722,
@@ -7507,7 +7553,8 @@
       },
       "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 240\" role=\"img\"><g fill=\"none\" stroke=\"#25364b\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><line x1=\"30\" y1=\"190\" x2=\"290\" y2=\"190\"/><line x1=\"80\" y1=\"220\" x2=\"80\" y2=\"20\"/><line x1=\"50\" y1=\"186\" x2=\"50\" y2=\"194\"/><line x1=\"80\" y1=\"186\" x2=\"80\" y2=\"194\"/><line x1=\"110\" y1=\"186\" x2=\"110\" y2=\"194\"/><line x1=\"140\" y1=\"186\" x2=\"140\" y2=\"194\"/><line x1=\"170\" y1=\"186\" x2=\"170\" y2=\"194\"/><line x1=\"200\" y1=\"186\" x2=\"200\" y2=\"194\"/><line x1=\"230\" y1=\"186\" x2=\"230\" y2=\"194\"/><line x1=\"260\" y1=\"186\" x2=\"260\" y2=\"194\"/><line x1=\"290\" y1=\"186\" x2=\"290\" y2=\"194\"/><line x1=\"76\" y1=\"40\" x2=\"84\" y2=\"40\"/><line x1=\"76\" y1=\"70\" x2=\"84\" y2=\"70\"/><line x1=\"76\" y1=\"100\" x2=\"84\" y2=\"100\"/><line x1=\"76\" y1=\"130\" x2=\"84\" y2=\"130\"/><line x1=\"76\" y1=\"160\" x2=\"84\" y2=\"160\"/><line x1=\"76\" y1=\"190\" x2=\"84\" y2=\"190\"/><line x1=\"80\" y1=\"190\" x2=\"270\" y2=\"47.5\"/><line x1=\"80\" y1=\"40\" x2=\"152\" y2=\"136\"/><polyline points=\"147.2,129.6 140.79999999999998,134.4 145.6,140.8\" fill=\"none\"/><circle cx=\"80\" cy=\"40\" r=\"3\" fill=\"#25364b\"/><text x=\"66\" y=\"42\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">A</text><circle cx=\"152\" cy=\"136\" r=\"3\" fill=\"#25364b\"/><text x=\"164\" y=\"149\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">B</text><text x=\"69\" y=\"207\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">O</text><text x=\"302\" y=\"195\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">x</text><text x=\"81\" y=\"15\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">y</text></g></svg>",
       "figureAlt": "A is on the positive y-axis. B lies on a ray from the origin in the first quadrant; AB is perpendicular to OB.",
-      "transcriptionNote": "原文前两个选项均印为 B；此处按从左到右的位置依次标为 A、B，其余 C、D、E 不变。"
+      "transcriptionNote": "原文前两个选项均印为 B；此处按从左到右的位置依次标为 A、B，其余 C、D、E 不变。",
+      "transcriptionNoteEn": "The source labels both of the first two choices B. They are labeled A and B here in left-to-right order; C, D, and E are unchanged."
     },
     {
       "globalIndex": 726,
@@ -7610,7 +7657,8 @@
         "D": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 380 165\" role=\"img\"><g fill=\"none\" stroke=\"#25364b\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><line x1=\"45\" y1=\"110\" x2=\"330\" y2=\"110\"/><line x1=\"55\" y1=\"105\" x2=\"55\" y2=\"115\"/><text x=\"55\" y=\"137\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">6</text><line x1=\"120\" y1=\"105\" x2=\"120\" y2=\"115\"/><text x=\"120\" y=\"137\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">7</text><line x1=\"185\" y1=\"105\" x2=\"185\" y2=\"115\"/><text x=\"185\" y=\"137\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">8</text><line x1=\"250\" y1=\"105\" x2=\"250\" y2=\"115\"/><text x=\"250\" y=\"137\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">9</text><line x1=\"315\" y1=\"105\" x2=\"315\" y2=\"115\"/><text x=\"315\" y=\"137\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">10</text><line x1=\"55\" y1=\"65\" x2=\"185\" y2=\"65\"/><line x1=\"250\" y1=\"65\" x2=\"315\" y2=\"65\"/><line x1=\"55\" y1=\"55\" x2=\"55\" y2=\"75\"/><line x1=\"315\" y1=\"55\" x2=\"315\" y2=\"75\"/><polygon points=\"185,50 250,50 250,80 185,80\" fill=\"none\"/></g></svg>",
         "E": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 380 165\" role=\"img\"><g fill=\"none\" stroke=\"#25364b\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><line x1=\"45\" y1=\"110\" x2=\"330\" y2=\"110\"/><line x1=\"55\" y1=\"105\" x2=\"55\" y2=\"115\"/><text x=\"55\" y=\"137\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">6</text><line x1=\"120\" y1=\"105\" x2=\"120\" y2=\"115\"/><text x=\"120\" y=\"137\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">7</text><line x1=\"185\" y1=\"105\" x2=\"185\" y2=\"115\"/><text x=\"185\" y=\"137\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">8</text><line x1=\"250\" y1=\"105\" x2=\"250\" y2=\"115\"/><text x=\"250\" y=\"137\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">9</text><line x1=\"315\" y1=\"105\" x2=\"315\" y2=\"115\"/><text x=\"315\" y=\"137\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">10</text><line x1=\"55\" y1=\"65\" x2=\"120\" y2=\"65\"/><line x1=\"315\" y1=\"65\" x2=\"315\" y2=\"65\"/><line x1=\"55\" y1=\"55\" x2=\"55\" y2=\"75\"/><line x1=\"315\" y1=\"55\" x2=\"315\" y2=\"75\"/><polygon points=\"120,50 315,50 315,80 120,80\" fill=\"none\"/><line x1=\"250\" y1=\"50\" x2=\"250\" y2=\"80\"/></g></svg>"
       },
-      "transcriptionNote": "原图五个选项未印字母，按上排从左到右、再下排从左到右标为 A–E。B、D 图中未见独立于箱体边缘的中位线，重绘保留该外观。"
+      "transcriptionNote": "原图五个选项未印字母，按上排从左到右、再下排从左到右标为 A–E。B、D 图中未见独立于箱体边缘的中位线，重绘保留该外观。",
+      "transcriptionNoteEn": "The five source choices are unlabeled. They are labeled A–E from left to right in the top row, then from left to right in the bottom row. No median line distinct from a box edge is visible in choices B and D; the redrawn plots retain that appearance."
     },
     {
       "globalIndex": 735,
@@ -7669,7 +7717,8 @@
       },
       "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 410 270\" role=\"img\"><g fill=\"none\" stroke=\"#25364b\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><path d=\"M140 220 C105 185 125 125 175 105 C225 75 285 95 315 85 C375 80 385 120 362 155 C350 180 366 210 333 224 C290 253 188 252 140 220 Z\" fill=\"#d8e8ee\"/><line x1=\"50\" y1=\"100\" x2=\"356\" y2=\"100\"/><line x1=\"140\" y1=\"50\" x2=\"140\" y2=\"220\"/><line x1=\"50\" y1=\"100\" x2=\"140\" y2=\"50\"/><line x1=\"140\" y1=\"220\" x2=\"356\" y2=\"100\"/><circle cx=\"50\" cy=\"100\" r=\"3\" fill=\"#25364b\"/><text x=\"37\" y=\"100\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">D</text><circle cx=\"140\" cy=\"100\" r=\"3\" fill=\"#25364b\"/><text x=\"128\" y=\"116\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">R</text><circle cx=\"356\" cy=\"100\" r=\"3\" fill=\"#25364b\"/><text x=\"368\" y=\"93\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">A</text><circle cx=\"140\" cy=\"50\" r=\"3\" fill=\"#25364b\"/><text x=\"150\" y=\"40\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">C</text><circle cx=\"140\" cy=\"220\" r=\"3\" fill=\"#25364b\"/><text x=\"126\" y=\"235\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">B</text></g></svg>",
       "figureAlt": "D, R, A are collinear, with R between D and A. C, R, B are collinear, with R between C and B. DC is parallel to AB. A and B lie on opposite banks of the pond.",
-      "transcriptionNote": "原文选项 A 的点名印为“4”，题末另将 B 印为“8”；根据图中的 A、B 点名统一录为 A、B。"
+      "transcriptionNote": "原文选项 A 的点名印为“4”，题末另将 B 印为“8”；根据图中的 A、B 点名统一录为 A、B。",
+      "transcriptionNoteEn": "The source prints the point name in choice A as “4” and prints B as “8” at the end of the question. These are transcribed as A and B to match the point labels in the diagram."
     },
     {
       "globalIndex": 740,
@@ -7839,7 +7888,8 @@
         "D": "<p>26</p>",
         "E": "<p>32</p>"
       },
-      "transcriptionNote": "原文存在题型或选项问题；保留原文，不作自动判分，交卷后显示核验说明。"
+      "transcriptionNote": "原文存在题型或选项问题；保留原文，不作自动判分，交卷后显示核验说明。",
+      "transcriptionNoteEn": "The source has an issue with the question format or answer choices. The original wording is retained, this question is not automatically scored, and a verification note is shown after submission."
     },
     {
       "globalIndex": 756,
@@ -7899,7 +7949,8 @@
       "choices": {},
       "quantityA": "<p>The standard deviation of data set X</p>",
       "quantityB": "<p>The standard deviation of data set Y</p>",
-      "transcriptionNote": "题干中的数据集名原印为 I；按同题表头及 Quantity A 统一录为 X。"
+      "transcriptionNote": "题干中的数据集名原印为 I；按同题表头及 Quantity A 统一录为 X。",
+      "transcriptionNoteEn": "The source prints the data-set name in the question as I. It is transcribed as X to match the table heading and Quantity A."
     },
     {
       "globalIndex": 762,
@@ -8117,7 +8168,8 @@
       },
       "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 700 285\" role=\"img\"><g fill=\"none\" stroke=\"#25364b\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><text x=\"175\" y=\"22\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"14\">Relative Frequency Distribution</text><text x=\"175\" y=\"42\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"14\">of Data Set A</text><line x1=\"55\" y1=\"225\" x2=\"315\" y2=\"225\"/><line x1=\"55\" y1=\"225\" x2=\"55\" y2=\"60\"/><line x1=\"55\" y1=\"225\" x2=\"305\" y2=\"225\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><text x=\"43\" y=\"229\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">0%</text><line x1=\"55\" y1=\"210\" x2=\"305\" y2=\"210\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><line x1=\"55\" y1=\"195\" x2=\"305\" y2=\"195\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><line x1=\"55\" y1=\"180\" x2=\"305\" y2=\"180\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><text x=\"43\" y=\"184\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">15%</text><line x1=\"55\" y1=\"165\" x2=\"305\" y2=\"165\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><line x1=\"55\" y1=\"150\" x2=\"305\" y2=\"150\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><line x1=\"55\" y1=\"135\" x2=\"305\" y2=\"135\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><text x=\"43\" y=\"139\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">30%</text><line x1=\"55\" y1=\"120\" x2=\"305\" y2=\"120\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><line x1=\"55\" y1=\"105\" x2=\"305\" y2=\"105\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><line x1=\"55\" y1=\"90\" x2=\"305\" y2=\"90\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><text x=\"43\" y=\"94\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">45%</text><line x1=\"55\" y1=\"75\" x2=\"305\" y2=\"75\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><rect x=\"55\" y=\"90\" width=\"50\" height=\"135\" fill=\"#dbe4ee\"/><rect x=\"105\" y=\"150\" width=\"50\" height=\"75\" fill=\"#dbe4ee\"/><rect x=\"155\" y=\"180\" width=\"50\" height=\"45\" fill=\"#dbe4ee\"/><rect x=\"205\" y=\"195\" width=\"50\" height=\"30\" fill=\"#dbe4ee\"/><rect x=\"255\" y=\"210\" width=\"50\" height=\"15\" fill=\"#dbe4ee\"/><text x=\"55\" y=\"245\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">0</text><text x=\"105\" y=\"245\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">10</text><text x=\"155\" y=\"245\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">20</text><text x=\"205\" y=\"245\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">30</text><text x=\"255\" y=\"245\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">40</text><text x=\"305\" y=\"245\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">50</text><text x=\"175\" y=\"269\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">Value</text><text x=\"525\" y=\"22\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"14\">Relative Frequency Distribution</text><text x=\"525\" y=\"42\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"14\">of Data Set B</text><line x1=\"405\" y1=\"225\" x2=\"665\" y2=\"225\"/><line x1=\"405\" y1=\"225\" x2=\"405\" y2=\"60\"/><line x1=\"405\" y1=\"225\" x2=\"655\" y2=\"225\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><text x=\"393\" y=\"229\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">0%</text><line x1=\"405\" y1=\"210\" x2=\"655\" y2=\"210\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><line x1=\"405\" y1=\"195\" x2=\"655\" y2=\"195\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><line x1=\"405\" y1=\"180\" x2=\"655\" y2=\"180\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><text x=\"393\" y=\"184\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">15%</text><line x1=\"405\" y1=\"165\" x2=\"655\" y2=\"165\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><line x1=\"405\" y1=\"150\" x2=\"655\" y2=\"150\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><line x1=\"405\" y1=\"135\" x2=\"655\" y2=\"135\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><text x=\"393\" y=\"139\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">30%</text><line x1=\"405\" y1=\"120\" x2=\"655\" y2=\"120\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><line x1=\"405\" y1=\"105\" x2=\"655\" y2=\"105\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><line x1=\"405\" y1=\"90\" x2=\"655\" y2=\"90\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><text x=\"393\" y=\"94\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">45%</text><line x1=\"405\" y1=\"75\" x2=\"655\" y2=\"75\" stroke=\"#b9c3cb\" stroke-width=\"1\"/><rect x=\"405\" y=\"210\" width=\"50\" height=\"15\" fill=\"#dbe4ee\"/><rect x=\"455\" y=\"195\" width=\"50\" height=\"30\" fill=\"#dbe4ee\"/><rect x=\"505\" y=\"180\" width=\"50\" height=\"45\" fill=\"#dbe4ee\"/><rect x=\"555\" y=\"150\" width=\"50\" height=\"75\" fill=\"#dbe4ee\"/><rect x=\"605\" y=\"90\" width=\"50\" height=\"135\" fill=\"#dbe4ee\"/><text x=\"405\" y=\"245\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">0</text><text x=\"455\" y=\"245\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">10</text><text x=\"505\" y=\"245\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">20</text><text x=\"555\" y=\"245\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">30</text><text x=\"605\" y=\"245\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">40</text><text x=\"655\" y=\"245\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">50</text><text x=\"525\" y=\"269\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">Value</text></g></svg>",
       "figureAlt": "For intervals [0,10), [10,20), [20,30), [30,40), [40,50), relative frequencies in A are 45%, 25%, 15%, 10%, 5%; those in B are 5%, 10%, 15%, 25%, 45%.",
-      "transcriptionNote": "原文问句在“values in”后遗漏数据集名称；根据前一句合并后的数据集录为 C。"
+      "transcriptionNote": "原文问句在“values in”后遗漏数据集名称；根据前一句合并后的数据集录为 C。",
+      "transcriptionNoteEn": "The source omits the data-set name after “values in” in the question. It is transcribed as C, the combined data set defined in the preceding sentence."
     },
     {
       "globalIndex": 782,
@@ -8290,7 +8342,8 @@
         "D": "<p>16</p>",
         "F": "<p>It cannot be determined from the information given.</p>"
       },
-      "transcriptionNote": "保留原文选项 A、B、C、D、F 及其数值；原文选项与题设存在疑点，本题不作自动判分，交卷后显示核验说明。"
+      "transcriptionNote": "保留原文选项 A、B、C、D、F 及其数值；原文选项与题设存在疑点，本题不作自动判分，交卷后显示核验说明。",
+      "transcriptionNoteEn": "The source choice letters A, B, C, D, F and their values are retained. There is an issue involving the source choices and the question conditions. This question is not automatically scored; a verification note is shown after submission."
     },
     {
       "globalIndex": 800,
@@ -8342,7 +8395,8 @@
         "C": "<p>100</p>",
         "D": "<p>125</p>"
       },
-      "transcriptionNote": "原文存在题型或选项问题；保留原文，不作自动判分，交卷后显示核验说明。"
+      "transcriptionNote": "原文存在题型或选项问题；保留原文，不作自动判分，交卷后显示核验说明。",
+      "transcriptionNoteEn": "The source has an issue with the question format or answer choices. The original wording is retained, this question is not automatically scored, and a verification note is shown after submission."
     },
     {
       "globalIndex": 805,
@@ -8606,7 +8660,8 @@
         "D": "<p>23</p>",
         "E": "<p>26</p>"
       },
-      "transcriptionNote": "原文存在题型或选项问题；保留原文，不作自动判分，交卷后显示核验说明。"
+      "transcriptionNote": "原文存在题型或选项问题；保留原文，不作自动判分，交卷后显示核验说明。",
+      "transcriptionNoteEn": "The source has an issue with the question format or answer choices. The original wording is retained, this question is not automatically scored, and a verification note is shown after submission."
     },
     {
       "globalIndex": 831,
@@ -8687,7 +8742,8 @@
         "D": "<p>9,500</p>",
         "E": "<p>11,000</p>"
       },
-      "transcriptionNote": "原文存在题型或选项问题；保留原文，不作自动判分，交卷后显示核验说明。"
+      "transcriptionNote": "原文存在题型或选项问题；保留原文，不作自动判分，交卷后显示核验说明。",
+      "transcriptionNoteEn": "The source has an issue with the question format or answer choices. The original wording is retained, this question is not automatically scored, and a verification note is shown after submission."
     },
     {
       "globalIndex": 838,
@@ -8748,7 +8804,8 @@
       },
       "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 235\" role=\"img\"><g fill=\"none\" stroke=\"#25364b\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><polygon points=\"95,195 95,55 305,55 305,195\" fill=\"none\"/><circle cx=\"165\" cy=\"125\" r=\"70\" fill=\"none\"/><circle cx=\"235\" cy=\"125\" r=\"70\" fill=\"none\"/><circle cx=\"165\" cy=\"125\" r=\"3\" fill=\"#25364b\"/><text x=\"151\" y=\"130\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">P</text><circle cx=\"235\" cy=\"125\" r=\"3\" fill=\"#25364b\"/><text x=\"249\" y=\"130\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">Q</text><text x=\"83\" y=\"211\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">R</text><text x=\"83\" y=\"49\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">S</text><text x=\"315\" y=\"49\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">T</text><text x=\"315\" y=\"211\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">W</text></g></svg>",
       "figureAlt": "Rectangle RSTW contains equal circles centered at P and Q. Each circle is tangent to the top and bottom and one vertical side. Each center lies on the other circle.",
-      "transcriptionNote": "原文五个选项横排且未印字母，此处从左到右标为 A–E。"
+      "transcriptionNote": "原文五个选项横排且未印字母，此处从左到右标为 A–E。",
+      "transcriptionNoteEn": "The five source choices appear in a horizontal row without letters. They are labeled A–E here from left to right."
     },
     {
       "globalIndex": 844,
@@ -8865,7 +8922,8 @@
         "D": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 105\" role=\"img\"><g fill=\"none\" stroke=\"#25364b\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><line x1=\"35\" y1=\"55\" x2=\"365\" y2=\"55\"/><line x1=\"100\" y1=\"49\" x2=\"100\" y2=\"61\"/><text x=\"100\" y=\"83\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">-2</text><line x1=\"150\" y1=\"49\" x2=\"150\" y2=\"61\"/><text x=\"150\" y=\"83\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">-1</text><line x1=\"200\" y1=\"49\" x2=\"200\" y2=\"61\"/><text x=\"200\" y=\"83\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">0</text><line x1=\"250\" y1=\"49\" x2=\"250\" y2=\"61\"/><text x=\"250\" y=\"83\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">1</text><line x1=\"300\" y1=\"49\" x2=\"300\" y2=\"61\"/><text x=\"300\" y=\"83\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">2</text><line x1=\"36\" y1=\"55\" x2=\"250\" y2=\"55\" stroke-width=\"5\"/><polygon points=\"36,55 45,50 45,60\" fill=\"#25364b\"/><circle cx=\"250\" cy=\"55\" r=\"4\" fill=\"#25364b\"/></g></svg>",
         "E": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 105\" role=\"img\"><g fill=\"none\" stroke=\"#25364b\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><line x1=\"35\" y1=\"55\" x2=\"365\" y2=\"55\"/><line x1=\"100\" y1=\"49\" x2=\"100\" y2=\"61\"/><text x=\"100\" y=\"83\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">-2</text><line x1=\"150\" y1=\"49\" x2=\"150\" y2=\"61\"/><text x=\"150\" y=\"83\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">-1</text><line x1=\"200\" y1=\"49\" x2=\"200\" y2=\"61\"/><text x=\"200\" y=\"83\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">0</text><line x1=\"250\" y1=\"49\" x2=\"250\" y2=\"61\"/><text x=\"250\" y=\"83\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">1</text><line x1=\"300\" y1=\"49\" x2=\"300\" y2=\"61\"/><text x=\"300\" y=\"83\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"13\">2</text><line x1=\"36\" y1=\"55\" x2=\"100\" y2=\"55\" stroke-width=\"5\"/><polygon points=\"36,55 45,50 45,60\" fill=\"#25364b\"/><line x1=\"250\" y1=\"55\" x2=\"364\" y2=\"55\" stroke-width=\"5\"/><polygon points=\"364,55 355,50 355,60\" fill=\"#25364b\"/><circle cx=\"100\" cy=\"55\" r=\"4\" fill=\"#25364b\"/><circle cx=\"250\" cy=\"55\" r=\"4\" fill=\"#25364b\"/></g></svg>"
       },
-      "transcriptionNote": "原文五幅数轴未印字母，此处按自上而下的顺序标为 A–E。实心端点表示包含端点，粗线表示选项所示范围。"
+      "transcriptionNote": "原文五幅数轴未印字母，此处按自上而下的顺序标为 A–E。实心端点表示包含端点，粗线表示选项所示范围。",
+      "transcriptionNoteEn": "The five source number-line choices are unlabeled. They are labeled A–E here from top to bottom. Filled endpoints are included, and the bold lines indicate the ranges shown by the choices."
     },
     {
       "globalIndex": 855,
@@ -8878,7 +8936,8 @@
         "D": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 250\" role=\"img\"><g fill=\"none\" stroke=\"#25364b\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><line x1=\"30\" y1=\"130\" x2=\"270\" y2=\"130\"/><line x1=\"150\" y1=\"25\" x2=\"150\" y2=\"230\"/><text x=\"280\" y=\"135\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">x</text><text x=\"150\" y=\"17\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">y</text><line x1=\"60\" y1=\"126\" x2=\"60\" y2=\"134\"/><line x1=\"146\" y1=\"205\" x2=\"154\" y2=\"205\"/><line x1=\"90\" y1=\"126\" x2=\"90\" y2=\"134\"/><line x1=\"146\" y1=\"180\" x2=\"154\" y2=\"180\"/><text x=\"90\" y=\"151\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">-2</text><text x=\"136\" y=\"184\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">-2</text><line x1=\"120\" y1=\"126\" x2=\"120\" y2=\"134\"/><line x1=\"146\" y1=\"155\" x2=\"154\" y2=\"155\"/><line x1=\"180\" y1=\"126\" x2=\"180\" y2=\"134\"/><line x1=\"146\" y1=\"105\" x2=\"154\" y2=\"105\"/><line x1=\"210\" y1=\"126\" x2=\"210\" y2=\"134\"/><line x1=\"146\" y1=\"80\" x2=\"154\" y2=\"80\"/><text x=\"210\" y=\"151\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">2</text><text x=\"136\" y=\"84\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">2</text><line x1=\"240\" y1=\"126\" x2=\"240\" y2=\"134\"/><line x1=\"146\" y1=\"55\" x2=\"154\" y2=\"55\"/><polyline points=\"93.0,220.25 93.95,217.2667361111111 94.9,214.3336111111111 95.85,211.450625 96.80000000000001,208.61777777777775 97.75,205.83506944444446 98.7,203.1025 99.65,200.42006944444444 100.60000000000001,197.78777777777776 101.55,195.205625 102.5,192.67361111111111 103.45,190.1917361111111 104.4,187.76 105.35,185.37840277777775 106.30000000000001,183.04694444444442 107.25,180.765625 108.2,178.53444444444443 109.15,176.35340277777777 110.1,174.2225 111.05,172.1417361111111 112.0,170.11111111111111 112.95,168.13062499999998 113.9,166.20027777777779 114.85,164.32006944444444 115.8,162.49 116.75,160.71006944444446 117.7,158.9802777777778 118.65,157.300625 119.60000000000001,155.67111111111112 120.55,154.09173611111112 121.5,152.5625 122.45,151.08340277777776 123.4,149.65444444444444 124.35,148.275625 125.30000000000001,146.94694444444445 126.25,145.66840277777777 127.2,144.44 128.15,143.2617361111111 129.1,142.13361111111112 130.05,141.055625 131.0,140.02777777777777 131.95,139.05006944444446 132.9,138.1225 133.85000000000002,137.24506944444443 134.8,136.4177777777778 135.75,135.640625 136.7,134.91361111111112 137.65,134.2367361111111 138.6,133.61 139.55,133.03340277777778 140.5,132.50694444444446 141.45,132.03062500000001 142.4,131.60444444444445 143.35,131.22840277777777 144.3,130.9025 145.25,130.62673611111111 146.2,130.4011111111111 147.15,130.225625 148.1,130.1002777777778 149.05,130.02506944444445 150.0,130.0 150.95,130.02506944444445 151.9,130.1002777777778 152.85,130.225625 153.79999999999998,130.4011111111111 154.75,130.62673611111111 155.7,130.9025 156.65,131.22840277777777 157.6,131.60444444444445 158.55,132.03062500000001 159.5,132.50694444444446 160.45000000000002,133.03340277777778 161.4,133.60999999999999 162.35,134.2367361111111 163.3,134.91361111111112 164.25,135.640625 165.20000000000002,136.4177777777778 166.14999999999998,137.24506944444443 167.1,138.1225 168.05,139.05006944444443 169.0,140.02777777777777 169.95,141.055625 170.89999999999998,142.1336111111111 171.85,143.2617361111111 172.79999999999998,144.44 173.75,145.6684027777778 174.70000000000002,146.94694444444445 175.65,148.275625 176.6,149.65444444444444 177.55,151.0834027777778 178.5,152.5625 179.45000000000002,154.09173611111112 180.4,155.67111111111112 181.35,157.300625 182.3,158.9802777777778 183.25,160.71006944444446 184.2,162.48999999999998 185.14999999999998,164.3200694444444 186.1,166.20027777777779 187.05,168.13062499999998 188.0,170.11111111111111 188.95,172.14173611111107 189.89999999999998,174.22249999999997 190.85,176.35340277777777 191.8,178.53444444444446 192.75,180.765625 193.7,183.04694444444442 194.65,185.37840277777775 195.6,187.76 196.55,190.1917361111111 197.5,192.67361111111114 198.45,195.205625 199.39999999999998,197.78777777777776 200.35,200.42006944444444 201.3,203.1025 202.25,205.83506944444446 203.2,208.61777777777775 204.14999999999998,211.45062499999997 205.1,214.3336111111111 206.05,217.2667361111111 207.0,220.25\" fill=\"none\"/></g></svg>",
         "E": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 250\" role=\"img\"><g fill=\"none\" stroke=\"#25364b\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><line x1=\"30\" y1=\"130\" x2=\"270\" y2=\"130\"/><line x1=\"150\" y1=\"25\" x2=\"150\" y2=\"230\"/><text x=\"280\" y=\"135\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">x</text><text x=\"150\" y=\"17\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">y</text><line x1=\"60\" y1=\"126\" x2=\"60\" y2=\"134\"/><line x1=\"146\" y1=\"205\" x2=\"154\" y2=\"205\"/><line x1=\"90\" y1=\"126\" x2=\"90\" y2=\"134\"/><line x1=\"146\" y1=\"180\" x2=\"154\" y2=\"180\"/><text x=\"90\" y=\"151\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">-2</text><text x=\"136\" y=\"184\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">-2</text><line x1=\"120\" y1=\"126\" x2=\"120\" y2=\"134\"/><line x1=\"146\" y1=\"155\" x2=\"154\" y2=\"155\"/><line x1=\"180\" y1=\"126\" x2=\"180\" y2=\"134\"/><line x1=\"146\" y1=\"105\" x2=\"154\" y2=\"105\"/><line x1=\"210\" y1=\"126\" x2=\"210\" y2=\"134\"/><line x1=\"146\" y1=\"80\" x2=\"154\" y2=\"80\"/><text x=\"210\" y=\"151\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">2</text><text x=\"136\" y=\"84\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"12\">2</text><line x1=\"240\" y1=\"126\" x2=\"240\" y2=\"134\"/><line x1=\"146\" y1=\"55\" x2=\"154\" y2=\"55\"/><polyline points=\"123.0,220.25 123.95,217.2667361111111 124.9,214.3336111111111 125.85,211.450625 126.80000000000001,208.61777777777775 127.75,205.83506944444446 128.7,203.1025 129.65,200.42006944444444 130.6,197.78777777777776 131.55,195.205625 132.5,192.67361111111111 133.45,190.1917361111111 134.4,187.76 135.35,185.37840277777775 136.3,183.04694444444442 137.25,180.765625 138.2,178.53444444444443 139.15,176.35340277777777 140.1,174.2225 141.05,172.1417361111111 142.0,170.11111111111111 142.95,168.13062499999998 143.9,166.20027777777779 144.85,164.32006944444444 145.8,162.49 146.75,160.71006944444446 147.70000000000002,158.9802777777778 148.65,157.300625 149.6,155.67111111111112 150.55,154.09173611111112 151.5,152.5625 152.45000000000002,151.08340277777776 153.4,149.65444444444444 154.35,148.275625 155.3,146.94694444444445 156.25,145.66840277777777 157.2,144.44 158.15,143.2617361111111 159.1,142.13361111111112 160.05,141.055625 161.0,140.02777777777777 161.95,139.05006944444446 162.9,138.1225 163.85,137.24506944444443 164.8,136.4177777777778 165.75,135.640625 166.7,134.91361111111112 167.65,134.2367361111111 168.6,133.61 169.55,133.03340277777778 170.5,132.50694444444446 171.45,132.03062500000001 172.4,131.60444444444445 173.35,131.22840277777777 174.3,130.9025 175.25,130.62673611111111 176.2,130.4011111111111 177.15,130.225625 178.1,130.1002777777778 179.05,130.02506944444445 180.0,130.0 180.95,130.02506944444445 181.9,130.1002777777778 182.85,130.225625 183.8,130.4011111111111 184.75,130.62673611111111 185.7,130.9025 186.65,131.22840277777777 187.6,131.60444444444445 188.55,132.03062500000001 189.5,132.50694444444446 190.45000000000002,133.03340277777778 191.4,133.60999999999999 192.35,134.2367361111111 193.3,134.91361111111112 194.25,135.640625 195.2,136.4177777777778 196.14999999999998,137.24506944444443 197.1,138.1225 198.05,139.05006944444443 199.0,140.02777777777777 199.95,141.055625 200.89999999999998,142.1336111111111 201.85,143.2617361111111 202.8,144.44 203.75,145.6684027777778 204.70000000000002,146.94694444444445 205.65,148.275625 206.6,149.65444444444444 207.55,151.0834027777778 208.5,152.5625 209.45000000000002,154.09173611111112 210.4,155.67111111111112 211.35,157.300625 212.3,158.9802777777778 213.25,160.71006944444446 214.2,162.48999999999998 215.14999999999998,164.3200694444444 216.1,166.20027777777779 217.05,168.13062499999998 218.0,170.11111111111111 218.95,172.14173611111107 219.89999999999998,174.22249999999997 220.85,176.35340277777777 221.8,178.53444444444446 222.75,180.765625 223.7,183.04694444444442 224.65,185.37840277777775 225.6,187.76 226.55,190.1917361111111 227.5,192.67361111111114 228.45,195.205625 229.39999999999998,197.78777777777776 230.35,200.42006944444444 231.3,203.1025 232.25,205.83506944444446 233.2,208.61777777777775 234.14999999999998,211.45062499999997 235.1,214.3336111111111 236.05,217.2667361111111 237.0,220.25\" fill=\"none\"/></g></svg>"
       },
-      "transcriptionNote": "原文五幅图未印字母，按上排从左到右、再下排从左到右标为 A–E。"
+      "transcriptionNote": "原文五幅图未印字母，按上排从左到右、再下排从左到右标为 A–E。",
+      "transcriptionNoteEn": "The five source graphs are unlabeled. They are labeled A–E from left to right in the top row, then from left to right in the bottom row."
     },
     {
       "globalIndex": 856,
@@ -8933,7 +8992,8 @@
         "D": "<p>\\(\\frac{55-x}{100}\\)</p>",
         "E": "<p>\\(\\frac{55+x}{100}\\)</p>"
       },
-      "transcriptionNote": "原文五个选项未印字母，此处按从左到右的顺序标为 A–E。"
+      "transcriptionNote": "原文五个选项未印字母，此处按从左到右的顺序标为 A–E。",
+      "transcriptionNoteEn": "The five source choices are unlabeled. They are labeled A–E here from left to right."
     },
     {
       "globalIndex": 862,
@@ -8954,7 +9014,8 @@
         "D": "<p>\\(y=3x-13\\)</p>",
         "E": "<p>\\(y=3x-21\\)</p>"
       },
-      "transcriptionNote": "选项 B 按原文保留为 y = 3x + 5y。"
+      "transcriptionNote": "选项 B 按原文保留为 y = 3x + 5y。",
+      "transcriptionNoteEn": "Choice B is retained as y = 3x + 5y, as printed in the source."
     },
     {
       "globalIndex": 864,
@@ -8989,7 +9050,8 @@
       },
       "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 300 250\" role=\"img\"><g fill=\"none\" stroke=\"#25364b\" stroke-width=\"2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"><line x1=\"35\" y1=\"130\" x2=\"265\" y2=\"130\"/><line x1=\"150\" y1=\"235\" x2=\"150\" y2=\"25\"/><text x=\"274\" y=\"135\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">x</text><text x=\"150\" y=\"17\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">y</text><circle cx=\"150\" cy=\"130\" r=\"60\" fill=\"none\"/><text x=\"138\" y=\"150\" fill=\"#17263a\" stroke=\"none\" text-anchor=\"middle\" font-family=\"Arial, sans-serif\" font-size=\"15\">O</text><line x1=\"120\" y1=\"125\" x2=\"120\" y2=\"135\"/><line x1=\"145\" y1=\"160\" x2=\"155\" y2=\"160\"/><line x1=\"180\" y1=\"125\" x2=\"180\" y2=\"135\"/><line x1=\"145\" y1=\"100\" x2=\"155\" y2=\"100\"/></g></svg>",
       "figureAlt": "A circle centered at the origin with radius 2.",
-      "transcriptionNote": "原文五幅选项图未印字母，此处从左到右标为 A–E；保留各直线与圆、坐标轴的交点或相切位置。"
+      "transcriptionNote": "原文五幅选项图未印字母，此处从左到右标为 A–E；保留各直线与圆、坐标轴的交点或相切位置。",
+      "transcriptionNoteEn": "The five source graph choices are unlabeled. They are labeled A–E here from left to right. The intersections or points of tangency between each line and the circle and coordinate axes are preserved."
     },
     {
       "globalIndex": 867,
@@ -9120,7 +9182,8 @@
         "B": "<p>More than \\(\\frac25\\) of his income was from assets and earnings combined.</p>",
         "C": "<p>His income from social security was 56 percent greater than his income from earnings.</p>"
       },
-      "transcriptionNote": "原饼图的全部类别及百分比已忠实转录为表格。"
+      "transcriptionNote": "原饼图的全部类别及百分比已忠实转录为表格。",
+      "transcriptionNoteEn": "All categories and percentages in the source pie chart are faithfully transcribed into a table."
     },
     {
       "globalIndex": 880,
@@ -9261,7 +9324,8 @@
         "B": "<p>The number of CDs in the country genre is 5 percent greater than the number of CDs in the folk genre.</p>",
         "C": "<p>The CDs in the country and rap genres together comprise \\(\\frac13\\) of the collection.</p>"
       },
-      "transcriptionNote": "原饼图的全部类别及百分比已忠实转录为表格。"
+      "transcriptionNote": "原饼图的全部类别及百分比已忠实转录为表格。",
+      "transcriptionNoteEn": "All categories and percentages in the source pie chart are faithfully transcribed into a table."
     },
     {
       "globalIndex": 893,
@@ -9325,7 +9389,8 @@
         "D": "<p>\\(1-0.\\overline{knn}\\)</p>",
         "E": "<p>\\(1-0.\\overline{nkn}\\)</p>"
       },
-      "transcriptionNote": "原文五个选项未印字母，此处按自上而下的顺序标为 A–E；上划线表示其下方数字循环。"
+      "transcriptionNote": "原文五个选项未印字母，此处按自上而下的顺序标为 A–E；上划线表示其下方数字循环。",
+      "transcriptionNoteEn": "The five source choices are unlabeled. They are labeled A–E here from top to bottom. An overbar indicates that the digits beneath it repeat."
     },
     {
       "globalIndex": 898,

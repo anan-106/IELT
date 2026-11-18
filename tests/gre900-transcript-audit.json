@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-18.text.1",
+  "version": "2026-11-18.text.2",
   "sourceSha256": "81789d49daf72ba23927158c94cc86293103fb9fad994b1afe700d7699e4eece",
   "transcriptCount": 900,
   "sourceVisualReviewCount": 900,
@@ -751,12 +751,36 @@
     }
   ],
   "validation": {
-    "regressionChecksPassed": 41,
+    "regressionChecksPassed": 42,
     "regressionChecksFailed": 0,
     "domInteractions": "passed",
     "pdfRequired": false,
     "rasterQuestionAssets": 0,
     "realBrowserVisualAcceptance": "not performed; Chromium unavailable in execution environment"
   },
-  "editableTranscriptsSha256": "744cf63c3b7007927c273e099cb5d987bbcfde55b346da88d2d1a2b5311ce6f8"
+  "editableTranscriptsSha256": "7fc0e6c248c26b03c23c5fb6142941c4e02f397bae8c55ef342f9898595dcf78",
+  "languageReview": {
+    "version": "2026-11-18.text.2",
+    "answeringLanguage": "en",
+    "postSubmissionExplanationsLanguage": "zh-CN",
+    "questionCountScanned": 900,
+    "questionFieldsScanned": 4262,
+    "chineseOriginalNotesTranslated": 54,
+    "existingEnglishNotesRetained": 11,
+    "englishNotesIndependentlyComparedToOriginals": 65,
+    "hanCharactersInAnsweringFields": 0,
+    "mathematicalContentChanged": false,
+    "answerKeysOrScoringChanged": false,
+    "stableIdsAndSavedRecordSchemaChanged": false,
+    "reviewScope": "All question stems, quantities, options, SVG content and figure captions checked for Chinese; all 65 English transcription notes independently compared with original notes for meaning and preservation of approximation, source correction and option numbering disclosures.",
+    "domCoverage": [
+      "all question kinds and source difficulty groups",
+      "English module header, backup controls, question UI and accessibility labels",
+      "English validation feedback and submission confirmation",
+      "English notes before submission; original Chinese notes and explanations after submission",
+      "clearing old Chinese result notices when starting another attempt",
+      "draft restoration, wrong-only retry, deferred grading, 95% score and legacy module isolation"
+    ],
+    "browserVisualAcceptance": "Not performed; same execution environment limitation as the preceding text release."
+  }
 }

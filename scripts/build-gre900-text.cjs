@@ -9,6 +9,10 @@ const bank = require(path.join(root, 'gre-900-data.js'));
 const sourcePath = path.join(root, 'data/gre900-transcripts.json');
 const outputPath = path.join(root, 'gre-900-text.js');
 const allowed = new Set(('p div span br b strong i em u sup sub ul ol li table thead tbody tfoot tr th td caption colgroup col h3 h4 h5 figure figcaption blockquote hr small svg g defs marker pattern clipPath mask line rect circle ellipse polygon polyline path text tspan title desc use math semantics annotation mrow mi mn mo mtext mfrac msqrt mroot msup msub msubsup mspace mtable mtr mtd mstyle menclose mover munder munderover mpadded mphantom').toLowerCase().split(' '));
+function assertEnglish(text, location) {
+  assert.equal(typeof text, 'string', `${location}: expected text`);
+  assert.ok(!/\p{Script=Han}/u.test(text), `${location}: answering content must be in English; keep Chinese in review notes and explanations`);
+}
 function compileMarkup(raw, location) {
   assert.equal(typeof raw, 'string', `${location}: expected markup string`);
   assert.ok(!/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/.test(raw), `${location}: illegal control character`);
@@ -50,13 +54,17 @@ function compileEntry(raw, q) {
   if(!raw.stem.trim())out.stem='<p>Compare Quantity A and Quantity B.</p>';
   let formulas=0;
   for(const key of ['stem','quantityA','quantityB','figure']) if(raw[key]) {
-    const c=compileMarkup(raw[key],`${q.id}.${key}`);out[key]=c.html;formulas+=c.formulas;
+    const c=compileMarkup(raw[key],`${q.id}.${key}`);assertEnglish(c.html,`${q.id}.${key}`);out[key]=c.html;formulas+=c.formulas;
   }
   for(const [letter,html] of Object.entries(raw.choices)) {
     assert.ok(html.trim(),`${q.id}: blank option ${letter}`);
-    const c=compileMarkup(html,`${q.id}.choices.${letter}`);out.choices[letter]=c.html;formulas+=c.formulas;
+    const c=compileMarkup(html,`${q.id}.choices.${letter}`);assertEnglish(c.html,`${q.id}.choices.${letter}`);out.choices[letter]=c.html;formulas+=c.formulas;
   }
-  for(const key of ['figureAlt','transcriptionNote'])if(raw[key])out[key]=raw[key];
+  for(const key of ['figureAlt','transcriptionNoteEn'])if(raw[key]) { assertEnglish(raw[key],`${q.id}.${key}`);out[key]=raw[key]; }
+  if(raw.transcriptionNote) {
+    assert.ok(raw.transcriptionNoteEn?.trim(),`${q.id}: an English transcription note is required for the answering stage`);
+    out.transcriptionNote=raw.transcriptionNote;
+  }
   // All IDs belong to one question, so opening many report rows cannot cross-reference another diagram.
   for(const [key,value] of Object.entries(out))if(typeof value==='string'&&key!=='id')out[key]=value.replace(/\bid="([^\"]+)"/g,`id="g900q${q.globalIndex}-$1"`).replace(/\b(?:href|xlink:href)="#([^\"]+)"/g,`href="#g900q${q.globalIndex}-$1"`).replace(/url\(#([^\)]+)\)/g,`url(#g900q${q.globalIndex}-$1)`);
   for(const letter of Object.keys(out.choices)) out.choices[letter]=out.choices[letter].replace(/\bid="([^\"]+)"/g,`id="g900q${q.globalIndex}${letter}-$1"`).replace(/\b(?:href|xlink:href)="#([^\"]+)"/g,`href="#g900q${q.globalIndex}${letter}-$1"`).replace(/url\(#([^\)]+)\)/g,`url(#g900q${q.globalIndex}${letter}-$1)`);
@@ -69,7 +77,8 @@ function build({check=false}={}) {
   const byId=new Map(raw.questions.map(q=>[q.id,q]));assert.equal(byId.size,900,'duplicate transcript');
   let formulas=0;
   const questions=bank.questions.map(q=>{const r=byId.get(q.id);assert.ok(r,`missing ${q.id}`);const c=compileEntry(r,q);formulas+=c.formulas;return c.entry;});
-  const data={version:'2026-11-18.text.1',sourceSha256:bank.source.sha256,format:'html-mathml-svg',questions};
+  assert.ok(typeof raw.version==='string'&&raw.version.trim(),'transcript version is required');
+  const data={version:raw.version,answeringLanguage:'en',sourceSha256:bank.source.sha256,format:'html-mathml-svg',questions};
   const text='/* Reflowable source questions: HTML text, native MathML, and independently redrawn SVG. */\n(function(root){const data='+JSON.stringify(data)+';if(typeof module!=="undefined"&&module.exports)module.exports=data;else root.GRE900Text=data;})(typeof window!=="undefined"?window:globalThis);\n';
   if(check)assert.equal(fs.readFileSync(outputPath,'utf8'),text,'generated content is stale');else fs.writeFileSync(outputPath,text);
   const stats={questions:questions.length,formulas,questionsWithSvg:questions.filter(q=>JSON.stringify(q).includes('<svg')).length,questionsWithTables:questions.filter(q=>JSON.stringify(q).includes('<table')).length,outputBytes:Buffer.byteLength(text),mode:check?'verified':'built'};

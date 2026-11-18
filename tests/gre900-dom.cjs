@@ -5,6 +5,7 @@ const path=require('node:path');
 const {JSDOM,VirtualConsole}=require('jsdom');
 const B=require('../gre-900-data.js');
 const C=require('../gre-900-core.js');
+const T=require('../gre-900-text.js');
 const root=path.resolve(__dirname,'..');
 const errors=[];
 function setup(stored,legacy=false){
@@ -37,6 +38,25 @@ function inputAnswer(t,q,answer){
  }else for(const a of answer)d.querySelector(`input[name="g900-answer"][value="${a}"]`).click();
 }
 function state(t){return JSON.parse(t.w.localStorage.getItem(C.KEY))}
+function englishOnly(el,label){
+ assert.ok(el,label+' exists');
+ assert.doesNotMatch(el.textContent,/\p{Script=Han}/u,label+' visible content');
+ for(const node of [el,...el.querySelectorAll('[aria-label],[title],[placeholder]')]){
+  for(const attr of ['aria-label','title','placeholder'])if(node.hasAttribute(attr))assert.doesNotMatch(node.getAttribute(attr),/\p{Script=Han}/u,label+' '+attr);
+ }
+}
+function englishAttempt(t){
+ const view=t.d.getElementById('view-gre900');assert.equal(view.lang,'en');englishOnly(view,'answering view');
+ assert.equal(t.d.querySelectorAll('.g900-solution,.g900-explanation').length,0,'no Chinese explanations before submission');
+}
+function openQuestion(t,index){
+ const q=B.questions[index-1];t.d.getElementById('g900-home').click();
+ t.d.querySelector('[data-difficulty="all"]').click();
+ t.d.querySelector(`[data-start="${q.sectionId}"]`).click();
+ const s=state(t).sessions[state(t).activeId];
+ t.d.querySelector(`[data-jump="${s.questionIds.indexOf(q.id)}"]`).click();
+ return q;
+}
 async function main(){
  let t=setup();t.d.querySelector('[data-view="gre900"]').click();
  assert.equal(t.d.querySelectorAll('.g900-chapter').length,45);
@@ -45,23 +65,25 @@ async function main(){
  assert.equal(t.d.querySelectorAll('.g900-answer-map button').length,20);
  assert.equal(t.d.getElementById('g900-answer-fields').disabled,false);
  t.d.getElementById('g900-submit').click();assert.equal(t.d.querySelectorAll('.g900-result').length,0);
- assert.match(t.d.getElementById('g900-alert').textContent,/20.*未完成/);
+ assert.match(t.d.getElementById('g900-alert').textContent,/20 questions are incomplete/);englishAttempt(t);
  assert.equal(t.d.getElementById('g900-pdf'),null,'no PDF upload needed');
  assert.ok(t.d.querySelector('#g900-question-text math mfrac'),'question1 fraction is semantic MathML');
  assert.equal(t.d.querySelectorAll('#view-gre900 canvas,#view-gre900 img,#view-gre900 iframe').length,0,'no screenshot display');
  inputAnswer(t,B.questions[0],['B']);t.d.getElementById('g900-next').click();
  assert.equal(t.d.querySelectorAll('.g900-solution').length,0);
- assert.equal(t.d.querySelector('.g900-attempt-header p').textContent.includes('第 2'),true);
+ assert.equal(t.d.querySelector('.g900-attempt-header p').textContent.includes('Question 2 of 20'),true);englishAttempt(t);
  const saved=t.w.localStorage.getItem(C.KEY);t.dom.window.close();
  t=setup(saved);t.d.querySelector('[data-view="gre900"]').click();t.d.querySelector('[data-start="original-01"]').click();
- assert.equal(t.d.querySelector('.g900-attempt-header p').textContent.includes('第 2'),true);
+ assert.equal(t.d.querySelector('.g900-attempt-header p').textContent.includes('Question 2 of 20'),true);englishAttempt(t);
  for(let i=1;i<20;i++){
   const q=B.questions[i];inputAnswer(t,q,q.answer);
   if(i<19)t.d.getElementById('g900-next').click();
   assert.equal(t.d.querySelectorAll('.g900-solution').length,0,'no solutions before submit');
+  englishAttempt(t);
  }
  t.d.getElementById('g900-submit').click();
  assert.equal(t.d.querySelectorAll('.g900-result').length,0,'confirmation is still pre-submit');
+ assert.equal(t.d.querySelector('dialog').lang,'en');englishOnly(t.d.querySelector('dialog'),'submission dialog');
  t.d.querySelector('dialog [data-cancel]').click();
  // A full synchronization took place while opening the dialog. Subsequent edits
  // must still change the live saved attempt, including after Escape/close.
@@ -75,6 +97,8 @@ async function main(){
  let s=state(t),attempt=s.sessions[s.activeId];
  assert.equal(attempt.status,'submitted');assert.equal(attempt.result.summary.correct,19);assert.equal(attempt.result.summary.scored,20);
  assert.equal(t.d.querySelectorAll('.g900-solution').length,20);
+ assert.equal(t.d.getElementById('view-gre900').lang,'zh-CN');
+ assert.match(t.d.querySelector('.g900-explanation').textContent,/\p{Script=Han}/u,'Chinese explanations after submission');
  t.d.querySelector('[data-show-question]').click();assert.ok(t.d.querySelector('.g900-review-question math'),'report can display the text question');
  assert.match(t.d.querySelector('.g900-metrics').textContent,/95\.0%/);
  t.d.getElementById('g900-report-download').click();
@@ -82,7 +106,8 @@ async function main(){
  const reason=t.d.querySelector('[data-reason="gre900:original-01:1"]');reason.value='读题或翻译';reason.dispatchEvent(new t.w.Event('change',{bubbles:true}));
  const note=t.d.querySelector('[data-note="gre900:original-01:1"]');note.value='<script>test</script> Keep the exponent';note.dispatchEvent(new t.w.Event('input',{bubbles:true}));
  assert.equal(state(t).notes['gre900:original-01:1'].reason,'读题或翻译');
- t.d.querySelector('[data-review="original-01"]').click();assert.equal(t.d.querySelectorAll('.g900-answer-map button').length,1);
+ t.d.querySelector('[data-review="original-01"]').click();assert.equal(t.d.querySelectorAll('.g900-answer-map button').length,1);englishAttempt(t);
+ assert.equal(t.d.getElementById('g900-alert').hidden,true,'old Chinese report notice cleared when starting review');
  const reviewId=state(t).activeId;
  t.d.getElementById('g900-pause').click();
  assert.match(t.d.querySelector('[data-start="original-01"]').textContent,/继续错题复习/);
@@ -99,10 +124,39 @@ async function main(){
  t.d.querySelector('[data-difficulty="all"]').click();
  t.d.querySelector('[data-start="new-13"]').click();
  t.d.querySelector('[data-jump="18"]').click();
- assert.equal(t.d.getElementById('g900-number').placeholder,'输入代数式','expression input hint must not reveal the answer');
+ assert.equal(t.d.getElementById('g900-number').placeholder,'Enter an algebraic expression','expression input hint must not reveal the answer');englishAttempt(t);
  assert.equal(t.d.querySelectorAll('.g900-solution').length,0);
  assert.equal(errors.length,0,errors.join('\n'));
  t.dom.window.close();
+ // Include every question kind, chart notes, duplicate source labels and all difficulty groups.
+ t=setup();t.d.querySelector('[data-view="gre900"]').click();
+ for(const index of [1,43,90,341,652,659,663,708,715,725,799,816,855,897]){
+  const q=openQuestion(t,index);englishAttempt(t);
+  if(q.kind==='qc')assert.deepEqual([...t.d.querySelectorAll('.g900-choice-text')].map(el=>el.textContent),[
+   'Quantity A is greater.','Quantity B is greater.','The two quantities are equal.','The relationship cannot be determined from the information given.'
+  ]);
+  t.d.getElementById('g900-flag').click();englishAttempt(t);
+  t.d.getElementById('g900-skip').click();englishAttempt(t);
+  assert.match(t.d.querySelector('.g900-status-line').textContent,/Left blank/);
+ }
+ const numeric=B.questions.find(q=>q.kind==='numeric'),algebra=B.questions.find(q=>q.kind==='expression');
+ for(const q of [numeric,algebra]){
+  openQuestion(t,q.globalIndex);inputAnswer(t,q,'not-an-answer');englishAttempt(t);
+  assert.match(t.d.getElementById('g900-input-message').textContent,/Format not recognized/);
+  inputAnswer(t,q,q.answer);englishAttempt(t);
+  assert.match(t.d.getElementById('g900-input-message').textContent,/Answer saved/);
+  assert.match(t.d.querySelector('.g900-answer-map .current').getAttribute('aria-label'),/answered/);
+ }
+ const noted=openQuestion(t,43),transcript=T.questions[42];
+ assert.equal(t.d.querySelector('.g900-transcript-note p').textContent,transcript.transcriptionNoteEn);
+ assert.doesNotMatch(t.d.getElementById('g900-question-text').textContent,/\p{Script=Han}/u);
+ let draft=state(t).sessions[state(t).activeId];
+ for(let i=0;i<draft.questionIds.length;i++){t.d.querySelector(`[data-jump="${i}"]`).click();t.d.getElementById('g900-skip').click()}
+ t.d.getElementById('g900-submit').click();englishOnly(t.d.querySelector('dialog'),'submission dialog');t.d.querySelector('dialog [data-confirm]').click();
+ t.d.querySelector(`[data-show-question="${noted.id}"]`).click();
+ assert.equal(t.d.querySelector(`#g900-review-question-${noted.globalIndex} .g900-transcript-note p`).textContent,transcript.transcriptionNote,'Chinese source note returns only in review');
+ assert.match(t.d.querySelector('.g900-explanation').textContent,/\p{Script=Han}/u);
+ assert.equal(errors.length,0,errors.join('\n'));t.dom.window.close();
  t=setup(null,true);
  t.d.getElementById('startVerbalBtn').click();
  const beforeLegacy=t.w.localStorage.getItem('gre-prep-v1');
@@ -119,6 +173,6 @@ async function main(){
  assert.equal(t.w.localStorage.getItem('gre-prep-v1'),beforeLegacy,'hidden Verbal record untouched');
  assert.equal(errors.length,0,errors.join('\n'));
  t.dom.window.close();
- console.log(JSON.stringify({dom:'passed',checks:['45 chapters','source difficulty filter','practice starts without a PDF','native MathML fractions','no screenshot media','deferred grading','restore active position','cancel/escape then edit before submission','20-item full submission','95% score','notes/reasons','resume exact review attempt','no background time','wrong-only retry','first attempt preserved','legacy Verbal keyboard isolation','no answer in expression input hint'],errors}));
+ console.log(JSON.stringify({dom:'passed',checks:['45 chapters','source difficulty filter','practice starts without a PDF','native MathML fractions','no screenshot media','English answering view and aria labels','English QC choices and submission dialog','English numeric and algebra input feedback','English source notes before submission','Chinese explanations and original notes after submission','clear stale Chinese notices when reviewing','deferred grading','restore active position','cancel/escape then edit before submission','20-item full submission','95% score','notes/reasons','resume exact review attempt','no background time','wrong-only retry','first attempt preserved','legacy Verbal keyboard isolation','no answer in expression input hint'],errors}));
 }
 main().catch(e=>{console.error(e);process.exit(1)});
